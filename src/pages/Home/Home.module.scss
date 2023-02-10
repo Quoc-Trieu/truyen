@@ -1,0 +1,13 @@
+@use "../../styles/scss/" as *;
+
+.home {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+
+    .homeRight {
+        display: flex;
+        flex: 1;
+        background-color: #EFF6E7;
+    }
+}

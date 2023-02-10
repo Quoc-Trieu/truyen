@@ -1,0 +1,79 @@
+@use "../../styles/scss/" as *;
+
+.headerStyle {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-self: center;
+  padding: 10px 30px;
+  background-color: $white-color;
+
+  .headerLeft {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-self: center;
+
+    span {
+        color: $darkGreen-color;
+        font-size: 24px;
+        font-weight: bold;
+    }
+  }
+
+
+  .headerRight {
+    .btnAccount {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+
+        .avatarProfile {
+            width: 35px;
+            height: 35px;
+        }
+
+        span {
+            color: $text-color;
+            font-size: $default-fontSize;
+            font-weight: 400;
+        }
+
+        .iconBlackDown {
+            width: 15px;
+            height: 8px;
+        }
+    }
+
+    //item dropdown account
+    .itemDropdown {
+      padding: 10px 10%;
+      position: relative;
+      font-size: 15px;
+
+      // line between items
+      &::after {
+        content: "";
+        width: 80%;
+        height: 1px;
+        background: #ccc;
+        position: absolute;
+        bottom: -1px;
+        left: 10%;
+        right: 10%;
+      }
+      // item cuối sẽ không có line
+      &:last-child::after {
+        height: 0px;
+      }
+
+      &:active {
+        background-color: $brightGreen-color;
+      }
+    }
+  }
+ 
+}

@@ -1,0 +1,21 @@
+{
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["./"],
+        "extensions": [".jsx", ".js", ".json"],
+        "alias": {
+          "@assets": "./src/assets",
+          "@components": "./src/components",
+          "@pages": "./src/pages",
+          "@services": "./src/services",
+          "@routes": "./src/routes",
+          "@styles": "./src/styles",
+          "@store": "./src/store",
+          "@utils": "./src/utils"
+        }
+      }
+    ]
+  ]
+}
