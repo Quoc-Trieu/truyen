@@ -1,0 +1,172 @@
+@use "../../../../../styles/scss/" as *;
+$width-col: 170px;
+
+.listAssignment {
+  width: 100%;
+  height: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .headerRow {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0px;
+    padding: 10px 20px;
+
+    span {
+      font-size: 20px;
+      color: $text-color;
+      font-weight: bold;
+      width: $width-col;
+
+      &:last-child {
+        flex: 1;
+      }
+    }
+  }
+
+  .itemContainer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    overflow: scroll;
+
+    .itemUI {
+      height: 80px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 20px;
+      padding: 0 20px;
+      border-radius: 3px;
+      color: $text-color;
+      background-color: $white-color;
+
+      // animation khi render ra item
+      animation: fadeInAnimation 0.3s linear;
+      @keyframes fadeInAnimation {
+        0% {
+          opacity: 0.2;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      span {
+        font-size: 16px;
+        color: $text-color;
+        width: $width-col;
+        padding-left: 5px;
+        width: $width-col;
+      }
+
+      .shaverAreaStyle {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+        gap: 5px;
+        padding: 5px 5px;
+        width: $width-col;
+
+        span:first-child {
+          font-size: 16px;
+          color: $text-color;
+          font-weight: 600;
+        }
+
+        span:last-child {
+          font-size: 14px;
+          color: $text-color;
+          font-weight: 400;
+        }
+      }
+
+      .userShaverStyle {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+        gap: 5px;
+        padding: 5px 5px;
+        width: $width-col;
+
+        span:first-child {
+          font-size: 16px;
+          color: $text-color;
+          font-weight: 600;
+        }
+
+        span:last-child {
+          font-size: 14px;
+          color: $text-color;
+          font-weight: 400;
+        }
+      }
+
+      .actionItem {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 30px;
+        flex: 1;
+        height: 100%;
+
+        .remove {
+          height: 24px;
+          width: 24px;
+          cursor: pointer;
+        }
+
+        .seeDetails {
+          background-color: #f5f5f5;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          align-items: center;
+          padding: 10px 10px;
+          border-radius: 2px;
+          cursor: pointer;
+           // Disable text selection
+          -webkit-user-select: none;
+          -webkit-touch-callout: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+
+          span {
+            font-size: 16px;
+            color: #00502b;
+            font-weight: 500;
+            width: 90px;
+          }
+
+          img {
+            width: 22px;
+            height: 16px;
+          }
+        }
+      }
+    }
+  }
+}

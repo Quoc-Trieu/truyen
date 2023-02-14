@@ -2,12 +2,16 @@
 
 .home {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
     height: 100%;
 
     .homeRight {
         display: flex;
         flex: 1;
         background-color: #EFF6E7;
+        position: relative;
+        overflow: scroll;
     }
 }

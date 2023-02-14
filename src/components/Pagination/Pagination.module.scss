@@ -1,0 +1,142 @@
+@use "../../styles/scss/" as *;
+
+.pagingItem {
+  width: 100%;
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  // Disable text selection
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  .leftPrev {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 999px;
+    background-color: $lightGreen-color;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $white-color;
+      color: $white-color;
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .centerContainer {
+    width: auto;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    .pageNum {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 999px;
+      transition: all 0.2s ease-in-out;
+      animation: fadeInAnimation 0.5s linear;
+
+      @keyframes fadeInAnimation {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      &:hover {
+        background-color: $brightGreen-color;
+        color: $text-color;
+      }
+
+      span {
+        color: $text-color;
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+
+    .pageNumActive {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 999px;
+      background-color: $brightGreen-color;
+      color: $white-color;
+      transition: all 0.2s ease-in-out;
+      animation: fadeInAnimation 0.5s linear;
+
+      @keyframes fadeInAnimation {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      &:hover {
+        background-color: $green-color;
+        color: $white-color;
+      }
+
+      span {
+        color: $white-color;
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .rightNext {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 999px;
+    background-color: $lightGreen-color;
+    color: $green-color;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $white-color;
+      color: $white-color;
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

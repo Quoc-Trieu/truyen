@@ -1,7 +1,32 @@
 @use "../../../styles/scss/" as *;
 
 .userContainer {
-    width: $full-screen;
-    height: $full-screen;
+  width: $full-screen;
+  height: $full-screen;
+  display: flex;
+  flex-direction: column;
 
+  .userBody {
+    width: $full-screen;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 20px;
+    background-color: #EFF6E7;
+
+    .toolbar {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 0px;
+    }
+
+    .paginationUser {
+      justify-content: flex-end;
+    }
+  }
 }

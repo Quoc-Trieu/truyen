@@ -1,0 +1,33 @@
+@use "../../styles/scss/" as *;
+
+.headerModal {
+  width: 100%;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .titleModal {
+    flex: 1;
+    font-size: 22px;
+    color: $text-color;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .iconClose {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }
+}
+
+.bodyModal {
+  width: 100%;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}

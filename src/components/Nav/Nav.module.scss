@@ -7,7 +7,13 @@
   width: 250px;
   justify-content: flex-start;
   background-image: linear-gradient($green-color, $brightGreen-color);
-  position: relative;
+
+  // Disable text selection
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   .ulNav {
     display: flex;

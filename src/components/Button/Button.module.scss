@@ -1,0 +1,37 @@
+@use "../../styles/scss/" as *;
+
+
+.buttonComponent {
+    height: 45px;
+    width: auto;
+    max-width: 320px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: $white-color;
+    border-radius: 999px;
+    padding: 2px 2px 2px 15px;
+    border-width: 1px;
+    border-color: $green-color;
+    box-shadow: 0 1px 2px $green-color;
+    padding: 8px 15px;
+    gap: 12px;
+    cursor: pointer;
+    // Disable text selection
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    img {
+        width: auto;
+        height: 80%;
+    }
+
+    span {
+        font-size: 14px;
+        color: $text-color;
+    }
+}

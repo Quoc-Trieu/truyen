@@ -1,0 +1,10 @@
+/* custom border và padding của modal antd */
+.modalStyle .ant-modal-content,
+.modalStyle .ant-modal-header {
+  border-radius: 8px;
+  padding: 0;
+}
+
+.modalStyle .ant-modal-body {
+  padding: 0;
+}

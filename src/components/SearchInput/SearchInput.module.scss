@@ -1,0 +1,39 @@
+@use "../../styles/scss/" as *;
+
+
+.SearchInput {
+    height: 45px;
+    width: 320px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $white-color;
+    border-radius: 999px;
+    padding: 2px 2px 2px 15px;
+    border-width: 1px;
+    border-color: $green-color;
+    box-shadow: 0 1px 2px $green-color;
+
+    input {
+        flex: 1;
+        outline: none;
+        font-size: 14px;
+    }
+
+
+    .iconSearchCircle {
+        background-color: $green-color;
+        height: 37px;
+        width: 37px;
+        border-radius: 999px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            height: 50%;
+            width: 50%;
+        }
+    }
+}

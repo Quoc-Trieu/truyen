@@ -25,7 +25,7 @@ const assignment = ({ title, name }) => {
             </div>
           </Dropdown.Toggle>
 
-          <Dropdown.Menu style={{ padding: 0 }}>
+          <Dropdown.Menu style={{ padding: 0}}>
             <Dropdown.Item className={styles.itemDropdown}>
               Đổi mật khẩu
             </Dropdown.Item>
