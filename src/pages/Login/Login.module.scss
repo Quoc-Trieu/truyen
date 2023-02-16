@@ -39,6 +39,7 @@
       margin: 24px 0;
     }
 
+    // div chứa icon và input account
     .inputBox {
       background-color: $white-color;
       width: 100%;
@@ -51,12 +52,14 @@
       border-color: $green-color;
       border-width: 2px;
       margin: 10px 0;
+      @include user-select-none;
 
       .iconUserStyle {
         width: 30px;
         height: 30px;
       }
 
+      // custom ô input
       .inputAccount {
         background-color: transparent;
         flex: 1;
@@ -73,7 +76,8 @@
       }
     }
 
-    .inputBox {
+    // div chứa icon và input password
+    .inpuPasstBox {
       background-color: $white-color;
       width: 100%;
       display: flex;
@@ -85,6 +89,7 @@
       border-color: $green-color;
       border-width: 2px;
       margin: 10px 0;
+      @include user-select-none;
 
       .iconKeyStyle {
         width: 30px;
@@ -112,6 +117,7 @@
       }
     }
 
+    // custom text hiển thị lỗi
     .errorText {
       color: #FF3B3B;
       align-self: flex-start;

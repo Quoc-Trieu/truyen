@@ -37,3 +37,52 @@
     align-items: flex-start;
   }
 }
+
+
+//modal confirm
+.modalConfirm {
+  width: 100%;
+  border-radius: 8px;
+
+
+  .modalBody {
+    width: 100%;
+    padding: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+
+
+    .titleModal {
+      font-size: 22px;
+      color: $text-color;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .subModal {
+      font-size: 18px;
+      color: $text-color;
+      text-align: center;
+    }
+  }
+
+  .modalFooter {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .btnCannel {
+      flex: 1;
+    }
+
+    .btnConfirm {
+      flex: 1;
+    }
+  }
+
+}

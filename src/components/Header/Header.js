@@ -4,10 +4,20 @@ import iconDown from "../../assets/ico/icon-awesome-caret-down.png";
 import avatar from "../../assets/images/avatar-account.png";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
+import { removeToken } from './../../utils/localStorage';
+import { useSelector } from 'react-redux';
+import { userInfoSelector } from "../../store/user/UserSlice";
 
 const assignment = ({ title, name }) => {
   const navigate = useNavigate();
+  const userInfo = useSelector(userInfoSelector)
 
+  //logout
+  const handleLogOut =  () => {
+    removeToken();
+    navigate("/");
+    window.location.reload();
+  }
   return (
     <div className={styles.headerStyle}>
       <div className={styles.headerLeft}>
@@ -18,9 +28,9 @@ const assignment = ({ title, name }) => {
         {/* Dropdown Account */}
         <Dropdown>
           <Dropdown.Toggle>
-            <div className={styles.btnAccount} onClick={() => console.log(123)}>
+            <div className={styles.btnAccount}>
               <img src={avatar} className={styles.avatarProfile} />
-              <span>{name ?? "Tên"}</span>
+              <span>{userInfo?.fullName}</span>
               <img src={iconDown} className={styles.iconBlackDown} />
             </div>
           </Dropdown.Toggle>
@@ -31,10 +41,7 @@ const assignment = ({ title, name }) => {
             </Dropdown.Item>
             <Dropdown.Item
               className={styles.itemDropdown}
-              onClick={() => {
-                navigate("/");
-                window.location.reload();
-              }}
+              onClick={handleLogOut}
             >
               Đăng xuất
             </Dropdown.Item>

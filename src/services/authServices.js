@@ -1,7 +1,7 @@
 import AxiosClient from "./axiosClient";
 
-
 export const login = (data) => {
+  console.log(data);
   return AxiosClient.post("auth/login", data);
 };
 

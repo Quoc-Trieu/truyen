@@ -1,19 +1,21 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-
 import styles from "./Login.module.scss";
-
 import logo from "../../assets/images/image-login.png";
 import iconUser from "../../assets/ico/icon-awesome-user.png";
 import iconKey from "../../assets/ico/icon-feather-key.png";
 import iconEye from "../../assets/ico/icon-awesome-eye.png";
 import iconEyeOff from "../../assets/ico/icon-awesome-eye-slash.png";
+import { login } from "./../../services/authServices";
+import { setToken } from "./../../utils/localStorage";
+import { useNavigate } from "react-router-dom";
+import Notiflix from 'notiflix';
+import { setPhone, getInfoUser } from './../../store/user/UserSlice';
 
 const Login = () => {
-  const VN = "+84";
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const {
@@ -23,8 +25,20 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const res = await login(data);
+      setToken(res?.data?.auth);
+      // lưu sdt vào redux và lấy thông tin user
+      dispatch(setPhone(res?.data?.user?.phone));
+      dispatch(getInfoUser(res?.data?.user?.phone))
+      //thông báo và chuyền màn hình đăng nhập thành công
+      Notiflix.Notify.success('Đăng nhập thành công');
+      navigate("/");
+    } catch (error) {
+      Notiflix.Notify.warning('Đăng nhập lỗi')
+      console.log("Login Error: " + error);
+    }
   };
 
   return (
@@ -34,23 +48,24 @@ const Login = () => {
       </div>
       <form className={styles.wrapLogin} onSubmit={handleSubmit(onSubmit)}>
         <span className={styles.title}>Đăng nhập</span>
+        {/* Tài khoản (sdt) */}
         <div className={styles.inputBox}>
           <img className={styles.iconUserStyle} src={iconUser} />
           <input
             placeholder="Tài khoản"
             className={styles.inputAccount}
-            {...register("account", {
+            {...register("phoneNumber", {
               required: true,
             })}
           />
         </div>
-        {errors?.account?.type === "required" ? (
+        {errors?.phoneNumber?.type === "required" ? (
           <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
         ) : (
           <p className={styles.errorText}> </p>
         )}
-
-        <div className={styles.inputBox}>
+        {/* Mật khẩu */}
+        <div className={styles.inpuPasstBox}>
           <img className={styles.iconKeyStyle} src={iconKey} />
           <input
             placeholder="Mật khẩu"
@@ -60,6 +75,8 @@ const Login = () => {
               required: true,
             })}
           />
+
+          {/* xử lý icon mở và đóng mật khẩu */}
           {isShowPassword ? (
             <img
               className={styles.iconEyeStyle}
@@ -88,4 +105,4 @@ const Login = () => {
   );
 };
 
-export default Login
+export default Login;

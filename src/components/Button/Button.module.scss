@@ -88,3 +88,26 @@
         color: $white-color;
     }
 }
+
+
+.buttonIcon {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FF8000;
+    border-radius: 4px;
+    padding: 15px 30px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    img {
+        width: 20px;
+        height: 20px;
+    }
+
+}

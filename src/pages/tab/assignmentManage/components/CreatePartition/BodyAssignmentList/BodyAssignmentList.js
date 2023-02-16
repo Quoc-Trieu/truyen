@@ -20,8 +20,8 @@ const BodyAssignmentList = () => {
       {/* Item row */}
       <div className={styles.ListContainer}>
         <div className={styles.itemUI}>
-            <LotNumComponent subTitle="Lô số 1" />
-            <LotNumComponent subTitle="Hàng số 1" />
+            <LotNumComponent text="Lô số 1" />
+            <LotNumComponent text="Hàng số 1" typeMenu="col"/>
             <div className={styles.treeBegins}>
               <span>Nhập cây bắt đầu</span>
               <QuantitySelect />

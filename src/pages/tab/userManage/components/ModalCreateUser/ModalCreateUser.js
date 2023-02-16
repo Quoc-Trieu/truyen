@@ -4,6 +4,7 @@ import { Modal } from "antd";
 // import iconClose from "../../../../../assets/images/iconClose.png";
 import { useForm } from "react-hook-form";
 import ModalComponent from '../../../../../components/ModalComponent/ModalComponent';
+import { postCreateUser } from "../../../../../services/userServies";
 
 const ModalCreateUser = ({ visible, onCancel, onOk }) => {
   const {
@@ -13,8 +14,16 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      const res = await postCreateUser(data);
+      console.log(res);
+    }
+    catch (error) {
+      console.log(error);
+    }
+    
   };
   
   return (
@@ -31,11 +40,11 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
         <input
           placeholder="Nhập sđt người dùng"
           className={styles.input}
-          {...register("account", {
+          {...register("phone", {
             required: true,
           })}
         />
-        {errors?.account?.type === "required" ? (
+        {errors?.phone?.type === "required" ? (
           <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
         ) : (
           <p className={styles.errorText}> </p>
@@ -59,11 +68,11 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
         <input
           placeholder="Nhập tên người dùng"
           className={styles.input}
-          {...register("userName", {
+          {...register("fullName", {
             required: true,
           })}
         />
-        {errors?.userName?.type === "required" ? (
+        {errors?.fullName?.type === "required" ? (
           <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
         ) : (
           <p className={styles.errorText}> </p>
