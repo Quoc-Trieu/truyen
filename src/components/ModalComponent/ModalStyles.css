@@ -3,8 +3,29 @@
 .modalStyle .ant-modal-header {
   border-radius: 8px;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modalStyle .ant-modal-body {
+  width: 100%;
   padding: 0;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.modalStyle .ant-modal{
+  width: 100% !important;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+

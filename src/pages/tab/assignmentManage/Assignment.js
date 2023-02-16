@@ -6,7 +6,7 @@ import Button from "./../../../components/Button/Button";
 import Pagination from "./../../../components/Pagination/Pagination";
 import { useState } from "react";
 import ListAssginment from "./components/ListAssignment/ListAssignment";
-import CreatePartitionModal from "./components/CreatePartition/CreatePartitionModal";
+import ModalCreatePartition from "./components/CreatePartition/ModalCreatePartition";
 
 export const assignmenList = [
   {
@@ -40,7 +40,7 @@ export const assignmenList = [
 ];
 
 const Assignment = () => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className={styles.assignmentContainer}>
       <Header title="Quản lý công việc" name="Nguyễn Văn A" />
@@ -54,7 +54,6 @@ const Assignment = () => {
             text="Tạo phân vùng mới"
             onSubmit={() => {
               setShowModal(true);
-              console.log(showModal);
             }}
           />
         </div>
@@ -78,7 +77,7 @@ const Assignment = () => {
           }}
         />
 
-        <CreatePartitionModal isShow={showModal} onCancel={() => setShowModal(false)}/>
+        <ModalCreatePartition visible={showModal} onCancel={() => setShowModal(false)}/>
       </div>
     </div>
   );

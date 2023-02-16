@@ -8,18 +8,22 @@ const ModalComponent = ({
   children,
   title,
   visible,
-  setVisible,
   width,
   centered = true,
   onCancel,
   onOk,
+  alignHeader = "center",
+  styleWrapper,
+  styleHeader,
+  styleBody,
+
 }) => {
   return (
     <Modal
       centered={centered}
       visible={visible}
       onOk={onOk}
-      onCancel={onCancel}
+      // onCancel={onCancel}
       footer={null}
       width={width}
       animationIn={"slideInTop"}
@@ -27,17 +31,24 @@ const ModalComponent = ({
       className="modalStyle"
       closable={false}
     >
-      <div className={styles.headerModal}>
-        <span className={styles.titleModal}>{title}</span>
-        {/* nút close ở đây */}
-        <img
-          src={iconClose}
-          alt="iconClose"
-          className={styles.iconClose}
-          onClick={setVisible}
-        />
+      <div className={styles.wrapperModal} style={styleWrapper}>
+        <div className={styles.headerModal}>
+          <span
+            className={styles.titleModal}
+            style={{ textAlign: alignHeader }}
+          >
+            {title}
+          </span>
+          {/* nút close ở đây */}
+          <img
+            src={iconClose}
+            alt="iconClose"
+            className={styles.iconClose}
+            onClick={onCancel}
+          />
+        </div>
+        <div className={styles.bodyModal}>{children}</div>
       </div>
-      <div className={styles.bodyModal}>{children}</div>
     </Modal>
   );
 };

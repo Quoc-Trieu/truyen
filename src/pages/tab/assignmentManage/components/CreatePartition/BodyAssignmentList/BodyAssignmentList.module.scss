@@ -1,0 +1,110 @@
+@use "../../../../../../styles/scss/" as *;
+// chiều cao của hàng
+$height-col: 60px;
+// chiều dài của cột trong item
+$width-col-item: 250px;
+
+.bodyAssignmentList {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0 20px;
+  width: 100%;
+
+  .headerRow {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0px;
+    padding: 10px 20px;
+
+    span {
+      font-size: 18px;
+      color: $text-color;
+      font-weight: bold;
+      width: $width-col-item;
+
+      &:last-child {
+        flex: 1;
+      }
+    }
+  }
+
+  .ListContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    font-size: 18px;
+
+    .itemUI {
+      width: 100%;
+      height: 60px;
+      background-color: $white-color;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      gap: 20px;
+      border-radius: 3px;
+
+      .treeBegins {
+        width: $width-col-item;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btnDelete {
+        flex: 1;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+      }
+    }
+
+    // Thêm mới
+    .btnAddAssignment {
+      width: 100%;
+      height: 60px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      margin: 10px 0;
+      font-size: 18px;
+      background-color: #ffffff;
+      border-radius: 3px;
+      gap: 10px;
+
+      .iconAdd {
+        width: 25px;
+        height: 25px;
+      }
+
+      span {
+        margin-top: 3px;
+        font-size: 20px;
+        color: #0020ff;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .footerAssignment {
+    background-color: aqua;
+  }
+}

@@ -5,7 +5,9 @@ import SearchInput from "./../../../components/SearchInput/SearchInput";
 import Button from "./../../../components/Button/Button";
 import ListUser from "../../../components/ListUser/ListUser";
 import Pagination from "../../../components/Pagination/Pagination";
-import CreateUserModal from "./components/CreateUser/CreateUserModal";
+import ModalCreateUser from "./components/ModalCreateUser/ModalCreateUser";
+import iconAddUser from "../../../assets/ico/icon-awesome-user-plus.png";
+
 export const itemUser = [
   {
     phone: "01234567891",
@@ -41,7 +43,7 @@ const UserManage = () => {
             placeholder="Nhập tên, số điện thoại"
             onSubmit={(searchText) => console.log(searchText)}
           />
-          <Button text="Tạo tài khoản" onSubmit={() => setShowModal(true)} />
+          <Button text="Tạo tài khoản" onSubmit={() => setShowModal(true)} icon={iconAddUser}/>
         </div>
 
         <ListUser
@@ -56,7 +58,7 @@ const UserManage = () => {
         />
       </div>
 
-      <CreateUserModal visible={showModal} setVisible={() =>  setShowModal(false)}  onOk={() =>  setShowModal(true)}/>
+      <ModalCreateUser visible={showModal} onCancel={() =>  setShowModal(false)}  onOk={() =>  setShowModal(true)}/>
     </div>
   );
 };

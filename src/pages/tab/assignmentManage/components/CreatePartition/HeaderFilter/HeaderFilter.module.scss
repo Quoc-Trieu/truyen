@@ -1,0 +1,191 @@
+@use "../../../../../../styles/scss/" as *;
+
+.HeaderFilter {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0 20px;
+  width: 100%;
+  height: 100px;
+  gap: 3%;
+
+//   người giao
+  .deliver {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .labelDeliver {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+
+      .circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 999px;
+        background-color: #01eb11;
+        border-width: 4px;
+        border-color: #a9ffaf;
+      }
+
+      span {
+        font-size: 16px;
+        font-weight: bold;
+        color: $text-color;
+      }
+    }
+
+    .inputDeliver {
+      width: 100%;
+      height: 50px;
+      border-radius: 4px;
+      border: 1px solid #01eb11;
+      background-color: #f5f5f5;
+      padding: 0 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      color: $text-color;
+      outline: none;
+
+      &::placeholder {
+        opacity: 0.8;
+        color: #777777;
+        font-weight: bold;
+      }
+    }
+  }
+
+//   Người thực hiện
+  .performer {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .labelPerformer {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+
+      .circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 999px;
+        background-color: #0020ff;
+        border-width: 4px;
+        border-color: #d5dbff;
+      }
+
+      span {
+        font-size: 16px;
+        font-weight: bold;
+        color: $text-color;
+      }
+    }
+
+    .inputPerformerContainer {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border: 1px solid #0020ff;
+      border-radius: 4px;
+      background-color: #ffffff;
+      padding: 0px 3px;
+      margin: 10px 0px;
+      height: 50px;
+
+      .inputPerformer {
+        flex: 1;
+        height: 45px;
+        border-radius: 4px;
+        padding: 0 10px;
+        font-size: 16px;
+        color: $text-color;
+        outline: none;
+
+        &::placeholder {
+          opacity: 0.8;
+          color: #777777;
+          font-weight: 500;
+        }
+      }
+
+      .btnPerformer {
+        width: 44px;
+        height: 44px;
+        background-color: #0020ff;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+//   Tên vùng cạo
+  .shavingArea {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .labelShavingArea {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+
+        .circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            background-color: #0020ff;
+            border-width: 4px;
+            border-color: #d5dbff;
+        }
+
+        span {
+            font-size: 16px;
+            font-weight: bold;
+            color: $text-color;
+        }
+    }
+
+    .inputShavingArea {
+        width: 100%;
+        height: 50px;
+        border-radius: 4px;
+        border: 1px solid #0020ff;
+        background-color: #FFFFFF;
+        padding: 0 10px;
+        margin-top: 10px;
+        font-size: 16px;
+        color: $text-color;
+        outline: none;
+
+        &::placeholder {
+            opacity: 0.8;
+            color: #777777;
+            font-weight: 500;
+        }
+    }
+}
+
+}

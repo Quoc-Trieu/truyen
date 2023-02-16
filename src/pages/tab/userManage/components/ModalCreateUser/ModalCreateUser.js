@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import styles from "./CreateUserModal.module.scss";
+import styles from "./ModalCreateUser.module.scss";
 import { Modal } from "antd";
 // import iconClose from "../../../../../assets/images/iconClose.png";
 import { useForm } from "react-hook-form";
 import ModalComponent from '../../../../../components/ModalComponent/ModalComponent';
 
-const CreateUserModal = ({ visible, setVisible, onCancel, onOk }) => {
+const ModalCreateUser = ({ visible, onCancel, onOk }) => {
   const {
     register,
     handleSubmit,
@@ -21,10 +21,10 @@ const CreateUserModal = ({ visible, setVisible, onCancel, onOk }) => {
     <ModalComponent
       title="Tạo Tài Khoản Mới"
       visible={visible}
-      setVisible={setVisible}
       onOk={onOk}
       onCancel={onCancel}
       width={500}
+      styleWrapper={{backgroundColor: "#fff"}}
     >
       <form className={styles.modalWrapper} onSubmit={handleSubmit(onSubmit)}>
         <span className={styles.label}>Tài khoản</span>
@@ -77,4 +77,4 @@ const CreateUserModal = ({ visible, setVisible, onCancel, onOk }) => {
   );
 };
 
-export default CreateUserModal;
+export default ModalCreateUser;
