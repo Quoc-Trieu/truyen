@@ -33,3 +33,11 @@ export const deleteUser = (phone) => {
   }
   return AxiosClient.delete("user/deleteUser", {data});
 };
+
+export const putChangePass = ({phone, data}) => {
+  console.log({phone, data});
+  return AxiosClient.put("/user/updatePassUser", data, {
+    params: { phone: phone },
+  });
+};
+

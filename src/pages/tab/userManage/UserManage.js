@@ -3,7 +3,7 @@ import Header from "./../../../components/Header/Header";
 import styles from "./UserManage.module.scss";
 import SearchInput from "./../../../components/SearchInput/SearchInput";
 import Button from "./../../../components/Button/Button";
-import ListUser from "../../../components/ListUser/ListUser";
+import ListUser from "./components/ListUser/ListUser";
 import Pagination from "../../../components/Pagination/Pagination";
 import ModalCreateUser from "./components/ModalCreateUser/ModalCreateUser";
 import iconAddUser from "../../../assets/ico/icon-awesome-user-plus.png";

@@ -22,7 +22,7 @@ const ModalComponent = ({
     <Modal
       centered={centered}
       visible={visible}
-      onOk={onOk}
+      // onOk={onOk}
       // onCancel={onCancel}
       footer={null}
       width={width}

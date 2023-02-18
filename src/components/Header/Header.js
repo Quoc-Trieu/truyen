@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Header.module.scss";
 import iconDown from "../../assets/ico/icon-awesome-caret-down.png";
 import avatar from "../../assets/images/avatar-account.png";
@@ -7,14 +7,17 @@ import { useNavigate } from "react-router-dom";
 import { removeToken } from './../../utils/localStorage';
 import { useSelector } from 'react-redux';
 import { userInfoSelector, phoneUserSelector } from "../../store/user/UserSlice";
+import ModalChangePassword from './../../pages/tab/userManage/components/ModalCreateUser/ModalChangePassword';
 
 const assignment = ({ title, name }) => {
   const navigate = useNavigate();
   const userInfo = useSelector(userInfoSelector)
   const phoneSelector = useSelector(phoneUserSelector)
+  const [showModalChangePassword, setShowModalChangePassword] = useState(false);
 
   const handleChangePassword = () => {
     console.log("handleChangePassword");
+    setShowModalChangePassword(true)
   }
 
   //logout
@@ -53,6 +56,7 @@ const assignment = ({ title, name }) => {
           </Dropdown.Menu>
         </Dropdown>
       </div>
+      <ModalChangePassword visible={showModalChangePassword} onCancel={() => setShowModalChangePassword(false)} onOk={() => setShowModalChangePassword(false)}/>
     </div>
   );
 };

@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ListUser.module.scss";
-import iconEdit from "../../assets/ico/icon-feather-edit.png";
-import iconRemove from "../../assets/ico/icon-remove.png";
-import iconLock from "../../assets/ico/icon-ionic-lock.png";
-import iconUnLock from "../../assets/ico/icon-ionic-unlock.png";
-import iconDown from "../../assets/ico/icon-awesome-caret-down.png";
+import iconEdit from "../../../../../assets/ico/icon-feather-edit.png";
+import iconRemove from "../../../../../assets/ico/icon-remove.png";
+import iconLock from "../../../../../assets/ico/icon-ionic-lock.png";
+import iconUnLock from "../../../../../assets/ico/icon-ionic-unlock.png";
+import iconDown from "../../../../../assets/ico/icon-awesome-caret-down.png";
 import Dropdown from "react-bootstrap/Dropdown";
-import ModalConfirm from "./../ModalComponent/ModalConfirm";
+import ModalConfirm from "../../../../../components/ModalComponent/ModalConfirm";
 import {
   getALLUser,
   putUpdateUser,
   deleteUser,
-} from "./../../services/userServies";
+} from "../../../../../services/userServies";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getALLInfoUser, setUserDetails } from "./../../store/user/UserSlice";
-import { infoALLUserSelector } from "./../../store/user/UserSlice";
+import { getALLInfoUser, setUserDetails } from "../../../../../store/user/UserSlice";
+import { infoALLUserSelector } from "../../../../../store/user/UserSlice";
 import Notiflix from "notiflix";
-import ModalEditUser from "./../../pages/tab/userManage/components/ModalCreateUser/ModalEditUser";
-import Pagination from "./../Pagination/Pagination";
+import ModalEditUser from "../ModalCreateUser/ModalEditUser";
+import Pagination from "../../../../../components/Pagination/Pagination";
 
 const ListUser = ({ itemsHeaderRow }) => {
   const [showModalRemove, setShowModalRemove] = useState(false);
