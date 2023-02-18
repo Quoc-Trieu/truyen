@@ -71,28 +71,32 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
           placeholder="Nhập sđt người dùng"
           className={styles.input}
           {...register("phone", {
-            required: true,
+            required: "Vui lòng không bỏ trống ô này",
+            minLength: {
+              value: 6,
+              message: 'Nhập dài hơn 6 ký tự',
+            },
           })}
         />
-        {errors?.phone?.type === "required" ? (
-          <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
-        ) : (
-          <p className={styles.errorText}> </p>
-        )}
+        {errors?.phone && 
+          <p className={styles.errorText}>{errors?.phone?.message}</p>
+        }
 
         <span className={styles.label}>Mật khẩu</span>
         <input
           placeholder="Nhập mật khẩu"
           className={styles.input}
           {...register("password", {
-            required: true,
+            required: "Vui lòng không bỏ trống ô này",
+            minLength: {
+              value: 6,
+              message: 'Nhập dài hơn 6 ký tự',
+            },
           })}
         />
-        {errors?.password?.type === "required" ? (
-          <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
-        ) : (
-          <p className={styles.errorText}> </p>
-        )}
+        {errors?.password && 
+          <p className={styles.errorText}>{errors?.password?.message}</p>
+        }
 
         <span className={styles.label}>Tên người dùng</span>
         <input

@@ -4,17 +4,20 @@ import { Modal } from "antd";
 // import iconClose from "../../../../../assets/images/iconClose.png";
 import { useForm } from "react-hook-form";
 import ModalComponent from "../../../../../components/ModalComponent/ModalComponent";
-import { postCreateUser } from "../../../../../services/userServies";
+import { postCreateUser, putChangePass } from "../../../../../services/userServies";
 import { useSelector } from "react-redux";
 import RadioButton from "./../../../../../components/RadioButton/RadioButton";
 import { Notiflix } from "notiflix";
 import { useDispatch } from "react-redux";
-import { getALLInfoUser, userDetailsSelector } from "../../../../../store/user/UserSlice";
+import {
+  getALLInfoUser,
+  roleUserSelector,
+} from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
-import { putUpdateUser } from './../../../../../services/userServies';
+import { putUpdateUser } from "./../../../../../services/userServies";
 
-const ModalEditUser = ({ title, visible, onCancel, onOk }) => {
-  const item = useSelector(userDetailsSelector);
+const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
+  console.log('itemSelect' + item);
   const {
     register,
     setValue,
@@ -23,37 +26,50 @@ const ModalEditUser = ({ title, visible, onCancel, onOk }) => {
     watch,
     formState: { errors },
   } = useForm();
-  const ROLE = { USER: "USER", MANAGE: "MANAGE" };
- 
   const dispatch = useDispatch();
-
-  const [phone, setPhone] = useState();
-  const [password, setPassword] = useState();
-  const [fullName, setFullName] = useState();
+  const ROLE = { USER: "USER", MANAGE: "MANAGE" };
   const [selectedRole, setSelectedRole] = useState();
+  const roleUser = useSelector(roleUserSelector);
+  console.log(roleUser);
 
   useEffect(() => {
-    setPhone(item?.phone);
-    setPassword(item?.password);
-    setFullName(item?.fullName);
+    setValue("phone", item?.phone);
+    setValue("password", item?.password);
+    setValue("fullName", item?.fullName);
     setSelectedRole(item?.role?.join());
-  }, [visible])
+    // console.log(selectedRole);
+  }, [visible]);
 
   const onSelectRole = (roleName) => {
-    //cập nhật giá trị cho selectedRole để render lại RadioButton
-    setSelectedRole(roleName);
+    // chỉ các tài khoản có quyền USER và MANAGE bị thay đổi
+    if (selectedRole == ROLE.MANAGE || selectedRole == ROLE.USER) {
+      setSelectedRole(roleName);
+    }
   };
 
   const onSubmit = async (data) => {
     console.log(data);
     try {
       Loading.pulse();
-      const res = await putUpdateUser({
-        fullName: fullName,
-        phone: phone,
-        role: selectedRole,
-        status: "ACTIVE",
+      const resUpdate = await putUpdateUser({
+        phone: item?.phone,
+        data: {
+          fullName: data?.fullName,
+          phone: data?.phone,
+          role: selectedRole,
+          status: item?.status,
+        },
       });
+      if(item?.password !== data?.password){
+        const resChangePass = await putChangePass({
+          phone: data?.phone,
+          data: {
+            oldPassword: item?.password,
+            newPassword: data?.password,
+            role: roleUser,
+          },
+        });
+      }
       //reload lại danh sách user
       dispatch(getALLInfoUser());
       reset();
@@ -79,42 +95,44 @@ const ModalEditUser = ({ title, visible, onCancel, onOk }) => {
         <input
           placeholder="Nhập sđt người dùng"
           className={styles.input}
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          
+          {...register("phone", {
+            required: "Vui lòng không bỏ trống ô này",
+            minLength: {
+              value: 6,
+              message: "Nhập dài hơn 6 ký tự",
+            },
+          })}
         />
-        {errors?.phone?.type === "required" ? (
-          <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
-        ) : (
-          <p className={styles.errorText}> </p>
+        {errors?.phone && (
+          <p className={styles.errorText}>{errors?.phone?.message}</p>
         )}
 
         <span className={styles.label}>Mật khẩu</span>
         <input
           placeholder="Nhập mật khẩu"
           className={styles.input}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          
+          {...register("password", {
+            required: "Vui lòng không bỏ trống ô này",
+            minLength: {
+              value: 6,
+              message: "Nhập dài hơn 6 ký tự",
+            },
+          })}
         />
-        {errors?.password?.type === "required" ? (
-          <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
-        ) : (
-          <p className={styles.errorText}> </p>
+        {errors?.password && (
+          <p className={styles.errorText}>{errors?.password?.message}</p>
         )}
 
         <span className={styles.label}>Tên người dùng</span>
         <input
           placeholder="Nhập tên người dùng"
           className={styles.input}
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-         
+          {...register("fullName", {
+            required: "Vui lòng không bỏ trống ô này",
+          })}
         />
-        {errors?.fullName?.type === "required" ? (
-          <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
-        ) : (
-          <p className={styles.errorText}> </p>
+        {errors?.fullName && (
+          <p className={styles.errorText}>{errors?.fullName?.message}</p>
         )}
 
         <span className={styles.label}>Phân quyền</span>
@@ -123,18 +141,14 @@ const ModalEditUser = ({ title, visible, onCancel, onOk }) => {
             className={styles.radioGroup}
             onClick={() => onSelectRole(ROLE.USER)}
           >
-            <RadioButton
-              selected={selectedRole == ROLE.USER}
-            />
+            <RadioButton selected={selectedRole == ROLE.USER} />
             <span>User</span>
           </div>
           <div
             className={styles.radioGroup}
             onClick={() => onSelectRole(ROLE.MANAGE)}
           >
-            <RadioButton
-              selected={selectedRole == ROLE.MANAGE}
-            />
+            <RadioButton selected={selectedRole == ROLE.MANAGE} />
             <span>Quản lý</span>
           </div>
         </div>

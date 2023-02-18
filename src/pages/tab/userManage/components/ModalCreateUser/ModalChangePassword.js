@@ -77,32 +77,34 @@ const ModalChangePassword = ({ visible, onCancel, onOk }) => {
           placeholder="Mật khẩu cũ"
           className={styles.input}
           {...register("oldPassword", {
-            required: true,
+            required: "Vui lòng không bỏ trống ô này",
+            minLength: {
+              value: 6,
+              message: 'Nhập dài hơn 6 ký tự',
+            },
           })}
         />
         {/* bắt lỗi từ server trả về và lỗi để trống */}
         {errors?.oldPassword && (
           <span className={styles.errorText}>{errors.oldPassword.message}</span>
         )}
-        {errors?.oldPassword?.type === "required" && 
-          <span className={styles.errorText}>Vui lòng không bỏ trống ô này</span>
-        }
 
         <span className={styles.label}>Mật khẩu</span>
         <input
           placeholder="Mật khẩu mới"
           className={styles.input}
           {...register("newPassword", {
-            required: true,
+            required: "Vui lòng không bỏ trống ô này",
+            minLength: {
+              value: 6,
+              message: 'Nhập dài hơn 6 ký tự',
+            },
           })}
         />
         {/* bắt lỗi từ server trả về và lỗi để trống */}
         {errors?.newPassword && (
           <span className={styles.errorText}>{errors.newPassword.message}</span>
         )}
-        {errors?.newPassword?.type === "required" && 
-          <span className={styles.errorText}>Vui lòng không bỏ trống ô này</span>
-        }
 
         <button className={styles.btnSubmit} type="submit">
           Lưu

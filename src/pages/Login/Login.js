@@ -11,7 +11,7 @@ import { login } from "./../../services/authServices";
 import { setPhoneLocalStorage, setToken } from "./../../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Notiflix from 'notiflix';
-import { setPhone, getInfoUser } from './../../store/user/UserSlice';
+import { getInfoUser } from './../../store/user/UserSlice';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,7 +32,6 @@ const Login = () => {
       setToken(res?.data?.auth);
       setPhoneLocalStorage(res?.data?.user?.phone);
       // lưu sdt vào redux và lấy thông tin user
-      dispatch(setPhone(res?.data?.user?.phone));
       dispatch(getInfoUser(res?.data?.user?.phone))
       //thông báo và chuyền màn hình đăng nhập thành công
       Notiflix.Notify.success('Đăng nhập thành công');

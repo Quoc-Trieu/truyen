@@ -17,9 +17,9 @@ export const getInfo = (phone) => {
   return AxiosClient.get("/user/getInfo", { params: { phoneNumber: phone } });
 };
 
-export const putUpdateUser = (data) => {
+export const putUpdateUser = ({phone, data}) => {
   return AxiosClient.put("/user/updateUser", data, {
-    params: { phone: data?.phone },
+    params: { phone: phone },
   });
 };
 

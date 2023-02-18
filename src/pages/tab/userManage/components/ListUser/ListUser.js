@@ -14,7 +14,9 @@ import {
 } from "../../../../../services/userServies";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getALLInfoUser, setUserDetails } from "../../../../../store/user/UserSlice";
+import {
+  getALLInfoUser,
+} from "../../../../../store/user/UserSlice";
 import { infoALLUserSelector } from "../../../../../store/user/UserSlice";
 import Notiflix from "notiflix";
 import ModalEditUser from "../ModalCreateUser/ModalEditUser";
@@ -26,19 +28,24 @@ const ListUser = ({ itemsHeaderRow }) => {
   const dispatch = useDispatch();
   const InfoALLUser = useSelector(infoALLUserSelector);
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemSelect, setItemSelect] = useState();
 
   useEffect(() => {
     // get Api tất cả user từ redux Thunk
     dispatch(getALLInfoUser());
   }, []);
 
+  useEffect(() => {
+    setItemSelect(itemSelect);
+  }, [itemSelect]);
+
   const onEdit = (item) => {
+    setItemSelect(item);
     setShowModalEditUser(true);
-    dispatch(setUserDetails(item));
   };
 
-  const onRemove = (phone) => {
-    // mở modal
+  const onRemove = (item) => {
+    setItemSelect(item);
     setShowModalRemove(true);
   };
 
@@ -80,7 +87,7 @@ const ListUser = ({ itemsHeaderRow }) => {
       };
     }
     //update user
-    await putUpdateUser(newUpdate);
+    await putUpdateUser({phone: item?.phone, data: newUpdate});
     // gọi lại api để lấy lại danh sách user
     dispatch(getALLInfoUser());
   };
@@ -120,7 +127,7 @@ const ListUser = ({ itemsHeaderRow }) => {
                 <img
                   src={iconRemove}
                   className={styles.remove}
-                  onClick={() => onRemove(item?.phone)}
+                  onClick={() => onRemove(item)}
                 />
 
                 <Dropdown style={{ height: "100%" }}>
@@ -155,14 +162,6 @@ const ListUser = ({ itemsHeaderRow }) => {
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-              {/* Modal xác nhận xóa user */}
-              <ModalConfirm
-                visible={showModalRemove}
-                title="Xác nhận xóa User"
-                subText="Toàn bộ thông tin tài khoản của user sẽ bị xóa vĩnh viễn"
-                onCancel={() => setShowModalRemove(false)}
-                onConfirm={() => onDeleteUser(item?.phone)}
-              />
             </div>
           );
         })}
@@ -175,9 +174,18 @@ const ListUser = ({ itemsHeaderRow }) => {
       {/* Modal sửa thông tin user */}
       <ModalEditUser
         title="Sửa Thông Tin Tài Khoản"
+        item={itemSelect}
         visible={showModalEditUser}
         onCancel={() => setShowModalEditUser(false)}
         onOk={() => setShowModalEditUser(false)}
+      />
+      
+      <ModalConfirm
+        visible={showModalRemove}
+        title="Xác nhận xóa User"
+        subText="Toàn bộ thông tin tài khoản của user sẽ bị xóa vĩnh viễn"
+        onCancel={() => setShowModalRemove(false)}
+        onConfirm={() => onDeleteUser(itemSelect?.phone)}
       />
     </div>
   );

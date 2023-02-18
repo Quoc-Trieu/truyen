@@ -2,10 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getInfo, getALLUser } from "./../../services/userServies";
 import { getALLTreeByCondition } from './../../services/treeServices';
+import { getPhoneLocalStorage } from './../../utils/localStorage';
 
 const initialState = {
   phone: null,
-  userDetails: {},
+  role: null,
   userInfo: {},
   infoALLUser: [],
   inoALLTree: [],
@@ -13,7 +14,7 @@ const initialState = {
   error: null,
 };
 
-export const getInfoUser = createAsyncThunk("user/getInfoUser", async (phone) => {
+export const getInfoUser = createAsyncThunk("user/getInfoUser", async (phone = getPhoneLocalStorage()) => {
   const response = await getInfo(phone);
   return response?.data;
 });
@@ -37,11 +38,8 @@ const userSlice = createSlice({
     setPhone: (state, action) => {
       state.phone = action.payload;
     },
-    setUserDetails: (state, action) => {
-      state.userDetails = action.payload;
-    },
     resetUser: (state) => {
-      return { ...initialState, phone: state.phone, userInfo: state.userInfo, infoALLUser: state.infoALLUser };
+      return { ...initialState, phone: state.phone, role: state.role, userInfo: state.userInfo, infoALLUser: state.infoALLUser };
     },
   },
   extraReducers: (builder) => {
@@ -56,6 +54,7 @@ const userSlice = createSlice({
       state.loading = false;
       // Add user to the state array
       state.userInfo = action.payload;
+      state.role = action.payload?.role.join();
     });
     builder.addCase(getInfoUser.rejected, (state, action) => {
       state.loading = false;
@@ -74,10 +73,10 @@ const userSlice = createSlice({
 // sử dụng useSelector để lấy dữ liệu từ store này
 export const userInfoSelector = (state) => state.user.userInfo;
 export const phoneUserSelector = (state) => state.user.phone;
-export const userDetailsSelector = (state) => state.user.userDetails;
+export const roleUserSelector = (state) => state.user.role;
 export const infoALLUserSelector = (state) => state.user.infoALLUser;
 export const infoALLTreeSelector = (state) => state.user.inoALLTree;
 
 
-export const { setPhone, clearPhone, setUserDetails } = userSlice.actions;
+export const { setPhone, clearPhone } = userSlice.actions;
 export default userSlice.reducer;

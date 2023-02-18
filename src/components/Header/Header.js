@@ -6,13 +6,12 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from './../../utils/localStorage';
 import { useSelector } from 'react-redux';
-import { userInfoSelector, phoneUserSelector } from "../../store/user/UserSlice";
+import { userInfoSelector } from "../../store/user/UserSlice";
 import ModalChangePassword from './../../pages/tab/userManage/components/ModalCreateUser/ModalChangePassword';
 
 const assignment = ({ title, name }) => {
   const navigate = useNavigate();
   const userInfo = useSelector(userInfoSelector)
-  const phoneSelector = useSelector(phoneUserSelector)
   const [showModalChangePassword, setShowModalChangePassword] = useState(false);
 
   const handleChangePassword = () => {
@@ -36,7 +35,7 @@ const assignment = ({ title, name }) => {
         {/* Dropdown Account */}
         <Dropdown>
           <Dropdown.Toggle>
-            <div className={styles.btnAccount} onClick={() => console.log(phoneSelector)}>
+            <div className={styles.btnAccount}>
               <img src={avatar} className={styles.avatarProfile} />
               <span>{userInfo?.fullName}</span>
               <img src={iconDown} className={styles.iconBlackDown} />
