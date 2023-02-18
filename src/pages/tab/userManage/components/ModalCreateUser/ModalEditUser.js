@@ -5,14 +5,16 @@ import { Modal } from "antd";
 import { useForm } from "react-hook-form";
 import ModalComponent from "../../../../../components/ModalComponent/ModalComponent";
 import { postCreateUser } from "../../../../../services/userServies";
+import { useSelector } from "react-redux";
 import RadioButton from "./../../../../../components/RadioButton/RadioButton";
 import { Notiflix } from "notiflix";
 import { useDispatch } from "react-redux";
-import { getALLInfoUser } from "../../../../../store/user/UserSlice";
+import { getALLInfoUser, userDetailsSelector } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
+import { putUpdateUser } from './../../../../../services/userServies';
 
-const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
-  const ROLE = { USER: "USER", MANAGE: "MANAGE" };
+const ModalEditUser = ({ title, visible, onCancel, onOk }) => {
+  const item = useSelector(userDetailsSelector);
   const {
     register,
     setValue,
@@ -20,29 +22,38 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
     reset,
     watch,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      phone: item?.phone,
-      password: item?.password,
-      fullName: item?.fullName,
-      role: item?.role[0],
-    },
-  });
+  } = useForm();
+  const ROLE = { USER: "USER", MANAGE: "MANAGE" };
+ 
   const dispatch = useDispatch();
-  const [selectedRole, setSelectedRole] = useState(ROLE.USER);
+
+  const [phone, setPhone] = useState();
+  const [password, setPassword] = useState();
+  const [fullName, setFullName] = useState();
+  const [selectedRole, setSelectedRole] = useState();
+
+  useEffect(() => {
+    setPhone(item?.phone);
+    setPassword(item?.password);
+    setFullName(item?.fullName);
+    setSelectedRole(item?.role?.join());
+  }, [visible])
 
   const onSelectRole = (roleName) => {
     //cập nhật giá trị cho selectedRole để render lại RadioButton
     setSelectedRole(roleName);
-    //setValue để lưu giá trị vào hook form
-    setValue("role", roleName);
   };
 
   const onSubmit = async (data) => {
     console.log(data);
     try {
       Loading.pulse();
-      const res = await postCreateUser(data);
+      const res = await putUpdateUser({
+        fullName: fullName,
+        phone: phone,
+        role: selectedRole,
+        status: "ACTIVE",
+      });
       //reload lại danh sách user
       dispatch(getALLInfoUser());
       reset();
@@ -68,9 +79,9 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         <input
           placeholder="Nhập sđt người dùng"
           className={styles.input}
-          {...register("phone", {
-            required: true,
-          })}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          
         />
         {errors?.phone?.type === "required" ? (
           <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
@@ -82,9 +93,9 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         <input
           placeholder="Nhập mật khẩu"
           className={styles.input}
-          {...register("password", {
-            required: true,
-          })}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          
         />
         {errors?.password?.type === "required" ? (
           <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
@@ -96,9 +107,9 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         <input
           placeholder="Nhập tên người dùng"
           className={styles.input}
-          {...register("fullName", {
-            required: true,
-          })}
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+         
         />
         {errors?.fullName?.type === "required" ? (
           <p className={styles.errorText}>Vui lòng không bỏ trống ô này</p>
@@ -114,7 +125,6 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
           >
             <RadioButton
               selected={selectedRole == ROLE.USER}
-              value={selectedRole}
             />
             <span>User</span>
           </div>
@@ -124,7 +134,6 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
           >
             <RadioButton
               selected={selectedRole == ROLE.MANAGE}
-              value={selectedRole}
             />
             <span>Quản lý</span>
           </div>

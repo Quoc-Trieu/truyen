@@ -6,11 +6,11 @@ import { useSelector } from "react-redux";
 import { infoALLTreeSelector } from "./../../../../../store/user/UserSlice";
 
 const STATUSTREE = {
-  X: { name: "Cây cạo", color: "#31D100" },
-  CD: { name: "Chưa thu hoạch", color: "#000" },
-  K: { name: "Chưa thu hoạch", color: "#31D100" },
-  C: { name: "Chưa thu hoạch", color: "#31D100" },
-  Y: { name: "Chưa thu hoạch", color: "#31D100" },
+  X: { name: "Cây cạo", color: "#31D100", borderColor: "#95FF74" },
+  CD: { name: "Cụt đọt", color: "#43439F", borderColor: "#D2D2FF" },
+  KM: { name: "Khô miệng", color: "#967B38", borderColor: "#E2D7BA" },
+  K: { name: "Cây kém", color: "#FFC000", borderColor: "#FFDD75" },
+  O: { name: "Cây chết", color: "#FF2700", borderColor: "#FFD7CF" },
 };
 
 const ListTree = () => {
@@ -19,9 +19,22 @@ const ListTree = () => {
   const [itemTree, setItemTree] = useState();
 
   const onDetails = (item) => {
+    console.log('item'+ JSON.stringify(item));
     setShowModal(true)
-    setItemTree(item)
+    setItemTree(item);
   };
+
+  const SplitChuoi = (chuoi) => {
+    let soLo = chuoi.substring(1, 3); // lấy 2 ký tự sau chữ S
+    let soHang = chuoi.substring(4, 7); // lấy 3 ký tự sau chữ H
+    let soCay = chuoi.substring(9, 11); // lấy 3 ký tự sau chữ C
+  
+    return {
+      soLo: soLo,
+      soHang: soHang,
+      soCay: soCay
+    };
+  }
 
   return (
     <div className={styles.listTree}>
@@ -38,16 +51,16 @@ const ListTree = () => {
         {allTree.map((item, index) => {
           return (
             <div className={styles.itemRow} key={index}>
-              <span>{item?.name}</span>
-              <span>Hàng số {index + 1}</span>
-              <span>Cây số {index + 1}</span>
+              <span>Số lô {SplitChuoi(item?.name)?.soLo}</span>
+              <span>Hàng số {SplitChuoi(item?.name)?.soHang}</span>
+              <span>Cây số {SplitChuoi(item?.name)?.soCay}</span>
               <div className={styles.statusTree}>
                 <div
                   className={styles.dotStatus}
                   style={{
                     backgroundColor: STATUSTREE?.[item?.status]?.color,
                     borderWidth: "3px",
-                    borderColor: "#95FF74",
+                    borderColor: STATUSTREE?.[item?.status]?.borderColor,
                   }}
                 ></div>
                 <span className={styles.statusText}>{STATUSTREE?.[item?.status]?.name}</span>
@@ -61,17 +74,19 @@ const ListTree = () => {
                   <span>Chi tiết cây</span>
                 </button>
               </div>
+
+              
             </div>
           );
         })}
       </div>
 
       <ModalDetailsTree
-        visible={showModal}
-        data={itemTree}
-        onCancel={() => setShowModal(false)}
-        onOk={() => setShowModal(false)}
-      />
+                  visible={showModal}
+                  data={itemTree}
+                  onCancel={() => setShowModal(false)}
+                  onOk={() => setShowModal(false)}
+                />
     </div>
   );
 };

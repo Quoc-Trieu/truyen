@@ -33,12 +33,25 @@
             //cho cái đầu tiên khác màu
             &:first-child {
                 background-color: #EFF6E7;
+                justify-content: space-between;
 
                 .label {
                     color: #61A300;
+                    background-color: #EFF6E7;
+                    text-overflow: ellipsis; 
                 }
                 .value {
                     color: #61A300;
+                    flex: 1;
+                    overflow-wrap: normal;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 60%;
+
+                    &:hover {
+                        overflow: visible;
+                        overflow-wrap: break-word;
+                }
                 }
             }
             // chỉnh text cho các item còn lại
@@ -80,7 +93,7 @@
         border-style: solid;
         border-color: #000;
         border-radius: 4px;
-        padding: 10px 20px;
+        padding: 12px 20px;
         gap: 10px;
 
         .titleStatusTree {

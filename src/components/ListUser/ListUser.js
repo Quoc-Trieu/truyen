@@ -14,7 +14,7 @@ import {
 } from "./../../services/userServies";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getALLInfoUser } from "./../../store/user/UserSlice";
+import { getALLInfoUser, setUserDetails } from "./../../store/user/UserSlice";
 import { infoALLUserSelector } from "./../../store/user/UserSlice";
 import Notiflix from "notiflix";
 import ModalEditUser from "./../../pages/tab/userManage/components/ModalCreateUser/ModalEditUser";
@@ -22,6 +22,7 @@ import ModalEditUser from "./../../pages/tab/userManage/components/ModalCreateUs
 const ListUser = ({ itemsHeaderRow }) => {
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [showModalEditUser, setShowModalEditUser] = useState(false);
+  const [data , setData] = useState();
   const dispatch = useDispatch();
   const InfoALLUser = useSelector(infoALLUserSelector);
 
@@ -30,9 +31,13 @@ const ListUser = ({ itemsHeaderRow }) => {
     dispatch(getALLInfoUser());
   }, []);
 
+
+
   const onEdit = (item) => {
     setShowModalEditUser(true);
-    console.log(item);
+    setData(JSON.stringify(item));
+    console.log('item?.users' + JSON.stringify(item));
+    dispatch(setUserDetails(item))
   };
 
   const onRemove = (phone) => {
@@ -94,7 +99,7 @@ const ListUser = ({ itemsHeaderRow }) => {
 
       {/* Item row */}
       <div className={styles.itemContainer}>
-        {InfoALLUser.map((item, index) => {
+        {InfoALLUser?.users?.map((item, index) => {
           // kiểm tra trạng thái của user có bị khóa hay không, nếu bị khóa thì trả về true, ngược lại trả về false
           const isUserActive = item?.status == "ACTIVE" ? true : false;
           const getIconUserLocked = isUserActive ? iconUnLock : iconLock;
@@ -147,7 +152,7 @@ const ListUser = ({ itemsHeaderRow }) => {
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-                {/* Modal xác nhận xóa user */}
+              {/* Modal xác nhận xóa user */}
               <ModalConfirm
                 visible={showModalRemove}
                 title="Xác nhận xóa User"
@@ -155,18 +160,18 @@ const ListUser = ({ itemsHeaderRow }) => {
                 onCancel={() => setShowModalRemove(false)}
                 onConfirm={() => onDeleteUser(item?.phone)}
               />
-              {/* Modal tạo tài khoản */}
-              <ModalEditUser
-                title="Sửa Thông Tin Tài Khoản"
-                visible={showModalEditUser}
-                item={item}
-                onCancel={() => setShowModalEditUser(false)}
-                onOk={() => setShowModalEditUser(false)}
-              />
+             
             </div>
           );
         })}
       </div>
+       {/* Modal sửa thông tin user */}
+       <ModalEditUser
+                title="Sửa Thông Tin Tài Khoản"
+                visible={showModalEditUser}
+                onCancel={() => setShowModalEditUser(false) }
+                onOk={() => setShowModalEditUser(false)}
+              />
     </div>
   );
 };
