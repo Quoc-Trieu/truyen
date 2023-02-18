@@ -5,7 +5,7 @@ import { CSSTransition, Transition  } from 'react-transition-group';
 import iconPrev from "../../assets/ico/icon-feather-arrow-left-blue.png";
 import iconNext from "../../assets/ico/icon-feather-arrow-right-blue.png";
 
-const Pagination = ({ pageTotalNum = 8, initValue = 1, OnChangePage, align }) => {
+const Pagination = ({ pageTotalNum = 1, initValue = 1, OnChangePage, align }) => {
   const [pageCurrent, setPageCurrent] = useState(initValue);
   const [disablePrev, setDisablePrev] = useState(false);
   const [disableNext, setDisableNext] = useState(false);
@@ -23,6 +23,8 @@ const Pagination = ({ pageTotalNum = 8, initValue = 1, OnChangePage, align }) =>
     } else {
       setDisableNext(false);
     }
+    // chạy OnChangePage được truyền vào từ component cha khi pageCurrent thay đổi
+    OnChangePage(pageCurrent);
   }, [pageCurrent]);
 
   const onPrev = () => {

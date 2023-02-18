@@ -27,12 +27,6 @@ const UserManage = () => {
         <ListUser
           itemsHeaderRow={["Số điện thoại", "Tên", ""]}
         />
-        <Pagination
-          align="flex-end"
-          OnChangePage={(text) => {
-            console.log(text);
-          }}
-        />
       </div>
 
       <ModalCreateUser visible={showModal} onCancel={() =>  setShowModal(false)}  onOk={() =>  setShowModal(false)}/>

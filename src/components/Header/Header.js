@@ -13,6 +13,10 @@ const assignment = ({ title, name }) => {
   const userInfo = useSelector(userInfoSelector)
   const phoneSelector = useSelector(phoneUserSelector)
 
+  const handleChangePassword = () => {
+    console.log("handleChangePassword");
+  }
+
   //logout
   const handleLogOut =  () => {
     removeToken();
@@ -37,7 +41,7 @@ const assignment = ({ title, name }) => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu style={{ padding: 0}}>
-            <Dropdown.Item className={styles.itemDropdown}>
+            <Dropdown.Item className={styles.itemDropdown} onClick={handleChangePassword}>
               Đổi mật khẩu
             </Dropdown.Item>
             <Dropdown.Item

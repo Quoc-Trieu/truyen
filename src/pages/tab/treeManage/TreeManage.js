@@ -16,12 +16,6 @@ const TreeManage = () => {
         <BoxTreeParameter />
         <ListTree />
 
-        <Pagination
-          align="flex-end"
-          OnChangePage={(text) => {
-            console.log(text);
-          }}
-        />
       </div>
     </div>
   );

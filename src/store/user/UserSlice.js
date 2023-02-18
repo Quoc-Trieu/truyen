@@ -18,14 +18,14 @@ export const getInfoUser = createAsyncThunk("user/getInfoUser", async (phone) =>
   return response?.data;
 });
 
-export const getALLInfoUser = createAsyncThunk("user/getALLInfoUser", async () => {
-  const response = await getALLUser({ page: 1, limit: 10, userRole: "ADMIN" });
+export const getALLInfoUser = createAsyncThunk("user/getALLInfoUser", async (page=1) => {
+  const response = await getALLUser({ page, limit: 10, userRole: "ADMIN" });
   console.log(response?.data);
   return response?.data;
 });
 
-export const getALLTree = createAsyncThunk("user/getALLTree", async () => {
-  const response = await getALLTreeByCondition({ page: 1, limit: 10,});
+export const getALLTree = createAsyncThunk("user/getALLTree", async (page=1) => {
+  const response = await getALLTreeByCondition({ page, limit: 10,});
   console.log(response?.data);
   return response?.data;
 });

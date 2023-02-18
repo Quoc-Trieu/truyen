@@ -3,7 +3,9 @@ import styles from "./ListTree.module.scss";
 import iconEdit from "../../../../../assets/ico/icon-feather-edit.png";
 import ModalDetailsTree from "./../ModalDetailsTree/ModalDetailsTree";
 import { useSelector } from "react-redux";
-import { infoALLTreeSelector } from "./../../../../../store/user/UserSlice";
+import { infoALLTreeSelector, getALLTree } from "./../../../../../store/user/UserSlice";
+import Pagination from './../../../../../components/Pagination/Pagination';
+import { useDispatch } from 'react-redux';
 
 const STATUSTREE = {
   X: { name: "Cây cạo", color: "#31D100", borderColor: "#95FF74" },
@@ -17,6 +19,7 @@ const ListTree = () => {
   const [showModal, setShowModal] = useState(false);
   const allTree = useSelector(infoALLTreeSelector);
   const [itemTree, setItemTree] = useState();
+  const dispatch = useDispatch();
 
   const onDetails = (item) => {
     console.log('item'+ JSON.stringify(item));
@@ -36,6 +39,11 @@ const ListTree = () => {
     };
   }
 
+  const onChangePage = (page) => {
+    dispatch(getALLTree(page))
+    console.log(page);
+  }
+
   return (
     <div className={styles.listTree}>
       <div className={styles.headerListTree}>
@@ -48,7 +56,7 @@ const ListTree = () => {
 
       <div className={styles.listContainer}>
         {/* Item row */}
-        {allTree.map((item, index) => {
+        {allTree?.trees.map((item, index) => {
           return (
             <div className={styles.itemRow} key={index}>
               <span>Số lô {SplitChuoi(item?.name)?.soLo}</span>
@@ -74,12 +82,16 @@ const ListTree = () => {
                   <span>Chi tiết cây</span>
                 </button>
               </div>
-
-              
             </div>
           );
         })}
-      </div>
+
+  </div>
+  <Pagination
+          align="flex-end"
+          pageTotalNum={allTree?.totalPages}
+          OnChangePage={onChangePage}
+        />    
 
       <ModalDetailsTree
                   visible={showModal}

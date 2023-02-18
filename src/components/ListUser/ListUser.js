@@ -18,26 +18,23 @@ import { getALLInfoUser, setUserDetails } from "./../../store/user/UserSlice";
 import { infoALLUserSelector } from "./../../store/user/UserSlice";
 import Notiflix from "notiflix";
 import ModalEditUser from "./../../pages/tab/userManage/components/ModalCreateUser/ModalEditUser";
+import Pagination from "./../Pagination/Pagination";
 
 const ListUser = ({ itemsHeaderRow }) => {
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [showModalEditUser, setShowModalEditUser] = useState(false);
-  const [data , setData] = useState();
   const dispatch = useDispatch();
   const InfoALLUser = useSelector(infoALLUserSelector);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     // get Api tất cả user từ redux Thunk
     dispatch(getALLInfoUser());
   }, []);
 
-
-
   const onEdit = (item) => {
     setShowModalEditUser(true);
-    setData(JSON.stringify(item));
-    console.log('item?.users' + JSON.stringify(item));
-    dispatch(setUserDetails(item))
+    dispatch(setUserDetails(item));
   };
 
   const onRemove = (phone) => {
@@ -50,12 +47,12 @@ const ListUser = ({ itemsHeaderRow }) => {
       .then((res) => {
         Notiflix.Notify.success("Xóa thành công sđt: " + phone);
         setShowModalRemove(false);
-        dispatch(getALLInfoUser());
+        dispatch(getALLInfoUser(currentPage));
       })
       .catch((error) => {
         Notiflix.Notify.warning("Xóa thất bại");
         setShowModalRemove(false);
-        dispatch(getALLInfoUser());
+        dispatch(getALLInfoUser(currentPage));
       });
   };
 
@@ -86,6 +83,12 @@ const ListUser = ({ itemsHeaderRow }) => {
     await putUpdateUser(newUpdate);
     // gọi lại api để lấy lại danh sách user
     dispatch(getALLInfoUser());
+  };
+
+  const OnChangePage = (page) => {
+    setCurrentPage(page);
+    console.log(page);
+    dispatch(getALLInfoUser(page));
   };
 
   return (
@@ -160,18 +163,22 @@ const ListUser = ({ itemsHeaderRow }) => {
                 onCancel={() => setShowModalRemove(false)}
                 onConfirm={() => onDeleteUser(item?.phone)}
               />
-             
             </div>
           );
         })}
       </div>
-       {/* Modal sửa thông tin user */}
-       <ModalEditUser
-                title="Sửa Thông Tin Tài Khoản"
-                visible={showModalEditUser}
-                onCancel={() => setShowModalEditUser(false) }
-                onOk={() => setShowModalEditUser(false)}
-              />
+      <Pagination
+        align="flex-end"
+        pageTotalNum={InfoALLUser?.totalPages}
+        OnChangePage={OnChangePage}
+      />
+      {/* Modal sửa thông tin user */}
+      <ModalEditUser
+        title="Sửa Thông Tin Tài Khoản"
+        visible={showModalEditUser}
+        onCancel={() => setShowModalEditUser(false)}
+        onOk={() => setShowModalEditUser(false)}
+      />
     </div>
   );
 };
