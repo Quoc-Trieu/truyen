@@ -6,11 +6,12 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from './../../utils/localStorage';
 import { useSelector } from 'react-redux';
-import { userInfoSelector } from "../../store/user/UserSlice";
+import { userInfoSelector, phoneUserSelector } from "../../store/user/UserSlice";
 
 const assignment = ({ title, name }) => {
   const navigate = useNavigate();
   const userInfo = useSelector(userInfoSelector)
+  const phoneSelector = useSelector(phoneUserSelector)
 
   //logout
   const handleLogOut =  () => {
@@ -28,7 +29,7 @@ const assignment = ({ title, name }) => {
         {/* Dropdown Account */}
         <Dropdown>
           <Dropdown.Toggle>
-            <div className={styles.btnAccount}>
+            <div className={styles.btnAccount} onClick={() => console.log(phoneSelector)}>
               <img src={avatar} className={styles.avatarProfile} />
               <span>{userInfo?.fullName}</span>
               <img src={iconDown} className={styles.iconBlackDown} />

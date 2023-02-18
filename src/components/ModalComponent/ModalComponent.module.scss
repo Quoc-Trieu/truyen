@@ -75,13 +75,23 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    font-size: 18px;
+    font-weight: bold;
 
     .btnCannel {
       flex: 1;
+      padding: 10px 5px;
+      border-top-width: 1px;
+      border-right-width: 1px;
+      border-color: #707070;
     }
 
     .btnConfirm {
       flex: 1;
+      padding: 10px 5px;
+      border-top-width: 1px;
+      border-color: #707070;
+      color: #61A300;
     }
   }
 

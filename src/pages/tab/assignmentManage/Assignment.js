@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Assignment.module.scss";
 import Header from "./../../../components/Header/Header";
 import SearchInput from "./../../../components/SearchInput/SearchInput";
+import IconAdd from "./../../../assets/ico/icon-material-add-circle-outline.png";
 import Button from "./../../../components/Button/Button";
 import Pagination from "./../../../components/Pagination/Pagination";
 import { useState } from "react";
@@ -51,6 +52,7 @@ const Assignment = () => {
             onSubmit={(searchText) => console.log(searchText)}
           />
           <Button
+            icon={IconAdd}
             text="Tạo phân vùng mới"
             onSubmit={() => {
               setShowModal(true);

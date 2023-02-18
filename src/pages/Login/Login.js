@@ -8,7 +8,7 @@ import iconKey from "../../assets/ico/icon-feather-key.png";
 import iconEye from "../../assets/ico/icon-awesome-eye.png";
 import iconEyeOff from "../../assets/ico/icon-awesome-eye-slash.png";
 import { login } from "./../../services/authServices";
-import { setToken } from "./../../utils/localStorage";
+import { setPhoneLocalStorage, setToken } from "./../../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Notiflix from 'notiflix';
 import { setPhone, getInfoUser } from './../../store/user/UserSlice';
@@ -28,7 +28,9 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const res = await login(data);
+      // lưu token và sdt vào localstorage
       setToken(res?.data?.auth);
+      setPhoneLocalStorage(res?.data?.user?.phone);
       // lưu sdt vào redux và lấy thông tin user
       dispatch(setPhone(res?.data?.user?.phone));
       dispatch(getInfoUser(res?.data?.user?.phone))

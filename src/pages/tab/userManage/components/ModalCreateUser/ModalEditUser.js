@@ -11,9 +11,8 @@ import { useDispatch } from "react-redux";
 import { getALLInfoUser } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
 
-const ModalCreateUser = ({ visible, onCancel, onOk }) => {
+const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   const ROLE = { USER: "USER", MANAGE: "MANAGE" };
-  const STATUS = { ACTIVE: "ACTIVE", INACTIVE: "INACTIVE" };
   const {
     register,
     setValue,
@@ -23,11 +22,10 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      phone: "",
-      password: "",
-      fullName: "",
-      role: ROLE.USER,
-      status: STATUS.ACTIVE,
+      phone: item?.phone,
+      password: item?.password,
+      fullName: item?.fullName,
+      role: item?.role[0],
     },
   });
   const dispatch = useDispatch();
@@ -58,7 +56,7 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
 
   return (
     <ModalComponent
-      title="Tạo Tài Khoản Mới"
+      title={title}
       visible={visible}
       // onOk={onOk}
       onCancel={onCancel}
@@ -140,4 +138,4 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
   );
 };
 
-export default ModalCreateUser;
+export default ModalEditUser;

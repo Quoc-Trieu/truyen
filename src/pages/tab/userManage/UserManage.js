@@ -8,28 +8,6 @@ import Pagination from "../../../components/Pagination/Pagination";
 import ModalCreateUser from "./components/ModalCreateUser/ModalCreateUser";
 import iconAddUser from "../../../assets/ico/icon-awesome-user-plus.png";
 
-export const itemUser = [
-  {
-    phone: "01234567891",
-    name: "Nguyễn Văn A",
-    status: true,
-  },
-  {
-    phone: "01234567892",
-    name: "Nguyễn Văn B",
-    status: false,
-  },
-  {
-    phone: "01234567893",
-    name: "Nguyễn Văn C",
-    status: false,
-  },
-  {
-    phone: "01234567894",
-    name: "Nguyễn Văn D",
-    status: true,
-  },
-];
 
 const UserManage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -48,7 +26,6 @@ const UserManage = () => {
 
         <ListUser
           itemsHeaderRow={["Số điện thoại", "Tên", ""]}
-          itemUser={itemUser}
         />
         <Pagination
           align="flex-end"
@@ -58,7 +35,7 @@ const UserManage = () => {
         />
       </div>
 
-      <ModalCreateUser visible={showModal} onCancel={() =>  setShowModal(false)}  onOk={() =>  setShowModal(true)}/>
+      <ModalCreateUser visible={showModal} onCancel={() =>  setShowModal(false)}  onOk={() =>  setShowModal(false)}/>
     </div>
   );
 };

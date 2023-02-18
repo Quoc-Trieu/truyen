@@ -5,7 +5,8 @@ import RadioButton from './../../../../../components/RadioButton/RadioButton';
 import { ButtonSimple } from './../../../../../components/Button/ButtonSimple';
 
 
-const ModalDetailsTree = ({ visible, onCancel, onOk }) => {
+const ModalDetailsTree = ({ visible, onCancel, onOk, data }) => {
+  const [status, setStatus] = useState(data.status);
   return (
     <ModalComponent
       title="Chi tiết cây"
@@ -21,26 +22,26 @@ const ModalDetailsTree = ({ visible, onCancel, onOk }) => {
           {/* Mã cây */}
           <div className={styles.item}>
             <span className={styles.label}>Mã cây: </span>
-            <span className={styles.value}>1</span>
+            <span className={styles.value}>{data.name}</span>
           </div>
           {/* cây số */}
           <div className={styles.item}>
             <span className={styles.label}>Cây số: </span>
-            <span className={styles.value}>1</span>
+            <span className={styles.value}>{data.name}</span>
           </div>
           {/* Hàng số */}
           <div className={styles.item}>
             <span className={styles.label}>Hàng số: </span>
-            <span className={styles.value}>1</span>
+            <span className={styles.value}>{data.name}</span>
           </div>
           {/* Lô số */}
           <div className={styles.item}>
             <span className={styles.label}>Lô số: </span>
-            <span className={styles.value}>1</span>
+            <span className={styles.value}>{data.name}</span>
           </div>
           {/* ghi chú */}
           <textarea placeholder="Ghi chú: " rows="5" className={styles.inputNote}>
-            
+            {data.note}
           </textarea>
         </div>
 

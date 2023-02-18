@@ -31,8 +31,8 @@ const ModalConfirm = ({
             <span className={styles.subModal}>{subText}</span>
         </div>
         <div className={styles.modalFooter}>
-            <button className={styles.btnCannel}>{textCancel}</button>
-            <button className={styles.btnConfirm}>{textConfirm}</button>
+            <button className={styles.btnCannel} onClick={onCancel}>{textCancel}</button>
+            <button className={styles.btnConfirm} onClick={onConfirm}>{textConfirm}</button>
         </div>
         
       </div>
