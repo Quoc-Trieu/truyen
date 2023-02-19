@@ -16,4 +16,9 @@ export const getALLTreeByCondition = ({
   });
 };
 
+export const putUpdateStatusTree = ({idTree, data}) => {
+  return AxiosClient.put("/tree/updateStatusTree", data, {
+    params: { treeID: idTree },
+  });
+};
 

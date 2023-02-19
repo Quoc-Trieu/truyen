@@ -12,7 +12,6 @@ const initialState = {
   pageTotal: null,
   userInfo: {},
   infoALLUser: [],
-  inoALLTree: [],
   loading: false,
   error: null,
 };
@@ -25,12 +24,6 @@ export const getInfoUser = createAsyncThunk("user/getInfoUser", async (phone = g
 export const getALLInfoUser = createAsyncThunk("user/getALLInfoUser", async (page) => {
   // const page = useSelector(pageCurrentUserSelector)
   const response = await getALLUser({ page: page, limit: 10, userRole: "ADMIN" });
-  console.log(response?.data);
-  return response?.data;
-});
-
-export const getALLTree = createAsyncThunk("user/getALLTree", async (page=1) => {
-  const response = await getALLTreeByCondition({ page, limit: 10,});
   console.log(response?.data);
   return response?.data;
 });
@@ -71,9 +64,6 @@ const userSlice = createSlice({
     builder.addCase(getALLInfoUser.fulfilled, (state, action) => {
       state.infoALLUser = action.payload;
     });
-    builder.addCase(getALLTree.fulfilled, (state, action) => {
-      state.inoALLTree = action.payload;
-    });
   },
 });
 
@@ -87,8 +77,6 @@ export const pageCurrentUserSelector = (state) => state.user.pageCurrent;
 export const pageTotalUserSelector = (state) => state.user.pageTotal;
 
 export const infoALLUserSelector = (state) => state.user.infoALLUser;
-export const infoALLTreeSelector = (state) => state.user.inoALLTree;
-
 
 export const { setPhone, clearPhone, setPageCurrentUser } = userSlice.actions;
 export default userSlice.reducer;

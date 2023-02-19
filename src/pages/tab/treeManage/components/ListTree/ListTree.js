@@ -3,9 +3,9 @@ import styles from "./ListTree.module.scss";
 import iconEdit from "../../../../../assets/ico/icon-feather-edit.png";
 import ModalDetailsTree from "./../ModalDetailsTree/ModalDetailsTree";
 import { useSelector } from "react-redux";
-import { infoALLTreeSelector, getALLTree } from "./../../../../../store/user/UserSlice";
 import Pagination from './../../../../../components/Pagination/Pagination';
 import { useDispatch } from 'react-redux';
+import { getALLTrees, infoALLTreeSelector, pageCurrentTreeSelector, setPageCurrentTree } from './../../../../../store/tree/TreeSlice';
 
 const STATUSTREE = {
   X: { name: "Cây cạo", color: "#31D100", borderColor: "#95FF74" },
@@ -16,10 +16,12 @@ const STATUSTREE = {
 };
 
 const ListTree = () => {
-  const [showModal, setShowModal] = useState(false);
-  const allTree = useSelector(infoALLTreeSelector);
-  const [itemTree, setItemTree] = useState();
   const dispatch = useDispatch();
+  const allTree = useSelector(infoALLTreeSelector);
+  const pageCurrentTree = useSelector(pageCurrentTreeSelector);
+
+  const [showModal, setShowModal] = useState(false);
+  const [itemTree, setItemTree] = useState();
 
   const onDetails = (item) => {
     console.log('item'+ JSON.stringify(item));
@@ -40,8 +42,8 @@ const ListTree = () => {
   }
 
   const onChangePage = (page) => {
-    dispatch(getALLTree(page))
-    console.log(page);
+    dispatch(setPageCurrentTree(page))
+    dispatch(getALLTrees(page))
   }
 
   return (
@@ -90,6 +92,7 @@ const ListTree = () => {
   <Pagination
           align="flex-end"
           pageTotalNum={allTree?.totalPages}
+          initValue={pageCurrentTree}
           OnChangePage={onChangePage}
         />    
 

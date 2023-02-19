@@ -1,17 +1,27 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styles from "./ModalDetailsTree.module.scss";
 import ModalComponent from './../../../../../components/ModalComponent/ModalComponent';
 import RadioButton from './../../../../../components/RadioButton/RadioButton';
 import { ButtonSimple } from './../../../../../components/Button/ButtonSimple';
-
+import { putUpdateStatusTree } from "../../../../../services/treeServices";
+import { Loading } from "notiflix";
+import { useDispatch } from 'react-redux';
+import { getALLTrees, pageCurrentTreeSelector } from './../../../../../store/tree/TreeSlice';
+import { useSelector } from 'react-redux';
 
 const ModalDetailsTree = ({ visible, onCancel, onOk, data }) => {
   const STATUSTREE = { X: "X", CD: "CD", KM: "KM", K: "K", O: "O" };
-  const [status, setStatus] = useState(data?.status);
-  const [note, setNote] = useState(data?.note);
-  console.log(data);
-  
+  const [status, setStatus] = useState();
+  const [note, setNote] = useState();
+  const dispatch = useDispatch();
+  const pageCurrentTree = useSelector(pageCurrentTreeSelector);
 
+
+  useEffect(() => {
+    setStatus(data?.status);
+    setNote(data?.note);
+  }, [visible]);
+  
 
   const SplitChuoi = (chuoi) => {
     if(chuoi){
@@ -27,7 +37,18 @@ const ModalDetailsTree = ({ visible, onCancel, onOk, data }) => {
     }
   }
 
-  const onUpdate = () => {
+  const onUpdate = async () => {
+    try {
+      Loading.pulse();
+      const res = await putUpdateStatusTree({idTree: data._id, data: {status: status, note: note}})
+      console.log(status, note);
+      dispatch(getALLTrees(pageCurrentTree));
+      onOk();
+      Loading.remove();
+    } catch (error) {
+      Loading.remove();
+      console.log(error);
+    }
     console.log(status, note);
   }
 
@@ -35,7 +56,6 @@ const ModalDetailsTree = ({ visible, onCancel, onOk, data }) => {
     <ModalComponent
       title="Chi tiết cây"
       visible={visible}
-      onOk={onOk}
       onCancel={onCancel}
       width={600}
       styleWrapper={{backgroundColor: "#fff"}}
@@ -74,28 +94,28 @@ const ModalDetailsTree = ({ visible, onCancel, onOk, data }) => {
           {/* Title */}
           <span className={styles.titleStatusTree}>Cập nhập trạng thái cây</span>
           {/* cây cạo */}
-          <div className={styles.selectStatusTree}>
+          <div className={styles.selectStatusTree} onClick={() => setStatus(STATUSTREE.X)}>
             <RadioButton selected={status == STATUSTREE.X}/>
             <span className={styles.textStatus}>Cây cạo</span>
           </div>
           {/* cây cụt đọt */}
-          <div className={styles.selectStatusTree}>
+          <div className={styles.selectStatusTree} onClick={() => setStatus(STATUSTREE.CD)}>
             <RadioButton selected={status == STATUSTREE.CD}/>
             <span className={styles.textStatus}>Cây cụt đọt</span>
           </div>
           {/* cây khô miệng */}
-          <div className={styles.selectStatusTree}>
+          <div className={styles.selectStatusTree} onClick={() => setStatus(STATUSTREE.KM)}>
             <RadioButton selected={status == STATUSTREE.KM}/>
             <span className={styles.textStatus}>Cây khô miệng</span>
           </div>
           {/* cây kém */}
-          <div className={styles.selectStatusTree}>
+          <div className={styles.selectStatusTree} onClick={() => setStatus(STATUSTREE.K)}>
             <RadioButton selected={status == STATUSTREE.K}/>
             <span className={styles.textStatus}>Cây kém</span>
           </div>
           {/* cây trống, chết */}
-          <div className={styles.selectStatusTree}>
-            <RadioButton selected={status == STATUSTREE.O}/>
+          <div className={styles.selectStatusTree} onClick={() => setStatus(STATUSTREE.O)}>
+            <RadioButton selected={status == STATUSTREE.O }/>
             <span className={styles.textStatus}>Cây trống, chết</span>
           </div>
         </div>

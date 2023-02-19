@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./BoxTreeParameter.module.scss";
 import { useSelector } from "react-redux";
-import { infoALLTreeSelector } from "../../../../../store/user/UserSlice";
+import { infoALLTreeSelector } from './../../../../../store/tree/TreeSlice';
 
 const BoxTreeParameter = () => {
   const renderStyles = {
