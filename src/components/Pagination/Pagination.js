@@ -25,7 +25,7 @@ const Pagination = ({ pageTotalNum = 1, initValue = 1, OnChangePage, align }) =>
     }
     // chạy OnChangePage được truyền vào từ component cha khi pageCurrent thay đổi
     OnChangePage(pageCurrent);
-  }, [pageCurrent]);
+  }, [pageCurrent, initValue]);
 
   const onPrev = () => {
     // xử lý khi click Prev Trang

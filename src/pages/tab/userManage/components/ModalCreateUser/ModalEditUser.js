@@ -15,6 +15,7 @@ import {
 } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
 import { putUpdateUser } from "./../../../../../services/userServies";
+import { pageCurrentUserSelector } from './../../../../../store/user/UserSlice';
 
 const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   console.log('itemSelect' + item);
@@ -30,7 +31,8 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   const ROLE = { USER: "USER", MANAGE: "MANAGE" };
   const [selectedRole, setSelectedRole] = useState();
   const roleUser = useSelector(roleUserSelector);
-  console.log(roleUser);
+  const pageCurrent = useSelector(pageCurrentUserSelector);
+
 
   useEffect(() => {
     setValue("phone", item?.phone);
@@ -71,7 +73,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         });
       }
       //reload lại danh sách user
-      dispatch(getALLInfoUser());
+      dispatch(getALLInfoUser(pageCurrent));
       reset();
       onOk();
       Loading.remove();

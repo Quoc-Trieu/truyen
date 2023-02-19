@@ -21,19 +21,24 @@ import { infoALLUserSelector } from "../../../../../store/user/UserSlice";
 import Notiflix from "notiflix";
 import ModalEditUser from "../ModalCreateUser/ModalEditUser";
 import Pagination from "../../../../../components/Pagination/Pagination";
+import { pageCurrentUserSelector, setPageCurrentUser, pageTotalUserSelector } from './../../../../../store/user/UserSlice';
 
 const ListUser = ({ itemsHeaderRow }) => {
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [showModalEditUser, setShowModalEditUser] = useState(false);
   const dispatch = useDispatch();
   const InfoALLUser = useSelector(infoALLUserSelector);
+  const pageCurrentUser= useSelector(pageCurrentUserSelector);
+  const pageTotalUser = useSelector(pageTotalUserSelector);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemSelect, setItemSelect] = useState();
+  console.log("pageCurrentUser", pageCurrentUser, pageTotalUser);
 
-  useEffect(() => {
-    // get Api tất cả user từ redux Thunk
-    dispatch(getALLInfoUser());
-  }, []);
+
+  // useEffect(() => {
+  //   // get Api tất cả user từ redux Thunk
+  //   dispatch(getALLInfoUser(pageCurrentUser));
+  // }, []);
 
   useEffect(() => {
     setItemSelect(itemSelect);
@@ -54,12 +59,12 @@ const ListUser = ({ itemsHeaderRow }) => {
       .then((res) => {
         Notiflix.Notify.success("Xóa thành công sđt: " + phone);
         setShowModalRemove(false);
-        dispatch(getALLInfoUser(currentPage));
+        dispatch(getALLInfoUser(pageCurrentUser));
       })
       .catch((error) => {
         Notiflix.Notify.warning("Xóa thất bại");
         setShowModalRemove(false);
-        dispatch(getALLInfoUser(currentPage));
+        dispatch(getALLInfoUser(pageCurrentUser));
       });
   };
 
@@ -89,12 +94,11 @@ const ListUser = ({ itemsHeaderRow }) => {
     //update user
     await putUpdateUser({phone: item?.phone, data: newUpdate});
     // gọi lại api để lấy lại danh sách user
-    dispatch(getALLInfoUser());
+    dispatch(getALLInfoUser(pageCurrentUser));
   };
 
   const OnChangePage = (page) => {
-    setCurrentPage(page);
-    console.log(page);
+    dispatch(setPageCurrentUser(page));
     dispatch(getALLInfoUser(page));
   };
 
@@ -168,6 +172,7 @@ const ListUser = ({ itemsHeaderRow }) => {
       </div>
       <Pagination
         align="flex-end"
+        initValue={pageCurrentUser}
         pageTotalNum={InfoALLUser?.totalPages}
         OnChangePage={OnChangePage}
       />
