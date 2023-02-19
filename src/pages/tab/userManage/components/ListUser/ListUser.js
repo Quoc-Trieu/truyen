@@ -14,30 +14,29 @@ import {
 } from "../../../../../services/userServies";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import {
-  getALLInfoUser,
-} from "../../../../../store/user/UserSlice";
+import { getALLInfoUser } from "../../../../../store/user/UserSlice";
 import { infoALLUserSelector } from "../../../../../store/user/UserSlice";
 import Notiflix from "notiflix";
 import ModalEditUser from "../ModalCreateUser/ModalEditUser";
 import Pagination from "../../../../../components/Pagination/Pagination";
-import { pageCurrentUserSelector, setPageCurrentUser, pageTotalUserSelector } from './../../../../../store/user/UserSlice';
+import {
+  pageCurrentUserSelector,
+  setPageCurrentUser,
+} from "./../../../../../store/user/UserSlice";
 
 const ListUser = ({ itemsHeaderRow }) => {
-  const [showModalRemove, setShowModalRemove] = useState(false);
-  const [showModalEditUser, setShowModalEditUser] = useState(false);
   const dispatch = useDispatch();
   const InfoALLUser = useSelector(infoALLUserSelector);
-  const pageCurrentUser= useSelector(pageCurrentUserSelector);
-  const pageTotalUser = useSelector(pageTotalUserSelector);
+  const pageCurrentUser = useSelector(pageCurrentUserSelector);
+
+  const [showModalRemove, setShowModalRemove] = useState(false);
+  const [showModalEditUser, setShowModalEditUser] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemSelect, setItemSelect] = useState();
-  console.log("pageCurrentUser", pageCurrentUser, pageTotalUser);
-
-
   // useEffect(() => {
   //   // get Api tất cả user từ redux Thunk
-  //   dispatch(getALLInfoUser(pageCurrentUser));
+  //   dispatch(getALLInfoUser());
   // }, []);
 
   useEffect(() => {
@@ -59,17 +58,13 @@ const ListUser = ({ itemsHeaderRow }) => {
       .then((res) => {
         Notiflix.Notify.success("Xóa thành công sđt: " + phone);
         setShowModalRemove(false);
-        dispatch(getALLInfoUser(pageCurrentUser));
+        dispatch(getALLInfoUser());
       })
       .catch((error) => {
         Notiflix.Notify.warning("Xóa thất bại");
         setShowModalRemove(false);
-        dispatch(getALLInfoUser(pageCurrentUser));
+        dispatch(getALLInfoUser());
       });
-  };
-
-  const onLock = () => {
-    console.log("onLock");
   };
 
   const onChangeLock = async (item) => {
@@ -92,14 +87,14 @@ const ListUser = ({ itemsHeaderRow }) => {
       };
     }
     //update user
-    await putUpdateUser({phone: item?.phone, data: newUpdate});
+    await putUpdateUser({ phone: item?.phone, data: newUpdate });
     // gọi lại api để lấy lại danh sách user
-    dispatch(getALLInfoUser(pageCurrentUser));
+    dispatch(getALLInfoUser());
   };
 
   const OnChangePage = (page) => {
     dispatch(setPageCurrentUser(page));
-    dispatch(getALLInfoUser(page));
+    dispatch(getALLInfoUser());
   };
 
   return (
@@ -113,62 +108,65 @@ const ListUser = ({ itemsHeaderRow }) => {
 
       {/* Item row */}
       <div className={styles.itemContainer}>
-        {InfoALLUser?.users?.map((item, index) => {
-          // kiểm tra trạng thái của user có bị khóa hay không, nếu bị khóa thì trả về true, ngược lại trả về false
-          const isUserActive = item?.status == "ACTIVE" ? true : false;
-          const getIconUserLocked = isUserActive ? iconUnLock : iconLock;
+        { InfoALLUser?.users[0] !== undefined &&
+          InfoALLUser?.users?.map((item, index) => {
+            // kiểm tra trạng thái của user có bị khóa hay không, nếu bị khóa thì trả về true, ngược lại trả về false
+            const isUserActive = item?.status == "ACTIVE" ? true : false;
+            const getIconUserLocked = isUserActive ? iconUnLock : iconLock;
 
-          return (
-            <div key={index} className={styles.itemUI}>
-              <span>{item?.phone} </span>
-              <span>{item?.fullName} </span>
-              <div className={styles.actionItem}>
-                <img
-                  src={iconEdit}
-                  className={styles.edit}
-                  onClick={() => onEdit(item)}
-                />
-                <img
-                  src={iconRemove}
-                  className={styles.remove}
-                  onClick={() => onRemove(item)}
-                />
+            return (
+              <div key={index} className={styles.itemUI}>
+                <span>{item?.phone} </span>
+                <span>{item?.fullName} </span>
+                <div className={styles.actionItem}>
+                  <img
+                    src={iconEdit}
+                    className={styles.edit}
+                    onClick={() => onEdit(item)}
+                  />
+                  <img
+                    src={iconRemove}
+                    className={styles.remove}
+                    onClick={() => onRemove(item)}
+                  />
 
-                <Dropdown style={{ height: "100%" }}>
-                  <Dropdown.Toggle style={{ height: "100%" }}>
-                    <div className={styles.lockUser} onClick={onLock}>
-                      <img
-                        src={getIconUserLocked}
-                        className={styles.iconLock}
-                      />
-                      <img src={iconDown} className={styles.iconDown} />
-                    </div>
-                  </Dropdown.Toggle>
+                  <Dropdown style={{ height: "100%" }}>
+                    <Dropdown.Toggle style={{ height: "100%" }}>
+                      <div className={styles.lockUser}>
+                        <img
+                          src={getIconUserLocked}
+                          className={styles.iconLock}
+                        />
+                        <img src={iconDown} className={styles.iconDown} />
+                      </div>
+                    </Dropdown.Toggle>
 
-                  <Dropdown.Menu style={{ padding: 0 }} align="end">
-                    <Dropdown.Item
-                      className={styles.lockDropdown}
-                      onClick={() => onChangeLock(item)}
-                      style={
-                        isUserActive == true
-                          ? { background: "#FF3B3B" }
-                          : { background: "#00D673" }
-                      }
-                    >
-                      <span className={styles.textDropLock}>
-                        {isUserActive == true ? "Khóa" : "Mở khóa"}
-                      </span>
-                      <img
-                        className={styles.iconDropLock}
-                        src={isUserActive == true ? iconLock : iconUnLock}
-                      />
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                    <Dropdown.Menu style={{ padding: 0 }} align="end">
+                      <Dropdown.Item
+                        className={styles.lockDropdown}
+                        onClick={() => onChangeLock(item)}
+                        style={
+                          isUserActive == true
+                            ? { background: "#FF3B3B" }
+                            : { background: "#00D673" }
+                        }
+                      >
+                        <span className={styles.textDropLock}>
+                          {isUserActive == true ? "Khóa" : "Mở khóa"}
+                        </span>
+                        <img
+                          className={styles.iconDropLock}
+                          src={isUserActive == true ? iconLock : iconUnLock}
+                        />
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          }
+          
+        )}
       </div>
       <Pagination
         align="flex-end"
@@ -184,7 +182,7 @@ const ListUser = ({ itemsHeaderRow }) => {
         onCancel={() => setShowModalEditUser(false)}
         onOk={() => setShowModalEditUser(false)}
       />
-      
+
       <ModalConfirm
         visible={showModalRemove}
         title="Xác nhận xóa User"

@@ -14,11 +14,10 @@ import {
   roleUserSelector,
 } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
-import { putUpdateUser } from "./../../../../../services/userServies";
-import { pageCurrentUserSelector } from './../../../../../store/user/UserSlice';
+import { putUpdateUser, getPassNoHas } from "./../../../../../services/userServies";
 
 const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
-  console.log('itemSelect' + item);
+  console.log('itemSelect----------' + JSON.stringify(item));
   const {
     register,
     setValue,
@@ -30,16 +29,28 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   const dispatch = useDispatch();
   const ROLE = { USER: "USER", MANAGE: "MANAGE" };
   const [selectedRole, setSelectedRole] = useState();
-  const roleUser = useSelector(roleUserSelector);
-  const pageCurrent = useSelector(pageCurrentUserSelector);
+  const [passOld, setPassOld] = useState();
+  const roleLogin = useSelector(roleUserSelector);
 
 
   useEffect(() => {
     setValue("phone", item?.phone);
-    setValue("password", item?.password);
     setValue("fullName", item?.fullName);
     setSelectedRole(item?.role?.join());
     // console.log(selectedRole);
+
+    const getPass = async () => {
+      try {
+        const res = await getPassNoHas(item?.phone);
+        // lưu pass cũ lại và khởi tạo giá trị pass mới vào hook form
+        setPassOld(String(res?.data));
+        setValue("password", String(res?.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPass();
+
   }, [visible]);
 
   const onSelectRole = (roleName) => {
@@ -62,18 +73,19 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
           status: item?.status,
         },
       });
+      //nếu password thay đổi thì gọi api changePass
       if(item?.password !== data?.password){
         const resChangePass = await putChangePass({
           phone: data?.phone,
           data: {
-            oldPassword: item?.password,
+            oldPassword: passOld,
             newPassword: data?.password,
-            role: roleUser,
+            role: roleLogin,
           },
         });
       }
       //reload lại danh sách user
-      dispatch(getALLInfoUser(pageCurrent));
+      dispatch(getALLInfoUser());
       reset();
       onOk();
       Loading.remove();
@@ -95,10 +107,13 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
       <form className={styles.modalWrapper} onSubmit={handleSubmit(onSubmit)}>
         <span className={styles.label}>Tài khoản</span>
         <input
+          readOnly={true}
+          type="text" 
           placeholder="Nhập sđt người dùng"
           className={styles.input}
           {...register("phone", {
             required: "Vui lòng không bỏ trống ô này",
+            readOnly: true,
             minLength: {
               value: 6,
               message: "Nhập dài hơn 6 ký tự",
@@ -111,6 +126,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
 
         <span className={styles.label}>Mật khẩu</span>
         <input
+          type="text" 
           placeholder="Nhập mật khẩu"
           className={styles.input}
           {...register("password", {
@@ -127,6 +143,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
 
         <span className={styles.label}>Tên người dùng</span>
         <input
+          type="text" 
           placeholder="Nhập tên người dùng"
           className={styles.input}
           {...register("fullName", {

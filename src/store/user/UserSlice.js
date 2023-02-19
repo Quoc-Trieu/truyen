@@ -1,32 +1,74 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getInfo, getALLUser } from "./../../services/userServies";
-import { getALLTreeByCondition } from './../../services/treeServices';
-import { getPhoneLocalStorage } from './../../utils/localStorage';
-import { useSelector } from 'react-redux';
+import { getALLTreeByCondition } from "./../../services/treeServices";
+import { getPhoneLocalStorage } from "./../../utils/localStorage";
+import { useDispatch, useSelector } from "react-redux";
+import Notiflix from "notiflix";
 
 const initialState = {
   phone: null,
   role: null,
+  searching: null,
   pageCurrent: 1,
   pageTotal: null,
   userInfo: {},
-  infoALLUser: [],
+  infoALLUser: {},
   loading: false,
   error: null,
 };
 
-export const getInfoUser = createAsyncThunk("user/getInfoUser", async (phone = getPhoneLocalStorage()) => {
-  const response = await getInfo(phone);
-  return response?.data;
-});
+export const getInfoUser = createAsyncThunk(
+  "user/getInfoUser",
+  async (phone = getPhoneLocalStorage()) => {
+    const response = await getInfo(phone);
+    return response?.data;
+  }
+);
 
-export const getALLInfoUser = createAsyncThunk("user/getALLInfoUser", async (page) => {
-  // const page = useSelector(pageCurrentUserSelector)
-  const response = await getALLUser({ page: page, limit: 10, userRole: "ADMIN" });
-  console.log(response?.data);
-  return response?.data;
-});
+export const getInfoUserBySearch = createAsyncThunk(
+  "user/getInfoUserBySearch",
+  async (text) => {
+    try {
+      const response = await getInfo(text);
+      return response?.data;
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.code == "USER_NOT_FOUND") {
+        Notiflix.Notify.info("Không tìm thấy người dùng");
+      }
+    }
+  }
+);
+
+export const getALLInfoUser = createAsyncThunk(
+  "user/getALLInfoUser",
+  async (pageProp, { getState, dispatch }) => {
+    // lấy trang hiện tại để reload List user
+    const page = getState().user.pageCurrent;
+    //kiểm tra người dùng có đang thực hiện search hay không, nếu thực hiện search thì lấy textSearch từ store gọi API search
+    const searchText = getState().user.searching;
+
+    if (searchText) {
+      dispatch(getInfoUserBySearch(searchText));
+    } else {
+      try {
+        const response = await getALLUser({
+          page: pageProp ?? page,
+          limit: 10,
+          userRole: "ADMIN",
+        });
+        console.log(response?.data);
+        return response?.data;
+      } catch (error) {
+        console.log(error);
+        if (error?.response?.data?.code == "PHONE_IS_EXIST") {
+          Notiflix.Notify.info("Người dùng đã tồn tại");
+        }
+      }
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -38,8 +80,20 @@ const userSlice = createSlice({
     setPageCurrentUser: (state, action) => {
       state.pageCurrent = action.payload;
     },
+    setSearching: (state, action) => {
+      state.searching = action.payload;
+    },
     resetUser: (state) => {
-      return { ...initialState, phone: state.phone, role: state.role, userInfo: state.userInfo, infoALLUser: state.infoALLUser };
+      return {
+        ...initialState,
+        phone: state.phone,
+        role: state.role,
+        userInfo: state.userInfo,
+        infoALLUser: state.infoALLUser,
+        searching: state.searching,
+        pageCurrent: state.pageCurrent,
+        pageTotal: state.pageTotal,
+      };
     },
   },
   extraReducers: (builder) => {
@@ -64,9 +118,16 @@ const userSlice = createSlice({
     builder.addCase(getALLInfoUser.fulfilled, (state, action) => {
       state.infoALLUser = action.payload;
     });
+    builder.addCase(getInfoUserBySearch.fulfilled, (state, action) => {
+      // set object to array để cập nhập lại danh sách user
+      state.infoALLUser = {
+        users: [action.payload],
+        totalPages: 1,
+        totalUsers: 1,
+      };
+    });
   },
 });
-
 
 // sử dụng useSelector để lấy dữ liệu từ store này
 export const userInfoSelector = (state) => state.user.userInfo;
@@ -74,9 +135,10 @@ export const phoneUserSelector = (state) => state.user.phone;
 export const roleUserSelector = (state) => state.user.role;
 
 export const pageCurrentUserSelector = (state) => state.user.pageCurrent;
-export const pageTotalUserSelector = (state) => state.user.pageTotal;
+// export const pageTotalUserSelector = (state) => state.user.pageTotal;
+export const searchUserSelector = (state) => state.user.searching;
 
 export const infoALLUserSelector = (state) => state.user.infoALLUser;
 
-export const { setPhone, clearPhone, setPageCurrentUser } = userSlice.actions;
+export const { setPhone, clearPhone, setPageCurrentUser, setSearching } = userSlice.actions;
 export default userSlice.reducer;

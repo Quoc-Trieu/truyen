@@ -41,3 +41,7 @@ export const putChangePass = ({phone, data}) => {
   });
 };
 
+export const getPassNoHas = (phone) => {
+  return AxiosClient.get("/user/getPassNoHas", {params: { phone: phone }});
+};
+

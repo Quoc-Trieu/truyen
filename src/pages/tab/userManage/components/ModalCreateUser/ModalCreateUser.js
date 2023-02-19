@@ -8,7 +8,7 @@ import { postCreateUser } from "../../../../../services/userServies";
 import RadioButton from "./../../../../../components/RadioButton/RadioButton";
 import { Notiflix } from "notiflix";
 import { useDispatch } from "react-redux";
-import { getALLInfoUser, pageCurrentUserSelector } from "../../../../../store/user/UserSlice";
+import { getALLInfoUser } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
 import { useSelector } from "react-redux";
 
@@ -33,7 +33,6 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
   });
   const dispatch = useDispatch();
   const [selectedRole, setSelectedRole] = useState(ROLE.USER);
-  const pageCurrent = useSelector(pageCurrentUserSelector);
 
   const onSelectRole = (roleName) => {
     //cập nhật giá trị cho selectedRole để render lại RadioButton
@@ -48,7 +47,7 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
       Loading.pulse();
       const res = await postCreateUser(data);
       //reload lại danh sách user
-      dispatch(getALLInfoUser(pageCurrent));
+      dispatch(getALLInfoUser());
       reset();
       onOk();
       Loading.remove();

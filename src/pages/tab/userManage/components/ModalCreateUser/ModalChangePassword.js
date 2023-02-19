@@ -72,7 +72,7 @@ const ModalChangePassword = ({ visible, onCancel, onOk }) => {
       styleWrapper={{ backgroundColor: "#fff" }}
     >
       <form className={styles.modalWrapper} onSubmit={handleSubmit(onSubmit)}>
-        <span className={styles.label}>Mật khẩu</span>
+        <span className={styles.label}>Mật khẩu cũ</span>
         <input
           placeholder="Mật khẩu cũ"
           className={styles.input}
@@ -89,7 +89,7 @@ const ModalChangePassword = ({ visible, onCancel, onOk }) => {
           <span className={styles.errorText}>{errors.oldPassword.message}</span>
         )}
 
-        <span className={styles.label}>Mật khẩu</span>
+        <span className={styles.label}>Mật khẩu mới</span>
         <input
           placeholder="Mật khẩu mới"
           className={styles.input}
