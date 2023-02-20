@@ -3,7 +3,7 @@ import styles from "./BodyAssignmentList.module.scss";
 import iconAdd from "../../../../../../assets/ico/icon-ionic-add.png";
 import ModalComponent from "../../../../../../components/ModalComponent/ModalComponent";
 import ButtonDelete from "../../../../../../components/Button/ButtonDelete";
-import LotNumComponent from '../../../../../../components/LotNumComponent/LotNumComponent';
+import DropLandRow from '../../../../../../components/DropDownComponent/DropLand';
 import QuantitySelect from '../../../../../../components/QuantitySelect/QuantitySelect';
 
 const BodyAssignmentList = () => {
@@ -20,8 +20,8 @@ const BodyAssignmentList = () => {
       {/* Item row */}
       <div className={styles.ListContainer}>
         <div className={styles.itemUI}>
-            <LotNumComponent text="Lô số 1" />
-            <LotNumComponent text="Hàng số 1" typeMenu="col"/>
+            {/* <DropLandRow text="Lô số 1" />
+            <DropLandRow text="Hàng số 1" /> */}
             <div className={styles.treeBegins}>
               <span>Nhập cây bắt đầu</span>
               <QuantitySelect />

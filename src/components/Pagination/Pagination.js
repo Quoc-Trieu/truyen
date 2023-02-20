@@ -10,6 +10,10 @@ const Pagination = ({ pageTotalNum = 1, initValue = 1, OnChangePage, align }) =>
   const [disablePrev, setDisablePrev] = useState(false);
   const [disableNext, setDisableNext] = useState(false);
 
+  useEffect (() => {
+    setPageCurrent(initValue);
+  }, [initValue])
+
   useEffect(() => {
     // disable Prev trang khi trang hiện tại là 1
     if (pageCurrent == 1) {
@@ -25,7 +29,7 @@ const Pagination = ({ pageTotalNum = 1, initValue = 1, OnChangePage, align }) =>
     }
     // chạy OnChangePage được truyền vào từ component cha khi pageCurrent thay đổi
     OnChangePage(pageCurrent);
-  }, [pageCurrent, initValue]);
+  }, [pageCurrent, pageTotalNum]);
 
   const onPrev = () => {
     // xử lý khi click Prev Trang

@@ -6,7 +6,7 @@ import { ButtonSimple } from './../../../../../components/Button/ButtonSimple';
 import { putUpdateStatusTree } from "../../../../../services/treeServices";
 import { Loading } from "notiflix";
 import { useDispatch } from 'react-redux';
-import { getALLTrees, pageCurrentTreeSelector } from './../../../../../store/tree/TreeSlice';
+import { getALLTrees } from './../../../../../store/tree/TreeSlice';
 import { useSelector } from 'react-redux';
 
 const ModalDetailsTree = ({ visible, onCancel, onOk, data }) => {
@@ -14,7 +14,6 @@ const ModalDetailsTree = ({ visible, onCancel, onOk, data }) => {
   const [status, setStatus] = useState();
   const [note, setNote] = useState();
   const dispatch = useDispatch();
-  const pageCurrentTree = useSelector(pageCurrentTreeSelector);
 
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const ModalDetailsTree = ({ visible, onCancel, onOk, data }) => {
       Loading.pulse();
       const res = await putUpdateStatusTree({idTree: data._id, data: {status: status, note: note}})
       console.log(status, note);
-      dispatch(getALLTrees(pageCurrentTree));
+      dispatch(getALLTrees());
       onOk();
       Loading.remove();
     } catch (error) {

@@ -58,7 +58,7 @@ const ListTree = () => {
 
       <div className={styles.listContainer}>
         {/* Item row */}
-        {allTree?.trees.map((item, index) => {
+        {allTree?.trees && allTree?.trees.map((item, index) => {
           return (
             <div className={styles.itemRow} key={index}>
               <span>Số lô {SplitChuoi(item?.name)?.soLo}</span>
