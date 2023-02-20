@@ -17,7 +17,7 @@ import { Loading } from "notiflix";
 import { putUpdateUser, getPassNoHas } from "./../../../../../services/userServies";
 
 const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
-  console.log('itemSelect----------' + JSON.stringify(item));
+  // console.log('itemSelect----------' + JSON.stringify(item));
   const {
     register,
     setValue,
@@ -46,7 +46,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         setPassOld(String(res?.data));
         setValue("password", String(res?.data));
       } catch (error) {
-        console.log(error);
+        console.log("getPassNoHas mật khẩu" + error);
       }
     };
     getPass();

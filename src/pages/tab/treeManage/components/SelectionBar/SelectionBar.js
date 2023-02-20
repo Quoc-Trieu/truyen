@@ -6,16 +6,49 @@ import DropTypeOfTree from '../../../../../components/DropDownComponent/DropType
 import DropLand from '../../../../../components/DropDownComponent/DropLand';
 import DropTreeRow from '../../../../../components/DropDownComponent/DropTreeRow';
 import ButtonIcon from './../../../../../components/Button/ButtonIcon';
+import { setFilter, getALLTrees } from "./../../../../../store/tree/TreeSlice";
+import { useDispatch } from 'react-redux';
 
 const SelectionBar = () => {
+  const [value, setValue] = useState("");
+  const dispatch = useDispatch();
+
+
+  const onChangeSearch = (e) => {
+    setValue(e.target.value);
+    if (e.target.value === "") {
+      dispatch(setFilter({ nameTree: null }));
+      dispatch(getALLTrees({resetPage: true}));
+    }
+  };
+
+  const onSearch = () => {
+    const searchText = convertToString(value, 3);
+    dispatch(setFilter({ nameTree: searchText }));
+    dispatch(getALLTrees({resetPage: true}));
+  };
+
+  const onKeyDown = (e) => {
+    if (e.key === "Enter") {
+      onSearch();
+    }
+  };
+
+  const convertToString = (value, length) => {
+    // hàm này để convert số thành chuỗi có độ dài length(lấy số convert sang id Cây)
+    if (value) {
+        return 'C' + value.toString().padStart(length, '0');
+    }
+    return null;
+  }
   return(
   <div className={styles.selectionBar}>
     <DropTypeOfTree label="Tất cả cây"/>
     <DropLand label="Chọn số lô" />
     <DropTreeRow label="Chọn số hàng" />
     <div className={styles.searchInputTree}>
-        <input type="text" placeholder="Nhập tên cây" />
-        <ButtonIcon icon={iconSearch} />
+        <input type="text" placeholder="Nhập tên cây" value={value} onChange={onChangeSearch} onKeyDown={onKeyDown}/>
+        <ButtonIcon icon={iconSearch} onSummit={onSearch}/>
     </div>
   </div>
   );

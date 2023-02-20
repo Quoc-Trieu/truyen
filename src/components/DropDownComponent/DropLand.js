@@ -32,8 +32,8 @@ const DropLand = ({ label, styleCustom }) => {
 
   const onUnselectLo = (e) => {
     console.log(e);
-    dispatch(setFilter({ land: null, row: null }));
-    dispatch(getALLTrees());
+    dispatch(setFilter({ land: null, row: null, nameTree: null }));
+    dispatch(getALLTrees({resetPage: true}));
   };
 
   

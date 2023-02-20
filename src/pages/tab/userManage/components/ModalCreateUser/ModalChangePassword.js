@@ -16,7 +16,7 @@ import { Loading } from "notiflix";
 
 const ModalChangePassword = ({ visible, onCancel, onOk }) => {
   const userInfo = useSelector(userInfoSelector);
-  console.log("visible", userInfo);
+  // console.log("visible", userInfo);
   const {
     register,
     setValue,

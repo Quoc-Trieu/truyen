@@ -98,7 +98,7 @@
 
         .titleStatusTree {
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         //các item trạng thái cây
@@ -112,6 +112,11 @@
             justify-content: flex-start;
             align-items: center;
             gap: 10px;
+
+            &:hover {
+                // cursor: pointer;
+                box-shadow: rgba(85, 85, 85, 0.3) 0px 1px 6px 0px;
+            }
 
             span {
                 font-size: 16px;

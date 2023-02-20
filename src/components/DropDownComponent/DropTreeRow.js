@@ -37,7 +37,7 @@ const DropTreeRow = ({ label, styleCustom, }) => {
 
   const onClickItem = (itemHang) => {
     dispatch(setFilter({ row: itemHang?.name }));
-    dispatch(getALLTrees());
+    dispatch(getALLTrees({resetPage: true}));
     const nameHang = itemHang?.name.substring(itemHang?.name.length -3);
     setLabelTree("Hàng số " + nameHang);
   };

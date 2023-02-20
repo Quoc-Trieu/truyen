@@ -108,7 +108,7 @@ const ListUser = ({ itemsHeaderRow }) => {
 
       {/* Item row */}
       <div className={styles.itemContainer}>
-        { InfoALLUser?.users[0] !== undefined &&
+        { InfoALLUser?.users && InfoALLUser?.users[0] !== undefined &&
           InfoALLUser?.users?.map((item, index) => {
             // kiểm tra trạng thái của user có bị khóa hay không, nếu bị khóa thì trả về true, ngược lại trả về false
             const isUserActive = item?.status == "ACTIVE" ? true : false;
@@ -174,22 +174,28 @@ const ListUser = ({ itemsHeaderRow }) => {
         pageTotalNum={InfoALLUser?.totalPages}
         OnChangePage={OnChangePage}
       />
+      
       {/* Modal sửa thông tin user */}
-      <ModalEditUser
+      { itemSelect &&
+        <ModalEditUser
         title="Sửa Thông Tin Tài Khoản"
         item={itemSelect}
         visible={showModalEditUser}
         onCancel={() => setShowModalEditUser(false)}
         onOk={() => setShowModalEditUser(false)}
       />
-
-      <ModalConfirm
-        visible={showModalRemove}
-        title="Xác nhận xóa User"
-        subText="Toàn bộ thông tin tài khoản của user sẽ bị xóa vĩnh viễn"
-        onCancel={() => setShowModalRemove(false)}
-        onConfirm={() => onDeleteUser(itemSelect?.phone)}
-      />
+      }
+      {/* Modal xác nhận xóa user */}
+      { showModalRemove &&
+        <ModalConfirm
+          visible={showModalRemove}
+          title="Xác nhận xóa User"
+          subText="Toàn bộ thông tin tài khoản của user sẽ bị xóa vĩnh viễn"
+          onCancel={() => setShowModalRemove(false)}
+          onConfirm={() => onDeleteUser(itemSelect?.phone)}
+        />
+      }
+      
     </div>
   );
 };

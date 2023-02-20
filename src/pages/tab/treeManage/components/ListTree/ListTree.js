@@ -32,7 +32,7 @@ const ListTree = () => {
   const SplitChuoi = (chuoi) => {
     let soLo = chuoi.substring(1, 3); // lấy 2 ký tự sau chữ S
     let soHang = chuoi.substring(4, 7); // lấy 3 ký tự sau chữ H
-    let soCay = chuoi.substring(9, 11); // lấy 3 ký tự sau chữ C
+    let soCay = chuoi.substring(8, 11); // lấy 3 ký tự sau chữ C
   
     return {
       soLo: soLo,
@@ -43,7 +43,7 @@ const ListTree = () => {
 
   const onChangePage = (page) => {
     dispatch(setPageCurrentTree(page))
-    dispatch(getALLTrees(page))
+    dispatch(getALLTrees())
   }
 
   return (
