@@ -16,9 +16,10 @@ export const getALLTrees = createAsyncThunk("tree/getALLTree", async ( resetPage
   }
   const filter = getState().tree.filter;
   const pageCurrent = getState().tree.pageCurrentTree;
+  
   // cộng chuỗi tìm kiếm cây theo id cây
   let concatFindTree = null;
-  if ( filter.nameTree) {
+  if (filter.nameTree) {
     concatFindTree = filter.row + filter.nameTree;
   }
 

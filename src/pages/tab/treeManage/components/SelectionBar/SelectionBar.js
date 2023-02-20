@@ -6,13 +6,23 @@ import DropTypeOfTree from '../../../../../components/DropDownComponent/DropType
 import DropLand from '../../../../../components/DropDownComponent/DropLand';
 import DropTreeRow from '../../../../../components/DropDownComponent/DropTreeRow';
 import ButtonIcon from './../../../../../components/Button/ButtonIcon';
-import { setFilter, getALLTrees } from "./../../../../../store/tree/TreeSlice";
-import { useDispatch } from 'react-redux';
+import { setFilter, getALLTrees, filterTreeSelector } from "./../../../../../store/tree/TreeSlice";
+import { useDispatch, useSelector } from 'react-redux';
 
 const SelectionBar = () => {
   const [value, setValue] = useState("");
   const dispatch = useDispatch();
+  const filterTree = useSelector(filterTreeSelector);
+  //nếu chưa chọn hàng thì không bật tìm kiếm theo tên cây
+  const disableSearch = filterTree.row == null ? true : false;
 
+
+  useEffect(() => {
+    if (disableSearch) {
+      // clear value input khi reset filter
+      setValue("");
+    }
+  }, [disableSearch]);
 
   const onChangeSearch = (e) => {
     setValue(e.target.value);
@@ -47,7 +57,7 @@ const SelectionBar = () => {
     <DropLand label="Chọn số lô" />
     <DropTreeRow label="Chọn số hàng" />
     <div className={styles.searchInputTree}>
-        <input type="text" placeholder="Nhập tên cây" value={value} onChange={onChangeSearch} onKeyDown={onKeyDown}/>
+        <input disabled={disableSearch} type="text" placeholder="Nhập tên cây" value={value} onChange={onChangeSearch} onKeyDown={onKeyDown}/>
         <ButtonIcon icon={iconSearch} onSummit={onSearch}/>
     </div>
   </div>

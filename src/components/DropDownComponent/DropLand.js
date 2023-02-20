@@ -5,14 +5,17 @@ import iconDown from "../../assets/ico/icon-feather-chevron-down.png";
 import Dropdown from "react-bootstrap/Dropdown";
 import "./menuDrop.css";
 import { getALLland } from '../../services/treeServices';
-import { useDispatch } from 'react-redux';
-import { setFilter } from '../../store/tree/TreeSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { filterTreeSelector, setFilter } from '../../store/tree/TreeSlice';
 import { getALLTrees } from './../../store/tree/TreeSlice';
 
 const DropLand = ({ label, styleCustom }) => {
   const [ land , setLand ] = useState([]);
   const dispatch = useDispatch();
-  const [labelLand, setLabelLand] = useState(label);
+  // lấy dữ liệu bọ lọc cây lưu từ redux để hiển thị ra label
+  const filterTree = useSelector(filterTreeSelector);
+  // const [labelLand, setLabelLand] = useState(filter.land);
+
   useEffect(() => {
     const getLand = async () => {
       const res = await getALLland();
@@ -27,7 +30,6 @@ const DropLand = ({ label, styleCustom }) => {
   const onClickItem = (nameLo) => {
     console.log(nameLo);
     dispatch(setFilter({ land: nameLo }));
-    setLabelLand('Lô số ' + nameLo);
   };
 
   const onUnselectLo = (e) => {
@@ -42,7 +44,7 @@ const DropLand = ({ label, styleCustom }) => {
       <Dropdown drop="down" className="drop">
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
-            <span>{labelLand}</span>
+            <span> {filterTree.land ? ("Lô số " + filterTree.land) : "Chọn Lô" }</span>
             <img src={iconUp} className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>

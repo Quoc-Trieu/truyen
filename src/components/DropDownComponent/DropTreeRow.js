@@ -22,7 +22,6 @@ const TREES = {
 const DropTreeRow = ({ label, styleCustom, }) => {
   const dispatch = useDispatch();
   const filterTree = useSelector(filterTreeSelector);
-  const [labelTree, setLabelTree] = useState(label);
   const [treeRow, setTreeRow] = useState();
 
   useEffect(() => {
@@ -38,15 +37,13 @@ const DropTreeRow = ({ label, styleCustom, }) => {
   const onClickItem = (itemHang) => {
     dispatch(setFilter({ row: itemHang?.name }));
     dispatch(getALLTrees({resetPage: true}));
-    const nameHang = itemHang?.name.substring(itemHang?.name.length -3);
-    setLabelTree("Hàng số " + nameHang);
   };
   return (
     <div className={styles.dropDownComponent} style={{background: "#fff", padding: '0px 10px', borderRadius: '2px', borderWidth: '1px', borderColor: '#707070'}}>
       <Dropdown drop="down" className="drop">
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
-            <span>{labelTree}</span>
+            <span>{filterTree.row ? ("Hàng số " + filterTree.row.slice(filterTree.row.length - 3, filterTree.row.length)) : "Chọn hàng" }</span>
             <img src={iconUp} className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>

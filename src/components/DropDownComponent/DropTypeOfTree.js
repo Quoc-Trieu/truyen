@@ -12,18 +12,20 @@ import { getALLTrees } from './../../store/tree/TreeSlice';
 const TREES = {
   ALL: { name: "Tất cả cây", type: null, color: "#707070" },
   X: { name: "Cây cạo", type: "X", color: "#31D100" },
-  CD: { name: "Cụt đọt", type: "CD", color: "#43439F" },
-  KM: { name: "Khô miệng", type: "KM", color: "#967B38" },
+  CD: { name: "Cây cụt đọt", type: "CD", color: "#43439F" },
+  KM: { name: "Cây khô miệng", type: "KM", color: "#967B38" },
   K: { name: "Cây kém", type: "K", color: "#FFC000" },
   O: { name: "Cây chết", type: "O", color: "#FF2700" },
 };
 
 const DropTypeOfTree = ({ label, styleCustom, }) => {
   const dispatch = useDispatch();
+  const [labelState, setLabelState] = useState(label);
   const filterTree = useSelector(filterTreeSelector);
-  const onClickItem = (type) => {
-    console.log(type);
-    dispatch(setFilter({ typeTree: type }));
+
+  const onClickItem = (itemTree) => {
+    setLabelState(itemTree?.name);
+    dispatch(setFilter({ typeTree: itemTree?.type }));
     dispatch(getALLTrees({resetPage: true}));
     console.log('filterTreeSelector: ', filterTree)
   };
@@ -32,7 +34,7 @@ const DropTypeOfTree = ({ label, styleCustom, }) => {
       <Dropdown drop="down" className="drop">
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
-            <span>{label}</span>
+            <span>{labelState}</span>
             <img src={iconUp} className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>
@@ -42,7 +44,7 @@ const DropTypeOfTree = ({ label, styleCustom, }) => {
           >
             {TREES && Object.values(TREES).map((item, index) => {
               return (
-                <Dropdown.Item onClick={() => onClickItem(item?.type)} key={index} className={styles.item_hang}>
+                <Dropdown.Item onClick={() => onClickItem(item)} key={index} className={styles.item_hang}>
                   <span style={{color: item?.color}}>{item?.name}</span>
                 </Dropdown.Item>
               )
