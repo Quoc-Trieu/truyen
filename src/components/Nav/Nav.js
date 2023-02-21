@@ -12,11 +12,11 @@ import { changeIsOpen } from "../../store/navRes/navResSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { isOpen } from "../../store/navRes/navResSelector";
 // import { getUserInfor } from '../../store/auth/authThunk';
-
 import styles from "./Nav.module.scss";
 
 function Nav() {
   const navigate = useNavigate();
+  const permisson = useSelector(state => state.user.role)
 
   // lấy đường dẫn hiện tại để set active cho nav
   const { pathname } = useLocation();
@@ -51,23 +51,27 @@ function Nav() {
           <span>Map</span>
         </li>
 
-        {/* màn hình quản lý user */}
-        <li
-          onClick={() => onChangeNav("userManage")}
-          className={pathname === "/userManage" ? styles.li_Selected : ""}
-        >
-          <img src={iconUser} />
-          <span>Quản lý User</span>
-        </li>
+        {
+          permisson !== 'USER' ? <>
+            {/* màn hình quản lý user */}
+            <li
+              onClick={() => onChangeNav("userManage")}
+              className={pathname === "/userManage" ? styles.li_Selected : ""}
+            >
+              <img src={iconUser} />
+              <span>Quản lý User</span>
+            </li>
 
-        {/* màn hình quản lý công việc */}
-        <li
-          onClick={() => onChangeNav("assignment")}
-          className={pathname === "/assignment" ? styles.li_Selected : ""}
-        >
-          <img src={iconList} />
-          <span>Quản lý công việc</span>
-        </li>
+            {/* màn hình quản lý công việc */}
+            <li
+              onClick={() => onChangeNav("assignment")}
+              className={pathname === "/assignment" ? styles.li_Selected : ""}
+            >
+              <img src={iconList} />
+              <span>Quản lý công việc</span>
+            </li>
+          </> : ''
+        }
 
         {/* màn hình quản lý cây */}
         <li

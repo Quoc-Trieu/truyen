@@ -13,6 +13,7 @@ import { Loading } from "notiflix";
 import { useSelector } from "react-redux";
 
 const ModalCreateUser = ({ visible, onCancel, onOk }) => {
+  const permisson = useSelector(state => state.user.role)
   const ROLE = { USER: "USER", MANAGE: "MANAGE" };
   const STATUS = { ACTIVE: "ACTIVE", INACTIVE: "INACTIVE" };
   const {
@@ -79,7 +80,7 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
             },
           })}
         />
-        {errors?.phone && 
+        {errors?.phone &&
           <p className={styles.errorText}>{errors?.phone?.message}</p>
         }
 
@@ -95,7 +96,7 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
             },
           })}
         />
-        {errors?.password && 
+        {errors?.password &&
           <p className={styles.errorText}>{errors?.password?.message}</p>
         }
 
@@ -113,29 +114,34 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
           <p className={styles.errorText}> </p>
         )}
 
-        <span className={styles.label}>Phân quyền</span>
-        <div className={styles.groupAuthorizationUser}>
-          <div
-            className={styles.radioGroup}
-            onClick={() => onSelectRole(ROLE.USER)}
-          >
-            <RadioButton
-              selected={selectedRole == ROLE.USER}
-              value={selectedRole}
-            />
-            <span>User</span>
-          </div>
-          <div
-            className={styles.radioGroup}
-            onClick={() => onSelectRole(ROLE.MANAGE)}
-          >
-            <RadioButton
-              selected={selectedRole == ROLE.MANAGE}
-              value={selectedRole}
-            />
-            <span>Quản lý</span>
-          </div>
-        </div>
+        {
+          permisson == 'ADMIN' ?
+            <>
+              <span className={styles.label}>Phân quyền</span>
+              <div className={styles.groupAuthorizationUser}>
+                <div
+                  className={styles.radioGroup}
+                  onClick={() => onSelectRole(ROLE.USER)}
+                >
+                  <RadioButton
+                    selected={selectedRole == ROLE.USER}
+                    value={selectedRole}
+                  />
+                  <span>User</span>
+                </div>
+                <div
+                  className={styles.radioGroup}
+                  onClick={() => onSelectRole(ROLE.MANAGE)}
+                >
+                  <RadioButton
+                    selected={selectedRole == ROLE.MANAGE}
+                    value={selectedRole}
+                  />
+                  <span>Quản lý</span>
+                </div>
+              </div>
+            </> : ''
+        }
 
         <button className={styles.btnSubmit} type="submit">
           Xác nhận
