@@ -8,6 +8,8 @@ import Pagination from "./../../../components/Pagination/Pagination";
 import { useState } from "react";
 import ListAssginment from "./components/ListAssignment/ListAssignment";
 import ModalCreatePartition from "./components/CreatePartition/ModalCreatePartition";
+import { useDispatch } from 'react-redux';
+import { getALLUserAutoComplete } from './../../../store/assignment/AssignmentSlice';
 
 export const assignmenList = [
   {
@@ -41,7 +43,10 @@ export const assignmenList = [
 ];
 
 const Assignment = () => {
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+  dispatch(getALLUserAutoComplete());
+
   return (
     <div className={styles.assignmentContainer}>
       <Header title="Quản lý công việc" name="Nguyễn Văn A" />

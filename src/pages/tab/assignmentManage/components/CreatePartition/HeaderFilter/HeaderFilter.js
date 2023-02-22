@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./HeaderFilter.module.scss";
 import iconSearch from "../../../../../../assets/ico/icon-feather-search.png";
 import { useForm } from "react-hook-form";
+import Dropdown from "react-bootstrap/Dropdown";
+import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector } from "./../../../../../../store/assignment/AssignmentSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const HeaderFilter = () => {
   const {
@@ -10,56 +13,106 @@ const HeaderFilter = () => {
     watch,
     formState: { errors },
   } = useForm();
+  const dispatch = useDispatch();
+  const listUser = useSelector(userAutoCompleteSelector);
+  console.log(listUser);
+  const [value, setValue] = useState();
+  const [listSuggest, setListSuggest] = useState([]);
+  console.log(listSuggest);
+  const [showSuggest, setShowSuggest] = useState(false);
+  const [nameScaping, setNameScaping] = useState();
+
+  const onChangeSearch = (value) => {
+    setValue(value);
+    setShowSuggest(value ? true : false)
+    //xử lý hiển thị gợi ý tìm kiếm khi nhập
+    const searchTerms = suggestSearchTerms(value, listUser);
+    setListSuggest(searchTerms);
+  };
+
+  
+  const onChangeNameScaping = (value) => {
+    // setNameScaping(value)
+    console.log(value);
+    dispatch(setNamePartition(value))
+  };
+
+  const suggestSearchTerms = (inputValue, dataArray) => {
+    const suggestions = [];
+    for (let i = 0; i < dataArray.length; i++) {
+      // tìm kiếm theo tên và số điện thoại
+      if ( dataArray[i]?.fullName.toLowerCase().includes(inputValue.toLowerCase()) ||
+          dataArray[i]?.phone.toLowerCase().includes(inputValue.toLowerCase()) ) 
+      {
+        suggestions.push(dataArray[i]);
+      }
+    }
+    return suggestions;
+  };
 
   const onSubmit = (data) => {
-    console.log(data);
+
+  }
+
+  const onSelectItem = (item) => {
+    setValue(item?.fullName + " - " + item?.phone);
+    setShowSuggest(false);
+    dispatch(setIdUserPartition(item?.phone))
   };
+
   return (
-        <form className={styles.HeaderFilter} onSubmit={handleSubmit(onSubmit)}>
-          {/* Người giao */}
-          <div className={styles.deliver}>
-            <div className={styles.labelDeliver}>
-              <div className={styles.circle}></div>
-              <span>Người giao</span>
-            </div>
-            <input
-              readOnly={true}
-              placeholder="Admin Tuấn"
-              className={styles.inputDeliver}
-            />
-          </div>
+    <form className={styles.HeaderFilter} onSubmit={handleSubmit(onSubmit)}>
+      {/* Người giao */}
+      <div className={styles.deliver}>
+        <div className={styles.labelDeliver}>
+          <div className={styles.circle}></div>
+          <span>Người giao</span>
+        </div>
+        <input readOnly={true} placeholder="Admin Tuấn" className={styles.inputDeliver}/>
+      </div>
 
+      <Dropdown className={styles.dropPerformer} show={showSuggest}>
+        <Dropdown.Toggle className={styles.performerToggle}>
           {/* Người thực hiện */}
-          <div className={styles.performer}>
-            <div className={styles.labelPerformer}>
-              <div className={styles.circle}></div>
-              <span>Người thực hiện</span>
-            </div>
-            <div className={styles.inputPerformerContainer}>
-              <input
-                placeholder="Nhập tên người thực hiện"
-                className={styles.inputPerformer}
-                {...register("inputPerformer")}
-              />
-              <button className={styles.btnPerformer}>
-                <img src={iconSearch} />
-              </button>
-            </div>
+          <div className={styles.labelPerformer}>
+            <div className={styles.circle}></div>
+            <span>Người thực hiện</span>
           </div>
-
-          {/* Tên vùng cạo */}
-          <div className={styles.shavingArea}>
-            <div className={styles.labelShavingArea}>
-              <div className={styles.circle}></div>
-              <span>Tên vùng cạo</span>
-            </div>
+          <div className={styles.inputPerformerContainer}>
             <input
-              placeholder="Nhập tên vùng cạo"
-              className={styles.inputShavingArea}
-              {...register("inputShavingArea")}
+              placeholder="Nhập tên người thực hiện"
+              className={styles.inputPerformer}
+              value={value}
+              onChange={(e) => onChangeSearch(e.target.value)}
+              // {...register("inputPerformer")}
             />
+            <button className={styles.btnPerformer}>
+              <img src={iconSearch} />
+            </button>
           </div>
-        </form>
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu className={styles.performerMenu} style={{ padding: 0 }}>
+          {listSuggest &&
+            listSuggest?.map((item, index) => {
+              return (
+                <Dropdown.Item key={index} className={styles.itemDropdown} onClick={() => onSelectItem(item)}>
+                  {item?.fullName + " - " + item?.phone}
+                </Dropdown.Item>
+              );
+            })}
+        </Dropdown.Menu>
+      </Dropdown>
+
+      {/* Tên vùng cạo */}
+      <div className={styles.shavingArea}>
+        <div className={styles.labelShavingArea}>
+          <div className={styles.circle}></div>
+          <span>Tên vùng cạo</span>
+        </div>
+        <input value={nameScaping}  onChange={(e) => onChangeNameScaping(e.target.value)} placeholder="Nhập tên vùng cạo" className={styles.inputShavingArea} />
+      </div>
+    </form>
   );
 };
 

@@ -19,12 +19,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 5px 10px;
+    padding-left: 2px;
 
-    p {
+    input {
+      width: 100%;
       font-size: 20px;
       font-weight: 800;
       color: $text-color;
+      background-color: #EFEFEF;
+      text-align: center;
+
     }
   }
 
@@ -36,11 +40,11 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    gap: 4px;
-    padding: 3px;
+    gap: 2px;
+    padding: 2px;
 
     .btn {
-      width: 40px;
+      width: 35px;
       height: 20px;
       background-color: #f7fbfe;
       border-radius: 2px;

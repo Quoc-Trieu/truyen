@@ -61,80 +61,99 @@
   }
 
 //   Người thực hiện
-  .performer {
+  .dropPerformer {
     width: 30%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
 
-    .labelPerformer {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 10px;
+    .performerToggle {
+        width: 100%;
 
-      .circle {
-        width: 20px;
-        height: 20px;
-        border-radius: 999px;
-        background-color: #0020ff;
-        border-width: 4px;
-        border-color: #d5dbff;
-      }
-
-      span {
-        font-size: 16px;
-        font-weight: bold;
-        color: $text-color;
-      }
-    }
-
-    .inputPerformerContainer {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      border: 1px solid #0020ff;
-      border-radius: 4px;
-      background-color: #ffffff;
-      padding: 0px 3px;
-      margin: 10px 0px;
-      height: 50px;
-
-      .inputPerformer {
-        flex: 1;
-        height: 45px;
-        border-radius: 4px;
-        padding: 0 10px;
-        font-size: 16px;
-        color: $text-color;
-        outline: none;
-
-        &::placeholder {
-          opacity: 0.8;
-          color: #777777;
-          font-weight: 500;
-        }
-      }
-
-      .btnPerformer {
-        width: 44px;
-        height: 44px;
-        background-color: #0020ff;
-        border-radius: 4px;
+      .labelPerformer {
         display: flex;
-        justify-content: center;
+        flex-direction: row;
+        justify-content: flex-start;
         align-items: center;
-
-        img {
+        gap: 10px;
+  
+        .circle {
           width: 20px;
           height: 20px;
+          border-radius: 999px;
+          background-color: #0020ff;
+          border-width: 4px;
+          border-color: #d5dbff;
+        }
+  
+        span {
+          font-size: 16px;
+          font-weight: bold;
+          color: $text-color;
+        }
+      }
+
+      .inputPerformerContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        border: 1px solid #0020ff;
+        border-radius: 4px;
+        background-color: #ffffff;
+        padding: 0px 3px;
+        margin: 10px 0px;
+        height: 50px;
+  
+        .inputPerformer {
+          flex: 1;
+          height: 45px;
+          border-radius: 4px;
+          padding: 0 10px;
+          font-size: 16px;
+          color: $text-color;
+          outline: none;
+  
+          &::placeholder {
+            opacity: 0.8;
+            color: #777777;
+            font-weight: 500;
+          }
+        }
+  
+        .btnPerformer {
+          width: 44px;
+          height: 44px;
+          background-color: #0020ff;
+          border-radius: 4px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+  
+          img {
+            width: 20px;
+            height: 20px;
+          }
         }
       }
     }
+
+    .performerMenu {
+      width: 100%;
+      max-height: 300px;
+      overflow: auto;
+
+      .itemDropdown {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: 400;
+      }
+    }
+
+    
+    
   }
 
 //   Tên vùng cạo

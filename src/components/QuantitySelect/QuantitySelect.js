@@ -4,14 +4,46 @@ import styles from "./QuantitySelect.module.scss";
 import iconDown from "../../assets/ico/icon-awesome-caret-down.png";
 import iconUp from "../../assets/ico/icon-awesome-caret-up.png";
 
-const QuantitySelect = ({ value = 0, onChange }) => {
-  const [quantity, setQuantity] = useState(value ?? 0);
-  const disabledDown = quantity <= 0 ? true : false;
-  const disabledUp = quantity >= 5 ? true : false;
+const QuantitySelect = ({ value = 0, minValue = 1, maxValue = 1, onChange}) => {
+  const [quantity, setQuantity] = useState(value ?? minValue);
+  console.log(minValue, maxValue);
+  const [ disabledDown, setDisabledDown ] = useState(false);
+  const [disabledUp , setDisabledUp ] = useState(false);
+
+  useEffect(() => {
+    // onChange(quantity);
+    setDisabledDown(quantity <=  minValue ? true : false)
+    setDisabledUp(quantity >=  maxValue ? true : false)
+    setQuantity(value)
+    onChange(value)
+  }, [value, minValue, maxValue]);
+
+  useEffect(() => {
+    // onChange(quantity);
+    setDisabledDown(quantity <=  minValue ? true : false)
+    setDisabledUp(quantity >=  maxValue ? true : false)
+    setQuantity(quantity)
+    if(onChange)
+    {
+      onChange(quantity)
+    }
+  }, [quantity]);
+
+  const handleChange = (event) => {
+    const regex = /^[0-9]+$/;
+    const value = event.target.value;
+
+    if (regex.test(value)) {
+      const numValue = parseInt(value);
+      if (numValue >= minValue && numValue <= maxValue) {
+        setQuantity(numValue);
+      }
+    }
+  };
   return (
     <div className={styles.quantitySelect}>
       <div className={styles.quantity}>
-        <p>{quantity}</p>
+        <input value={quantity} onChange={handleChange} type="text" />
       </div>
       <div className={styles.selectContainer} >
         <button className={styles.btn} onClick={() => setQuantity(quantity + 1)} style={{opacity: disabledUp ? 0.5 : 1}} disabled={disabledUp}>

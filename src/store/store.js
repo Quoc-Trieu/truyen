@@ -3,6 +3,7 @@ import authSlice from "./auth/authSlice";
 import navResReducer from './navRes/navResSlice'
 import treeSlice from "./tree/TreeSlice";
 import userSlice from './user/UserSlice';
+import assignmentSlice from './assignment/AssignmentSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     auth: authSlice,
     user: userSlice,
     tree: treeSlice,
+    assignment: assignmentSlice,
   },
 });
 

@@ -27,7 +27,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const ROLE = { USER: "USER", MANAGE: "MANAGE" };
+  const ROLE = { USER: "USER", MANAGE: "MANAGER" };
   const [selectedRole, setSelectedRole] = useState();
   const [passOld, setPassOld] = useState();
   const roleLogin = useSelector(roleUserSelector);

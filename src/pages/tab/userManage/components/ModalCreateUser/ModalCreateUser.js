@@ -13,7 +13,7 @@ import { Loading } from "notiflix";
 import { useSelector } from "react-redux";
 
 const ModalCreateUser = ({ visible, onCancel, onOk }) => {
-  const ROLE = { USER: "USER", MANAGE: "MANAGE" };
+  const ROLE = { USER: "USER", MANAGE: "MANAGER" };
   const STATUS = { ACTIVE: "ACTIVE", INACTIVE: "INACTIVE" };
   const {
     register,
