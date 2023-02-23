@@ -35,7 +35,7 @@ const ModalChangePassword = ({ visible, onCancel, onOk }) => {
   const onSubmit = async (data) => {
     // thêm role vào data trước khi gửi lên server
     data.role = userInfo?.role[0];
-    console.log( "ModalChangePassword Submit: ", data,"----phone:", userInfo?.phone );
+    console.log("ModalChangePassword Submit: ", data, "----phone:", userInfo?.phone);
     try {
       Loading.pulse();
       const res = await putChangePass({ phone: userInfo?.phone, data: data });
@@ -48,11 +48,11 @@ const ModalChangePassword = ({ visible, onCancel, onOk }) => {
       //bắt lỗi từ server trả về
       switch (error?.response?.data?.response?.message[0]) {
         case "oldPassword must be longer than or equal to 6 characters":
-          setError("oldPassword", {type: "WrongPassword", message: "Mật Khẩu cũ phải hơn 6 ký tự",});
+          setError("oldPassword", { type: "WrongPassword", message: "Mật Khẩu cũ phải hơn 6 ký tự", });
           break;
 
         case "newPassword must be longer than or equal to 6 characters":
-          setError("newPassword", {type: "WrongPassword", message: "Mật Khẩu mới phải hơn 6 ký tự", });
+          setError("newPassword", { type: "WrongPassword", message: "Mật Khẩu mới phải hơn 6 ký tự", });
           break;
 
         default:

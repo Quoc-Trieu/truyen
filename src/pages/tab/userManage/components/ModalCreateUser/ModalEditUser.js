@@ -18,6 +18,7 @@ import { putUpdateUser, getPassNoHas } from "./../../../../../services/userServi
 
 const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   // console.log('itemSelect----------' + JSON.stringify(item));
+  const permisson = useSelector(state => state.user.role)
   const {
     register,
     setValue,
@@ -74,7 +75,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         },
       });
       //nếu password thay đổi thì gọi api changePass
-      if(item?.password !== data?.password){
+      if (item?.password !== data?.password) {
         const resChangePass = await putChangePass({
           phone: data?.phone,
           data: {
@@ -108,7 +109,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         <span className={styles.label}>Tài khoản</span>
         <input
           readOnly={true}
-          type="text" 
+          type="text"
           placeholder="Nhập sđt người dùng"
           className={styles.input}
           {...register("phone", {
@@ -126,7 +127,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
 
         <span className={styles.label}>Mật khẩu</span>
         <input
-          type="text" 
+          type="text"
           placeholder="Nhập mật khẩu"
           className={styles.input}
           {...register("password", {
@@ -143,7 +144,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
 
         <span className={styles.label}>Tên người dùng</span>
         <input
-          type="text" 
+          type="text"
           placeholder="Nhập tên người dùng"
           className={styles.input}
           {...register("fullName", {
@@ -153,24 +154,28 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         {errors?.fullName && (
           <p className={styles.errorText}>{errors?.fullName?.message}</p>
         )}
+        {
+          permisson == 'ADMIN' ? <>
+            <span className={styles.label}>Phân quyền</span>
+            <div className={styles.groupAuthorizationUser}>
+              <div
+                className={styles.radioGroup}
+                onClick={() => onSelectRole(ROLE.USER)}
+              >
+                <RadioButton selected={selectedRole == ROLE.USER} />
+                <span>User</span>
+              </div>
+              <div
+                className={styles.radioGroup}
+                onClick={() => onSelectRole(ROLE.MANAGE)}
+              >
+                <RadioButton selected={selectedRole == ROLE.MANAGE} />
+                <span>Quản lý</span>
+              </div>
+            </div>
+          </> : ''
+        }
 
-        <span className={styles.label}>Phân quyền</span>
-        <div className={styles.groupAuthorizationUser}>
-          <div
-            className={styles.radioGroup}
-            onClick={() => onSelectRole(ROLE.USER)}
-          >
-            <RadioButton selected={selectedRole == ROLE.USER} />
-            <span>User</span>
-          </div>
-          <div
-            className={styles.radioGroup}
-            onClick={() => onSelectRole(ROLE.MANAGE)}
-          >
-            <RadioButton selected={selectedRole == ROLE.MANAGE} />
-            <span>Quản lý</span>
-          </div>
-        </div>
 
         <button className={styles.btnSubmit} type="submit">
           Xác nhận
