@@ -11,6 +11,7 @@ import { getALLTrees } from './../../store/tree/TreeSlice';
 
 const DropLand = ({ label, styleCustom }) => {
   const [ land , setLand ] = useState([]);
+  const [isDrop, setIsDrop] = useState(false);
   const dispatch = useDispatch();
   // lấy dữ liệu bọ lọc cây lưu từ redux để hiển thị ra label
   const filterTree = useSelector(filterTreeSelector);
@@ -38,14 +39,21 @@ const DropLand = ({ label, styleCustom }) => {
     dispatch(getALLTrees({resetPage: true}));
   };
 
+  const handToggle = (isOpen) => {
+    if (isOpen) {
+      setIsDrop(true);
+    }else {
+      setIsDrop(false);
+    }
+  }
   
   return (
     <div className={styles.dropDownComponent} style={{background: "#fff", padding: '0px 10px', borderRadius: '2px', borderWidth: '1px', borderColor: '#707070'}}>
-      <Dropdown drop="down" className="drop">
+      <Dropdown drop="down" className="drop" onToggle={handToggle}>
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
             <span> {filterTree.land ? ("Lô số " + filterTree.land) : "Chọn Lô" }</span>
-            <img src={iconUp} className={styles.iconDownEx} />
+            <img src={ isDrop ? iconDown : iconUp } className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>
 

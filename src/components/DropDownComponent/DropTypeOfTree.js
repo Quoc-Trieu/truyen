@@ -21,6 +21,7 @@ const TREES = {
 const DropTypeOfTree = ({ label, styleCustom, }) => {
   const dispatch = useDispatch();
   const [labelState, setLabelState] = useState(label);
+  const [isOpen, setIsOpen] = useState(false);
   const filterTree = useSelector(filterTreeSelector);
 
   const onClickItem = (itemTree) => {
@@ -29,13 +30,20 @@ const DropTypeOfTree = ({ label, styleCustom, }) => {
     dispatch(getALLTrees({resetPage: true}));
     console.log('filterTreeSelector: ', filterTree)
   };
+  const handToggle = (isOpen) => {
+    if (isOpen) {
+      setIsOpen(true);
+    }else {
+      setIsOpen(false);
+    }
+  }
   return (
     <div className={styles.dropDownComponent} style={{background: "#fff", padding: '0px 10px', borderRadius: '2px', borderWidth: '1px', borderColor: '#707070', marginRight: '15px'}}>
-      <Dropdown drop="down" className="drop">
+      <Dropdown drop="down" className="drop" onToggle={handToggle}>
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
             <span>{labelState}</span>
-            <img src={iconUp} className={styles.iconDownEx} />
+            <img src={isOpen ? iconDown : iconUp} className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>
           <Dropdown.Menu

@@ -4,10 +4,11 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 0 20px;
+  padding: 0 30px;
   width: 100%;
   height: 100px;
   gap: 3%;
+  margin-bottom: 20px;
 
 //   người giao
   .deliver {
@@ -104,7 +105,8 @@
         border-radius: 4px;
         background-color: #ffffff;
         padding: 0px 3px;
-        margin: 10px 0px;
+        margin-top: 10px;
+        margin-bottom: 0;
         height: 50px;
   
         .inputPerformer {
@@ -137,6 +139,17 @@
             height: 20px;
           }
         }
+      }
+
+      .errorInput {
+        width: 100%;
+        display: flex;
+        align-self: flex-start;
+        height: 20px;
+        color: #ff0000;
+        font-size: 16px;
+        font-weight: 400;
+        margin-top: 3px;
       }
     }
 
@@ -204,6 +217,17 @@
             color: #777777;
             font-weight: 500;
         }
+    }
+
+    .errorInput {
+      width: 100%;
+      display: flex;
+      align-self: flex-start;
+      height: 20px;
+      color: #ff0000;
+      font-size: 16px;
+      font-weight: 400;
+      margin-top: 3px;
     }
 }
 

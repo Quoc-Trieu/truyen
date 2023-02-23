@@ -49,14 +49,13 @@ export const getALLInfoUser = createAsyncThunk(
     //kiểm tra người dùng có đang thực hiện search hay không, nếu thực hiện search thì lấy textSearch từ store gọi API search
     const searchText = getState().user.searching;
 
-    if (searchText) {
-      dispatch(getInfoUserBySearch(searchText));
-    } else {
+
       try {
         const response = await getALLUser({
           page: pageProp ?? page,
           limit: 10,
           userRole: "ADMIN",
+          query: searchText,
         });
         console.log(response?.data);
         return response?.data;
@@ -66,7 +65,7 @@ export const getALLInfoUser = createAsyncThunk(
           Notiflix.Notify.info("Người dùng đã tồn tại");
         }
       }
-    }
+    
   }
 );
 
@@ -97,13 +96,7 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // builder.addCase(getInfo.fulfilled, (state, { payload }) => {
-    //   state.userInfo = payload;
-    // });
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(getInfoUser.pending, (state) => {
-      state.loading = true;
-    });
     builder.addCase(getInfoUser.fulfilled, (state, action) => {
       state.loading = false;
       // Add user to the state array

@@ -7,10 +7,24 @@ import ListUser from "./components/ListUser/ListUser";
 import Pagination from "../../../components/Pagination/Pagination";
 import ModalCreateUser from "./components/ModalCreateUser/ModalCreateUser";
 import iconAddUser from "../../../assets/ico/icon-awesome-user-plus.png";
+import { useDispatch } from 'react-redux';
+import { getALLInfoUser, setSearching } from './../../../store/user/UserSlice';
 
 
 const UserManage = () => {
   const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+
+  const onSubmit = async (text) => {
+    dispatch(setSearching(text));
+    dispatch(getALLInfoUser());
+  };
+  const onChangeText = (text) => {
+    if (text === "") {
+      dispatch(setSearching(""));
+      dispatch(getALLInfoUser());
+    }
+  }
   return (
     <div className={styles.userContainer}>
       <Header title="Quản lý User" name="Nguyễn Văn A" />
@@ -19,7 +33,8 @@ const UserManage = () => {
         <div className={styles.toolbar}>
           <SearchInput
             placeholder="Nhập tên, số điện thoại"
-            onSubmit={(searchText) => console.log(searchText)}
+            onSubmit={onSubmit}
+            onChangeText={onChangeText}
           />
           <Button text="Tạo tài khoản" onSubmit={() => setShowModal(true)} icon={iconAddUser}/>
         </div>

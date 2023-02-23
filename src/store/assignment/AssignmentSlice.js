@@ -10,11 +10,11 @@ const initialState = {
   searchingAssignment: null,
   pageCurrentAssignment: 1,
   pageTotalAssignment: null,
-  itemScaping: { land: null, row: null, startTree: null, endTree: null },
   listScaping: [],
   userAutoComplete: {},
   idUserPartition: null,
   namePartition: null,
+  catchError: {},
 };
 
 export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAutoComplete", async () => {
@@ -33,17 +33,6 @@ export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAut
   }
 });
 
-export const getNumTreeAssignment = createAsyncThunk("assignment/getNumTreeAssignment", async (num,{ getState }) => {
-  try {
-    // lấy idRow từ store
-    const idRow = await getState().assignment.itemScaping.row;
-    const response = await getALLTreeByCondition({ page: 1, limit: 5, idRow: idRow });
-    console.log(response?.data);
-    return response?.data;
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 const AssignmentSlice = createSlice({
   name: "assignment",
@@ -52,15 +41,8 @@ const AssignmentSlice = createSlice({
     setPageCurrentAssignment: (state, action) => {
       state.pageCurrentAssignment = action.payload;
     },
-    setUserAutoComplete: (state, action) => {
-      state.userAutoComplete = action.payload;
-    },
     setSearchingAssignment: (state, action) => {
       state.searchingAssignment = action.payload;
-    },
-    setItemScaping: (state, action) => {
-      console.log(state, action.payload);
-      state.itemScaping = { ...state.itemScaping, ...action.payload };
     },
     setListScaping: (state, action) => {
       state.listScaping = action.payload
@@ -70,6 +52,18 @@ const AssignmentSlice = createSlice({
     },
     setNamePartition: (state, action) => {
       state.namePartition = action.payload
+    },
+    setCatchError: (state, action) => {
+      state.catchError = {...state.catchError, ...action.payload };
+    },
+    clearError: (state, action) => {
+      state.catchError = initialState.catchError;
+    },
+    resetSpacing: (state, action) => {
+      state.catchError = initialState.catchError;
+      state.idUserPartition = initialState.idUserPartition;
+      state.namePartition = initialState.namePartition;
+      state.listScaping = initialState.listScaping;
     },
     resetAssignment: (state) => {
       return {
@@ -83,9 +77,6 @@ const AssignmentSlice = createSlice({
     builder.addCase(getALLUserAutoComplete.fulfilled, (state, action) => {
       state.userAutoComplete = action.payload;
     });
-    builder.addCase(getNumTreeAssignment.fulfilled, (state, action) => {
-      state.itemScaping = { ...state.itemScaping, endTree: action.payload?.total, startTree: 1 };
-    });
   },
 });
 
@@ -93,11 +84,11 @@ const AssignmentSlice = createSlice({
 export const pageCurrentAssignmentSelector = (state) => state.assignment.pageCurrentAssignment;
 export const searchingAssignmentSelector = (state) => state.assignment.searchingAssignment;
 export const userAutoCompleteSelector = (state) => state.assignment.userAutoComplete;
-export const itemScapingSelector = (state) => state.assignment.itemScaping;
 export const listScapingSelector = (state) => state.assignment.listScaping;
 export const idUserPartitionSelector = (state) => state.assignment.idUserPartition;
 export const namePartitionSelector = (state) => state.assignment.namePartition;
+export const catchErrorSelector = (state) => state.assignment.catchError;
 
 // sử dụng useDispatch để dispatch action
-export const { setPageCurrentAssignment, setSearchingAssignment, setUserAutoComplete, setItemScaping, setListScaping, setIdUserPartition, setNamePartition } = AssignmentSlice.actions;
+export const { setPageCurrentAssignment, setSearchingAssignment, setListScaping, setIdUserPartition, setNamePartition, setCatchError, clearError, resetSpacing } = AssignmentSlice.actions;
 export default AssignmentSlice.reducer;

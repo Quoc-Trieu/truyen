@@ -71,11 +71,12 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
         <input
           placeholder="Nhập sđt người dùng"
           className={styles.input}
+          type="number"
           {...register("phone", {
             required: "Vui lòng không bỏ trống ô này",
             minLength: {
-              value: 6,
-              message: 'Nhập dài hơn 6 ký tự',
+              value: 10,
+              message: 'Nhập tối thiểu 10 số',
             },
           })}
         />

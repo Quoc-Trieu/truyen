@@ -32,7 +32,7 @@ const ModalComponent = ({
       closable={false}
     >
       <div className={styles.wrapperModal} style={styleWrapper}>
-        <div className={styles.headerModal}>
+        <div className={styles.headerModal} style={styleHeader}>
           <span
             className={styles.titleModal}
             style={{ textAlign: alignHeader }}

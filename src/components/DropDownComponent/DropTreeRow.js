@@ -23,6 +23,7 @@ const DropTreeRow = ({ label, styleCustom, }) => {
   const dispatch = useDispatch();
   const filterTree = useSelector(filterTreeSelector);
   const [treeRow, setTreeRow] = useState();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (filterTree?.land) {
@@ -38,13 +39,21 @@ const DropTreeRow = ({ label, styleCustom, }) => {
     dispatch(setFilter({ row: itemHang?.name }));
     dispatch(getALLTrees({resetPage: true}));
   };
+
+  const handToggle = (isOpen) => {
+    if (isOpen) {
+      setIsOpen(true);
+    }else {
+      setIsOpen(false);
+    }
+  }
   return (
     <div className={styles.dropDownComponent} style={{background: "#fff", padding: '0px 10px', borderRadius: '2px', borderWidth: '1px', borderColor: '#707070'}}>
-      <Dropdown drop="down" className="drop">
+      <Dropdown drop="down" className="drop" onToggle={handToggle} style={{pointerEvents: filterTree?.land==null ? 'none' : 'auto'}}>
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
             <span>{filterTree.row ? ("Hàng số " + filterTree.row.slice(filterTree.row.length - 3, filterTree.row.length)) : "Chọn hàng" }</span>
-            <img src={iconUp} className={styles.iconDownEx} />
+            <img src={isOpen ? iconDown : iconUp} className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>
           <Dropdown.Menu

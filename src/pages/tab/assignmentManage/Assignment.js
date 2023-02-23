@@ -9,7 +9,7 @@ import { useState } from "react";
 import ListAssginment from "./components/ListAssignment/ListAssignment";
 import ModalCreatePartition from "./components/CreatePartition/ModalCreatePartition";
 import { useDispatch } from 'react-redux';
-import { getALLUserAutoComplete } from './../../../store/assignment/AssignmentSlice';
+import { getALLUserAutoComplete, setSearchingAssignment } from './../../../store/assignment/AssignmentSlice';
 
 export const assignmenList = [
   {
@@ -42,10 +42,22 @@ export const assignmenList = [
   },
 ];
 
+
 const Assignment = () => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   dispatch(getALLUserAutoComplete());
+
+  const onSearch = (searchText) => {
+    dispatch(setSearchingAssignment(searchText));
+    console.log(searchText);
+  };
+
+  const onChangeText = (text) => {
+    if (text === "") {
+      dispatch(setSearchingAssignment(""));
+    }
+  }
 
   return (
     <div className={styles.assignmentContainer}>
@@ -54,7 +66,8 @@ const Assignment = () => {
         <div className={styles.toolbar}>
           <SearchInput
             placeholder="Nhập vùng cạo"
-            onSubmit={(searchText) => console.log(searchText)}
+            onSubmit={onSearch}
+            onChangeText={onChangeText}
           />
           <Button
             icon={IconAdd}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./BoxTreeParameter.module.scss";
 import { useSelector } from "react-redux";
 import { infoALLTreeSelector } from './../../../../../store/tree/TreeSlice';
+import { getALLTreeByCondition } from './../../../../../services/treeServices';
 
 const BoxTreeParameter = () => {
   const renderStyles = {
@@ -37,6 +38,20 @@ const BoxTreeParameter = () => {
     },
   };
   const allTree = useSelector(infoALLTreeSelector);
+  const [statics, setStatics] = useState([]);
+
+  useEffect(() => {
+    try {
+      const getTreeStatistics = async () => {
+        const response = await getALLTreeByCondition({});
+        setStatics(response?.data);
+      };
+      getTreeStatistics()
+    } catch (error) {
+      console.log(error);
+    }
+  }, [allTree])
+
 
   return (
     <div className={styles.treeParameterList}>
@@ -52,7 +67,7 @@ const BoxTreeParameter = () => {
             }}
           >
             <span className={styles.title}>{renderStyles[item].name}</span>
-            <span className={styles.value}>{allTree[item]}</span>
+            <span className={styles.value}>{statics[item] ?? 0}</span>
           </div>
         );
       })}

@@ -8,27 +8,24 @@ const SearchInput = ({
   initValue,
   placeholder,
   autoFocus,
+  onChangeText,
+  onSubmit,
 }) => {
-  const dispatch = useDispatch();
   const [value, setValue] = useState(initValue ?? "");
 
-  const onSubmit = async (text) => {
-    dispatch(setSearching(text));
-    dispatch(getInfoUserBySearch(text));
+  const onSubmitInput = async (value) => {
+    onSubmit && onSubmit(value);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      onSubmit(value);
+      onSubmitInput(value);
     }
   };
 
-  const onChangeText = (text) => {
-    setValue(text.target.value);
-    if (text.target.value === "") {
-      dispatch(setSearching(""));
-      dispatch(getALLInfoUser());
-    }
+  const onChangeTextInput = (text) => {
+    onChangeText && onChangeText(text)
+    setValue(text);
   }
 
   return (
@@ -37,7 +34,7 @@ const SearchInput = ({
         type="text"
         placeholder={placeholder}
         value={value}
-        onChange={(text) => onChangeText(text)}
+        onChange={(text) => onChangeTextInput(text.target.value)}
         autoFocus={autoFocus}
         onKeyDown={(e) => handleKeyDown(e)}
       />

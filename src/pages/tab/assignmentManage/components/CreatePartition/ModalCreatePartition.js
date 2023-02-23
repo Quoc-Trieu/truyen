@@ -6,8 +6,11 @@ import ModalComponent from "../../../../../components/ModalComponent/ModalCompon
 import HeaderFilter from './HeaderFilter/HeaderFilter';
 import BodyAssignmentList from './BodyAssignmentList/BodyAssignmentList';
 import FooterAssignment from './FooterAssignment/FooterAssignment';
+import { resetSpacing } from "../../../../../store/assignment/AssignmentSlice";
+import { useDispatch } from 'react-redux';
 
 const ModalCreatePartition = ({ visible, onCancel, onOk }) => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -26,10 +29,11 @@ const ModalCreatePartition = ({ visible, onCancel, onOk }) => {
       onCancel={onCancel}
       width={1500}
       alignHeader="left"
+      styleHeader={{padding: "3px 20px"}}
     >
         <HeaderFilter />
         <BodyAssignmentList />
-        <FooterAssignment />
+        <FooterAssignment onCancel={() => {onCancel(); dispatch(resetSpacing([]))}}/>
     </ModalComponent>
   );
 };

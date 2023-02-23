@@ -6,7 +6,6 @@ import iconUp from "../../assets/ico/icon-awesome-caret-up.png";
 
 const QuantitySelect = ({ value = 0, minValue = 1, maxValue = 1, onChange}) => {
   const [quantity, setQuantity] = useState(value ?? minValue);
-  console.log(minValue, maxValue);
   const [ disabledDown, setDisabledDown ] = useState(false);
   const [disabledUp , setDisabledUp ] = useState(false);
 

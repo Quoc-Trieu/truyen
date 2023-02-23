@@ -5,11 +5,11 @@ export const getALLUser = ({
   limit = 10,
   oderBy,
   query,
-  userRole = "ADMIN",
+  userRole,
   userStatus,
 }) => {
   return AxiosClient.get("/user/getAllUsers", {
-    params: { page: page ?? 1, limit, oderBy, query, userRole, userStatus },
+    params: { page: page ?? 1, limit, oderBy, query: query, userRole: userRole, userStatus },
   });
 };
 

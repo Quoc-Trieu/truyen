@@ -3,8 +3,9 @@ import styles from "./HeaderFilter.module.scss";
 import iconSearch from "../../../../../../assets/ico/icon-feather-search.png";
 import { useForm } from "react-hook-form";
 import Dropdown from "react-bootstrap/Dropdown";
-import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector } from "./../../../../../../store/assignment/AssignmentSlice";
+import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector, catchErrorSelector } from "./../../../../../../store/assignment/AssignmentSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { userInfoSelector } from "./../../../../../../store/user/UserSlice";
 
 const HeaderFilter = () => {
   const {
@@ -14,6 +15,8 @@ const HeaderFilter = () => {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
+  const catchError = useSelector(catchErrorSelector);
+  const userInfo = useSelector(userInfoSelector);
   const listUser = useSelector(userAutoCompleteSelector);
   console.log(listUser);
   const [value, setValue] = useState();
@@ -25,6 +28,7 @@ const HeaderFilter = () => {
   const onChangeSearch = (value) => {
     setValue(value);
     setShowSuggest(value ? true : false)
+    dispatch(setIdUserPartition(""));
     //xử lý hiển thị gợi ý tìm kiếm khi nhập
     const searchTerms = suggestSearchTerms(value, listUser);
     setListSuggest(searchTerms);
@@ -68,7 +72,7 @@ const HeaderFilter = () => {
           <div className={styles.circle}></div>
           <span>Người giao</span>
         </div>
-        <input readOnly={true} placeholder="Admin Tuấn" className={styles.inputDeliver}/>
+        <input readOnly={true} placeholder={userInfo?.fullName} className={styles.inputDeliver}/>
       </div>
 
       <Dropdown className={styles.dropPerformer} show={showSuggest}>
@@ -90,6 +94,7 @@ const HeaderFilter = () => {
               <img src={iconSearch} />
             </button>
           </div>
+          <span className={styles.errorInput}>{catchError?.idUserPartitionError}</span>
         </Dropdown.Toggle>
 
         <Dropdown.Menu className={styles.performerMenu} style={{ padding: 0 }}>
@@ -111,6 +116,7 @@ const HeaderFilter = () => {
           <span>Tên vùng cạo</span>
         </div>
         <input value={nameScaping}  onChange={(e) => onChangeNameScaping(e.target.value)} placeholder="Nhập tên vùng cạo" className={styles.inputShavingArea} />
+        <span className={styles.errorInput}>{catchError?.namePartitionError}</span>
       </div>
     </form>
   );
