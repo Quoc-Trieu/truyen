@@ -73,7 +73,7 @@ const ListTree = () => {
                     borderColor: STATUSTREE?.[item?.status]?.borderColor,
                   }}
                 ></div>
-                <span className={styles.statusText}>{STATUSTREE?.[item?.status]?.name}</span>
+                <span className={styles.statusText}  style={{color: STATUSTREE?.[item?.status]?.color}}>{STATUSTREE?.[item?.status]?.name}</span>
               </div>
               <div className={styles.seeDetails}>
                 <button

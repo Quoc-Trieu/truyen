@@ -2,16 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "./ModalCreateUser.module.scss";
 import { useForm } from "react-hook-form";
 import ModalComponent from "../../../../../components/ModalComponent/ModalComponent";
-import {
-  postCreateUser,
-  putChangePass,
-} from "../../../../../services/userServies";
-import { Notiflix } from "notiflix";
+import { postCreateUser, putChangePass } from "../../../../../services/userServies";
+import Notiflix from "notiflix";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getALLInfoUser,
-  userInfoSelector,
-} from "../../../../../store/user/UserSlice";
+import { getALLInfoUser, userInfoSelector } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
 
 const ModalChangePassword = ({ visible, onCancel, onOk }) => {
@@ -42,21 +36,19 @@ const ModalChangePassword = ({ visible, onCancel, onOk }) => {
       // đóng modal và reset form data
       onOk();
       reset();
+      Notiflix.Notify.success("Đổi mật khẩu thành công");
       Loading.remove();
     } catch (error) {
       Loading.remove();
-      //bắt lỗi từ server trả về
-      switch (error?.response?.data?.response?.message[0]) {
-        case "oldPassword must be longer than or equal to 6 characters":
-          setError("oldPassword", { type: "WrongPassword", message: "Mật Khẩu cũ phải hơn 6 ký tự", });
-          break;
-
-        case "newPassword must be longer than or equal to 6 characters":
-          setError("newPassword", { type: "WrongPassword", message: "Mật Khẩu mới phải hơn 6 ký tự", });
+      console.log(error);
+      // lỗi mật khẩu cũ không đúng
+      switch (error?.response?.data?.code) {
+        case "PASSWORD_WRONG":
+          Notiflix.Notify.failure("Mật khẩu cũ không đúng");
           break;
 
         default:
-          setError("oldPassword", { type: "WrongPassword", message: error?.response?.data?.response?.message[0], });
+          Notiflix.Notify.failure("Đổi mật khẩu thất bại");
           break;
       }
     }
@@ -80,14 +72,12 @@ const ModalChangePassword = ({ visible, onCancel, onOk }) => {
             required: "Vui lòng không bỏ trống ô này",
             minLength: {
               value: 6,
-              message: 'Nhập dài hơn 6 ký tự',
+              message: "Nhập dài hơn 6 ký tự",
             },
           })}
         />
         {/* bắt lỗi từ server trả về và lỗi để trống */}
-        {errors?.oldPassword && (
-          <span className={styles.errorText}>{errors.oldPassword.message}</span>
-        )}
+        {errors?.oldPassword && <span className={styles.errorText}>{errors.oldPassword.message}</span>}
 
         <span className={styles.label}>Mật khẩu mới</span>
         <input
@@ -97,14 +87,12 @@ const ModalChangePassword = ({ visible, onCancel, onOk }) => {
             required: "Vui lòng không bỏ trống ô này",
             minLength: {
               value: 6,
-              message: 'Nhập dài hơn 6 ký tự',
+              message: "Nhập dài hơn 6 ký tự",
             },
           })}
         />
         {/* bắt lỗi từ server trả về và lỗi để trống */}
-        {errors?.newPassword && (
-          <span className={styles.errorText}>{errors.newPassword.message}</span>
-        )}
+        {errors?.newPassword && <span className={styles.errorText}>{errors.newPassword.message}</span>}
 
         <button className={styles.btnSubmit} type="submit">
           Lưu

@@ -49,12 +49,11 @@ export const getALLInfoUser = createAsyncThunk(
     //kiểm tra người dùng có đang thực hiện search hay không, nếu thực hiện search thì lấy textSearch từ store gọi API search
     const searchText = getState().user.searching;
 
-
       try {
         const response = await getALLUser({
           page: pageProp ?? page,
           limit: 10,
-          userRole: "ADMIN",
+          userRole: getState().user.role,
           query: searchText,
         });
         console.log(response?.data);
@@ -102,6 +101,7 @@ const userSlice = createSlice({
       // Add user to the state array
       state.userInfo = action.payload;
       state.role = action.payload?.role.join();
+      console.log("ROLE: ",action.payload?.role.join());
       state.pageTotal = action.payload?.totalPages;
     });
     builder.addCase(getInfoUser.rejected, (state, action) => {

@@ -12,6 +12,7 @@ import { setPhoneLocalStorage, setToken } from "./../../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Notiflix from 'notiflix';
 import { getInfoUser } from './../../store/user/UserSlice';
+import { Loading } from 'notiflix';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
+      Loading.pulse()
       const res = await login(data);
       // lưu token và sdt vào localstorage
       setToken(res?.data?.auth);
@@ -34,11 +36,23 @@ const Login = () => {
       // lưu sdt vào redux và lấy thông tin user
       dispatch(getInfoUser(res?.data?.user?.phone))
       //thông báo và chuyền màn hình đăng nhập thành công
-      Notiflix.Notify.success('Đăng nhập thành công');
-      navigate("/");
+      if (res?.data?.user?.status=="ACTIVE")
+      {
+        navigate("/");
+        Notiflix.Notify.success('Đăng nhập thành công');
+      }else {
+        Notiflix.Notify.failure('Tài khoản bị khóa');
+      }
+      Loading.remove();
     } catch (error) {
-      Notiflix.Notify.warning('Đăng nhập lỗi')
-      console.log("Login Error: " + error);
+      Loading.remove();
+      switch (error?.response?.data?.code) {
+        case "USER_NOT_FOUND": Notiflix.Notify.failure('Tài khoản không tồn tại'); break;
+        case "USERNAME_WRONG": Notiflix.Notify.failure('Tài khoản không tồn tại'); break;
+        case "PASSWORD_WRONG": Notiflix.Notify.failure('Mật khẩu không đúng'); break;
+        default: Notiflix.Notify.failure('Đăng nhập thất bại'); break;
+      }
+
     }
   };
 

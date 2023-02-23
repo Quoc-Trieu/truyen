@@ -18,6 +18,7 @@ const HeaderFilter = () => {
   const catchError = useSelector(catchErrorSelector);
   const userInfo = useSelector(userInfoSelector);
   const listUser = useSelector(userAutoCompleteSelector);
+
   console.log(listUser);
   const [value, setValue] = useState();
   const [listSuggest, setListSuggest] = useState([]);

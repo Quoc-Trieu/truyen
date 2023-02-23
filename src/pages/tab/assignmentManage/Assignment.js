@@ -11,36 +11,6 @@ import ModalCreatePartition from "./components/CreatePartition/ModalCreatePartit
 import { useDispatch } from 'react-redux';
 import { getALLUserAutoComplete, setSearchingAssignment } from './../../../store/assignment/AssignmentSlice';
 
-export const assignmenList = [
-  {
-    shaverArea: { name: "Vùng số 1", time: "00/00/2000" },
-    userShaver: { user: "Nguyễn văn Bảy", phone: "0123456789" },
-    LotNumShaver: 2,
-    LotTreeShaver: 3,
-    TotalTreeShaver: 15,
-  },
-  {
-    shaverArea: { name: "Vùng số 2", time: "00/00/2000" },
-    userShaver: { user: "Nguyễn văn Bảy", phone: "0123456789" },
-    LotNumShaver: 2,
-    LotTreeShaver: 3,
-    TotalTreeShaver: 15,
-  },
-  {
-    shaverArea: { name: "Vùng số 3", time: "00/00/2000" },
-    userShaver: { user: "Nguyễn văn Bảy", phone: "0123456789" },
-    LotNumShaver: 2,
-    LotTreeShaver: 3,
-    TotalTreeShaver: 15,
-  },
-  {
-    shaverArea: { name: "Vùng số 4", time: "00/00/2000" },
-    userShaver: { user: "Nguyễn văn Bảy", phone: "0123456789" },
-    LotNumShaver: 2,
-    LotTreeShaver: 3,
-    TotalTreeShaver: 15,
-  },
-];
 
 
 const Assignment = () => {
@@ -87,17 +57,9 @@ const Assignment = () => {
             "Tổng cây cạo",
             "",
           ]}
-          assignmenList={assignmenList}
         />
 
-        <Pagination
-          align="flex-end"
-          OnChangePage={(text) => {
-            console.log(text);
-          }}
-        />
-
-        <ModalCreatePartition visible={showModal} onCancel={() => setShowModal(false)}/>
+        { showModal && <ModalCreatePartition visible={showModal} onCancel={() => setShowModal(false)}/>}
       </div>
     </div>
   );

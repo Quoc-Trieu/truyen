@@ -136,7 +136,7 @@ const BodyAssignmentList = () => {
                     <DropLandRow text="Hàng số 1" /> */}
                   <DropLandAssignment landALL={landALL} onSelectLand={onSelectLand} label={item?.land} onUnSelectLand={onUnSelectLand}/>
                   <span className={styles.line}></span>
-                  <DropTreeRowAssignment NumRowOfLand={rowOfLand} onSelectRow={onSelectRow} label={item?.row} />
+                  <DropTreeRowAssignment NumRowOfLand={rowOfLand} onSelectRow={onSelectRow} label={item?.row} styleCustom={{pointerEvents: item?.land == null ? 'none' : 'auto'}} />
                   <span className={styles.line}></span>
                   <div className={styles.treeBegins}>
                     <span>Nhập cây bắt đầu</span>
@@ -144,7 +144,7 @@ const BodyAssignmentList = () => {
                   </div>
                   <span className={styles.line}></span>
                   <div className={styles.treeBegins}>
-                    <span>Nhập cây bắt đầu</span>
+                    <span>Nhập cây kết thúc</span>
                     <QuantitySelect value={item?.endTree} minValue={item?.firstTree} maxValue={item?.lastTree} onChange={onChangeTreeEnd} />
                   </div>
                   <div className={styles.btnDelete}>

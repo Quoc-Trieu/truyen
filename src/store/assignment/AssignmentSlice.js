@@ -17,12 +17,12 @@ const initialState = {
   catchError: {},
 };
 
-export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAutoComplete", async () => {
+export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAutoComplete", async (prop,{getState}) => {
   try {
     const response = await getALLUser({
       page: 1,
       limit: 1000,
-      userRole: "ADMIN",
+      userRole: getState().user.role,
     });
     console.log(response?.data);
     const result = response?.data?.users;
@@ -64,6 +64,7 @@ const AssignmentSlice = createSlice({
       state.idUserPartition = initialState.idUserPartition;
       state.namePartition = initialState.namePartition;
       state.listScaping = initialState.listScaping;
+      state.catchError = initialState.catchError;
     },
     resetAssignment: (state) => {
       return {

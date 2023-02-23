@@ -26,7 +26,7 @@ const ModalCreatePartition = ({ visible, onCancel, onOk }) => {
       title="TẠO PHÂN VÙNG CẠO MỚI"
       visible={visible}
       onOk={onOk}
-      onCancel={onCancel}
+      onCancel={() => {onCancel(); dispatch(resetSpacing([]))}}
       width={1500}
       alignHeader="left"
       styleHeader={{padding: "3px 20px"}}

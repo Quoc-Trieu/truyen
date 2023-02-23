@@ -7,7 +7,7 @@ import ModalComponent from "../../../../../components/ModalComponent/ModalCompon
 import { postCreateUser, putChangePass } from "../../../../../services/userServies";
 import { useSelector } from "react-redux";
 import RadioButton from "./../../../../../components/RadioButton/RadioButton";
-import { Notiflix } from "notiflix";
+import  Notiflix  from "notiflix";
 import { useDispatch } from "react-redux";
 import {
   getALLInfoUser,
@@ -28,7 +28,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const ROLE = { USER: "USER", MANAGE: "MANAGER" };
+  const ROLE = { USER: "USER", MANAGER: "MANAGER" };
   const [selectedRole, setSelectedRole] = useState();
   const [passOld, setPassOld] = useState();
   const roleLogin = useSelector(roleUserSelector);
@@ -55,8 +55,8 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   }, [visible]);
 
   const onSelectRole = (roleName) => {
-    // chỉ các tài khoản có quyền USER và MANAGE bị thay đổi
-    if (selectedRole == ROLE.MANAGE || selectedRole == ROLE.USER) {
+    // chỉ các tài khoản có quyền USER và MANAGER bị thay đổi
+    if (selectedRole == ROLE.MANAGER || selectedRole == ROLE.USER) {
       setSelectedRole(roleName);
     }
   };
@@ -89,8 +89,10 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
       dispatch(getALLInfoUser());
       reset();
       onOk();
+      Notiflix.Notify.success("Cập nhật thành công");
       Loading.remove();
     } catch (error) {
+      Notiflix.Notify.failure("Cập nhật thất bại");
       Loading.remove();
       console.log(error);
     }
@@ -167,9 +169,9 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
               </div>
               <div
                 className={styles.radioGroup}
-                onClick={() => onSelectRole(ROLE.MANAGE)}
+                onClick={() => onSelectRole(ROLE.MANAGER)}
               >
-                <RadioButton selected={selectedRole == ROLE.MANAGE} />
+                <RadioButton selected={selectedRole == ROLE.MANAGER} />
                 <span>Quản lý</span>
               </div>
             </div>

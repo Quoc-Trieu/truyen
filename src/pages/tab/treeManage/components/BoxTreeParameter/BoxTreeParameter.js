@@ -38,19 +38,19 @@ const BoxTreeParameter = () => {
     },
   };
   const allTree = useSelector(infoALLTreeSelector);
-  const [statics, setStatics] = useState([]);
-
-  useEffect(() => {
-    try {
-      const getTreeStatistics = async () => {
-        const response = await getALLTreeByCondition({});
-        setStatics(response?.data);
-      };
-      getTreeStatistics()
-    } catch (error) {
-      console.log(error);
-    }
-  }, [allTree])
+  
+  // const [statics, setStatics] = useState([]);
+  // useEffect(() => {
+  //   try {
+  //     const getTreeStatistics = async () => {
+  //       const response = await getALLTreeByCondition({});
+  //       setStatics(response?.data);
+  //     };
+  //     getTreeStatistics()
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, [allTree])
 
 
   return (
@@ -67,7 +67,7 @@ const BoxTreeParameter = () => {
             }}
           >
             <span className={styles.title}>{renderStyles[item].name}</span>
-            <span className={styles.value}>{statics[item] ?? 0}</span>
+            <span className={styles.value}>{allTree[item] ?? 0}</span>
           </div>
         );
       })}

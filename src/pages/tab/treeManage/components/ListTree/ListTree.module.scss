@@ -3,7 +3,7 @@
 // chiều cao của hàng
 $height-col: 60px;
 // chiều dài của cột trong item
-$width-col-item: 250px;
+$width-col-item: 280px;
 
 .listTree {
   width: 100%;
@@ -72,6 +72,7 @@ $width-col-item: 250px;
         justify-content: flex-start;
         align-items: center;
         gap: 5px;
+        font-weight: 400;
 
         .dotStatus {
           width: 20px;
@@ -141,6 +142,6 @@ $width-col-item: 250px;
   }
 
   .footerAssignment {
-    background-color: aqua;
+    // background-color: aqua;
   }
 }

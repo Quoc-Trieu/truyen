@@ -6,19 +6,29 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "./menuDrop.css";
 
 const DropTreeRowAssignment = ({ label, styleCustom, NumRowOfLand, onSelectRow }) => {
+  const [isOpenDrop, setIsOpenDrop] = useState(false);
   const onClickItem = (itemHang) => {
     onSelectRow && onSelectRow(itemHang);
   };
+
+  const onToggle = (isOpen) => {
+    if (isOpen) {
+      setIsOpenDrop(true);
+    }else{
+      setIsOpenDrop(false);
+    }
+  };
+
   return (
     <div
       className={styles.dropDownComponent}
-      style={{ background: "#fff", padding: "0px 10px" }}
+      style={{ background: "#fff", padding: "0px 10px", ...styleCustom }}
     >
-      <Dropdown drop="down" className="drop">
+      <Dropdown drop="down" className="drop" onToggle={onToggle}>
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
             <span>{label ? "Hàng số " + label.slice(label.length - 3, label.length) : "Chọn hàng"}</span>
-            <img src={iconUp} className={styles.iconDownEx} />
+            <img src={isOpenDrop ? iconDown : iconUp} className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>
         <Dropdown.Menu style={{ padding: 0 }} className={styles.dropMenu_hang}>

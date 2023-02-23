@@ -6,14 +6,14 @@ import { useForm } from "react-hook-form";
 import ModalComponent from "../../../../../components/ModalComponent/ModalComponent";
 import { postCreateUser } from "../../../../../services/userServies";
 import RadioButton from "./../../../../../components/RadioButton/RadioButton";
-import { Notiflix } from "notiflix";
+import Notiflix from "notiflix";
 import { useDispatch } from "react-redux";
 import { getALLInfoUser } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
 import { useSelector } from "react-redux";
 
 const ModalCreateUser = ({ visible, onCancel, onOk }) => {
-  const ROLE = { USER: "USER", MANAGE: "MANAGER" };
+  const ROLE = { USER: "USER", MANAGER: "MANAGER" };
   const permisson = useSelector(state => state.user.role);
   const STATUS = { ACTIVE: "ACTIVE", INACTIVE: "INACTIVE" };
   const {
@@ -52,9 +52,14 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
       reset();
       onOk();
       Loading.remove();
+      Notiflix.Notify.success("Tạo tài khoản thành công");
     } catch (error) {
       Loading.remove();
       console.log(error);
+      switch (error?.response?.data?.code) {
+        case "PHONE_IS_EXIST": Notiflix.Notify.failure("Số điện thoại đã tồn tại"); break;
+        default: Notiflix.Notify.failure("Tạo tài khoản thất bại"); break;
+      }
     }
   };
 
@@ -132,10 +137,10 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
                 </div>
                 <div
                   className={styles.radioGroup}
-                  onClick={() => onSelectRole(ROLE.MANAGE)}
+                  onClick={() => onSelectRole(ROLE.MANAGER)}
                 >
                   <RadioButton
-                    selected={selectedRole == ROLE.MANAGE}
+                    selected={selectedRole == ROLE.MANAGER}
                     value={selectedRole}
                   />
                   <span>Quản lý</span>

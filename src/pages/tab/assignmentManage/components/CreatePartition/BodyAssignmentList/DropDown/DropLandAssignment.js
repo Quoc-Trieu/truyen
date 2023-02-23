@@ -6,6 +6,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "./menuDrop.css";
 
 const DropLandAssignment = ({ label, styleCustom, landALL, onSelectLand, onUnSelectLand }) => {
+  const [isOpenDrop, setIsOpenDrop] = useState(false);
   const onClickItemLand = (item) => {
     console.log(item);
     onSelectLand && onSelectLand(item);
@@ -14,16 +15,25 @@ const DropLandAssignment = ({ label, styleCustom, landALL, onSelectLand, onUnSel
   const onUnSelectLandItem = () => {
     onUnSelectLand && onUnSelectLand();
   };
+
+  const onToggle = (isOpen) => {
+    if (isOpen) {
+      setIsOpenDrop(true);
+    }else{
+      setIsOpenDrop(false);
+    }
+    console.log(isOpen);
+  };
   return (
     <div
       className={styles.dropDownComponent}
       style={{ background: "#fff", padding: "0px 10px" }}
     >
-      <Dropdown drop="down" className="drop">
+      <Dropdown drop="down" className="drop" onToggle={onToggle}>
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
             <span> {label ? "Lô số " + label : "Chọn Lô"}</span>
-            <img src={iconUp} className={styles.iconDownEx} />
+            <img src={isOpenDrop ? iconDown :  iconUp} className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>
 
