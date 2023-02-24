@@ -30,14 +30,14 @@ const Login = () => {
     try {
       Loading.pulse()
       const res = await login(data);
-      // lưu token và sdt vào localstorage
-      setToken(res?.data?.auth);
-      setPhoneLocalStorage(res?.data?.user?.phone);
-      // lưu sdt vào redux và lấy thông tin user
-      dispatch(getInfoUser(res?.data?.user?.phone))
-      //thông báo và chuyền màn hình đăng nhập thành công
       if (res?.data?.user?.status=="ACTIVE")
       {
+        // lưu token và sdt vào localstorage
+        setToken(res?.data?.auth);
+        setPhoneLocalStorage(res?.data?.user?.phone);
+        // lưu sdt vào redux và lấy thông tin user
+        dispatch(getInfoUser(res?.data?.user?.phone))
+        //thông báo và chuyền màn hình đăng nhập thành công
         navigate("/");
         Notiflix.Notify.success('Đăng nhập thành công');
       }else {

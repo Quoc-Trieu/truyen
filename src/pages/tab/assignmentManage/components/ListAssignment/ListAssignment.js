@@ -11,10 +11,13 @@ import { searchingAssignmentSelector, listScapingSelector } from './../../../../
 import Pagination from './../../../../../components/Pagination/Pagination';
 import Notiflix from 'notiflix';
 import { Loading } from 'notiflix';
+import ModalEditCreatePartition from './../EditPartition/ModalEditCreatePartition';
 
 const ListAssginment = ({ itemsHeaderRow, assignmenList }) => {
   const [showRemove, setShowRemove] = useState(false);
+  const [showEditDetail, setShowEditDetail] = useState(false);
   const [itemDelete, setItemDelete] = useState();
+  const [itemDetail, setItemDetail] = useState();
   const [list, setList] = useState([]);
   const search = useSelector(searchingAssignmentSelector);
   const listScaping = useSelector(listScapingSelector);
@@ -34,33 +37,32 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList }) => {
   }, [search, page, showRemove, listScaping])
 
 
-  const onDetail = () => {
-    console.log("onDetail");
-  };
-
   const formatTime = (inputString) => {
-    // Chuyển chuỗi thành đối tượng Date
-    const dt = new Date(inputString.slice(0, -1));
-    // Định dạng lại thời gian
-    const timeStr = dt.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" });
-    const dateStr = `${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()}`;
-    // Trả về chuỗi định dạng
-    return `${timeStr} / ${dateStr}`;
+    const date = new Date(inputString);
+    const hours = date.getUTCHours() + 7;
+    const minutes = date.getUTCMinutes();
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedDate = `${formattedHours}:${formattedMinutes} / ${date.getUTCDate()}-${date.getUTCMonth() + 1}-${date.getUTCFullYear()}`;
+    return formattedDate;
   }
 
-  const NumLandRowTree = (item) => {
-    let lo = item.length;
+  const NumLandRowTree = (detail) => {
+    let lo = detail?.length;
     let hang=0;
     let cay=0;
 
-    if (item?.length > 0) {
-      item.map((item, index) => {
+    if (detail?.length > 0) {
+      detail.map((itemLo, index) => {
         // console.log(item?.hang.length);
-        hang += item?.hang.length;
+        hang += itemLo?.hang.length;
 
-        item?.hang.map((item, index) => {
+        itemLo?.hang.map((itemHang, index) => {
           // console.log(item?.cay.length);
-          cay += item?.cay.length;
+          const arrTree = itemHang?.cay;
+          const startTree = parseInt(arrTree[0].slice(arrTree[0].length-3, arrTree[0].length));
+          const endTree = parseInt(arrTree[arrTree.length -1].slice(arrTree[arrTree.length -1].length-3, arrTree[arrTree.length -1].length));
+          cay += (endTree - startTree) + 1;
         })
       })
     }
@@ -91,6 +93,12 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList }) => {
   const onChangePage = (page) => {
     setPage(page);
   }
+
+  const onDetail = (item) => {
+    setShowEditDetail(true);
+    setItemDetail(item);
+    console.log("Data Item Detail: ",item);
+  };
 
   return (
     <div className={styles.listAssignment}>
@@ -128,7 +136,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList }) => {
                   className={styles.remove}
                   onClick={() => onRemove(item)}
                 />
-                <div className={styles.seeDetails} onClick={onDetail}>
+                <div className={styles.seeDetails} onClick={() => onDetail(item)}>
                   <span>Chi tiết</span>
                   <img src={iconEye} />
                 </div>
@@ -155,6 +163,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList }) => {
         />
       }
 
+      { showEditDetail && <ModalEditCreatePartition visible={showEditDetail} onCancel={() => setShowEditDetail(false)} data={itemDetail}/> }
     </div>
   );
 };

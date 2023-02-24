@@ -14,6 +14,7 @@ const initialState = {
   pageTotal: null,
   userInfo: {},
   infoALLUser: {},
+  filterUser: "ADMIN",
   loading: false,
   error: null,
 };
@@ -43,17 +44,30 @@ export const getInfoUserBySearch = createAsyncThunk(
 
 export const getALLInfoUser = createAsyncThunk(
   "user/getALLInfoUser",
-  async (pageProp, { getState, dispatch }) => {
+  async (userRole, { getState, dispatch }) => {
     // lấy trang hiện tại để reload List user
     const page = getState().user.pageCurrent;
     //kiểm tra người dùng có đang thực hiện search hay không, nếu thực hiện search thì lấy textSearch từ store gọi API search
-    const searchText = getState().user.searching;
+    const searchText = getState().user.searching
+    const role = getState().user.role;
+    const fifter = getState().user.filterUser;
+
+    let paramUserRole; //tham khảo cách trả về của BE để hiểu cách xử lý này
+    if(role === "ADMIN"){
+      paramUserRole = fifter; //chỉ có ADMIN mới đc lọc USER
+    }else{
+      if(role === "MANAGER"){
+        paramUserRole = "MANAGER" //quản lý lấy tất cả USER
+      }else{
+        paramUserRole = "ADMIN" //
+      }
+    }
 
       try {
         const response = await getALLUser({
-          page: pageProp ?? page,
+          page: page,
           limit: 10,
-          userRole: getState().user.role,
+          userRole: paramUserRole,
           query: searchText,
         });
         console.log(response?.data);
@@ -80,6 +94,9 @@ const userSlice = createSlice({
     },
     setSearching: (state, action) => {
       state.searching = action.payload;
+    },
+    setFilterUser: (state, action) => {
+      state.filterUser = action.payload;
     },
     resetUser: (state) => {
       return {
@@ -133,5 +150,5 @@ export const searchUserSelector = (state) => state.user.searching;
 
 export const infoALLUserSelector = (state) => state.user.infoALLUser;
 
-export const { setPhone, clearPhone, setPageCurrentUser, setSearching } = userSlice.actions;
+export const { setPhone, clearPhone, setPageCurrentUser, setSearching, setFilterUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -7,13 +7,20 @@ import ListUser from "./components/ListUser/ListUser";
 import Pagination from "../../../components/Pagination/Pagination";
 import ModalCreateUser from "./components/ModalCreateUser/ModalCreateUser";
 import iconAddUser from "../../../assets/ico/icon-awesome-user-plus.png";
-import { useDispatch } from 'react-redux';
-import { getALLInfoUser, setSearching } from './../../../store/user/UserSlice';
-
+import { useDispatch, useSelector } from "react-redux";
+import { getALLInfoUser, setFilterUser, setSearching } from "./../../../store/user/UserSlice";
+import iconUp from "../../..//assets/ico/icon-feather-chevron-up.png";
+import iconDown from "../../../assets/ico/icon-feather-chevron-down.png";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const UserManage = () => {
+  // dùng value truyền pẩm để lấy User, ADMIN lấy tất cả, MANAGER lấy User, User lấy quản lý
+  const filterUser ={ admin : {label: "Tất cả", value: "ADMIN"}, manager:{label: "Quản lý", value: "USER"}, user: {label: "Người dùng", value: "MANAGER"}}
   const [showModal, setShowModal] = useState(false);
+  const [isDrop, setIsDrop] = useState(false);
   const dispatch = useDispatch();
+  const permisson = useSelector(state => state.user.role)
+  const [labelMenu, setLabelMenu] = useState("Tất cả");
 
   const onSubmit = async (text) => {
     dispatch(setSearching(text));
@@ -24,6 +31,20 @@ const UserManage = () => {
       dispatch(setSearching(""));
       dispatch(getALLInfoUser());
     }
+  };
+
+  const onClickItem = (item) => {
+    setLabelMenu(item.label);
+    dispatch(setFilterUser(item.value));
+    dispatch(getALLInfoUser());
+  }
+
+  const handToggle = (isOpen) => {
+    if (isOpen) {
+      setIsDrop(true);
+    }else {
+      setIsDrop(false);
+    }
   }
   return (
     <div className={styles.userContainer}>
@@ -31,20 +52,41 @@ const UserManage = () => {
 
       <div className={styles.userBody}>
         <div className={styles.toolbar}>
-          <SearchInput
-            placeholder="Nhập tên, số điện thoại"
-            onSubmit={onSubmit}
-            onChangeText={onChangeText}
-          />
-          <Button text="Tạo tài khoản" onSubmit={() => setShowModal(true)} icon={iconAddUser}/>
+          <SearchInput placeholder="Nhập tên, số điện thoại" onSubmit={onSubmit} onChangeText={onChangeText} />
+          <Button text="Tạo tài khoản" onSubmit={() => setShowModal(true)} icon={iconAddUser} />
         </div>
 
-        <ListUser
-          itemsHeaderRow={["Số điện thoại", "Tên", ""]}
-        />
+        { //phần loại user dành cho admin
+          permisson == 'ADMIN' &&
+          <div className={styles.filterPermission}>
+          <Dropdown drop="down" className="drop" onToggle={handToggle}>
+            <Dropdown.Toggle>
+              <div className={styles.dropLotToggle}>
+                <span>{labelMenu}</span>
+                <img src={isDrop ? iconDown : iconUp} className={styles.iconDownEx} />
+              </div>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu  className={styles.filterPermissionMenu}>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(filterUser.admin)}}>
+                <span>Tất cả</span>
+              </Dropdown.Item>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(filterUser.manager)}}>
+                <span>Quản lý</span>
+              </Dropdown.Item>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(filterUser.user)}}>
+                <span>Người dùng</span>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+
+        }
+       
+        <ListUser itemsHeaderRow={["Số điện thoại", "Tên", ""]} />
       </div>
 
-      <ModalCreateUser visible={showModal} onCancel={() =>  setShowModal(false)}  onOk={() =>  setShowModal(false)}/>
+      <ModalCreateUser visible={showModal} onCancel={() => setShowModal(false)} onOk={() => setShowModal(false)} />
     </div>
   );
 };

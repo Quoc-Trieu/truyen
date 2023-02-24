@@ -1,34 +1,27 @@
 import React, { useState, useEffect } from "react";
 import styles from "./QuantitySelect.module.scss";
-
 import iconDown from "../../assets/ico/icon-awesome-caret-down.png";
 import iconUp from "../../assets/ico/icon-awesome-caret-up.png";
 
-const QuantitySelect = ({ value = 0, minValue = 1, maxValue = 1, onChange}) => {
-  const [quantity, setQuantity] = useState(value ?? minValue);
-  const [ disabledDown, setDisabledDown ] = useState(false);
-  const [disabledUp , setDisabledUp ] = useState(false);
+const QuantitySelect = ({ value = 1, minValue = 1, maxValue = 10, onChange }) => {
+  const [quantity, setQuantity] = useState(value);
+  const [disabledDown, setDisabledDown] = useState(false);
+  const [disabledUp, setDisabledUp] = useState(false);
+  const initValue = value;
 
   useEffect(() => {
-    // onChange(quantity);
-    setDisabledDown(quantity <=  minValue ? true : false)
-    setDisabledUp(quantity >=  maxValue ? true : false)
-    setQuantity(value)
-    onChange(value)
-  }, [value, minValue, maxValue]);
+    setDisabledDown(quantity <= minValue);
+    setDisabledUp(quantity >= maxValue);
+    onChange && onChange(quantity);
+  }, [quantity, minValue, maxValue]);
 
   useEffect(() => {
-    // onChange(quantity);
-    setDisabledDown(quantity <=  minValue ? true : false)
-    setDisabledUp(quantity >=  maxValue ? true : false)
-    setQuantity(quantity)
-    if(onChange)
-    {
-      onChange(quantity)
+    if(value) {
+      setQuantity(value);
     }
-  }, [quantity]);
+  }, [value]);
 
-  const handleChange = (event) => {
+  const handleQuantityChange = (event) => {
     const regex = /^[0-9]+$/;
     const value = event.target.value;
 
@@ -39,17 +32,44 @@ const QuantitySelect = ({ value = 0, minValue = 1, maxValue = 1, onChange}) => {
       }
     }
   };
+
+  const incrementQuantity = () => {
+    if (quantity < maxValue) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > minValue) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   return (
     <div className={styles.quantitySelect}>
       <div className={styles.quantity}>
-        <input value={quantity} onChange={handleChange} type="text" />
+        <input
+          type="text"
+          value={quantity}
+          onChange={handleQuantityChange}
+        />
       </div>
-      <div className={styles.selectContainer} >
-        <button className={styles.btn} onClick={() => setQuantity(quantity + 1)} style={{opacity: disabledUp ? 0.5 : 1}} disabled={disabledUp}>
-          <img src={iconUp} />
+      <div className={styles.selectContainer}>
+        <button
+          className={styles.btn}
+          onClick={incrementQuantity}
+          style={{ opacity: disabledUp ? 0.5 : 1 }}
+          disabled={disabledUp}
+        >
+          <img src={iconUp} alt="increase quantity" />
         </button>
-        <button className={styles.btn} onClick={() => setQuantity(quantity - 1)} style={{opacity: disabledDown ? 0.5 : 1}} disabled={disabledDown}>
-          <img src={iconDown} />
+        <button
+          className={styles.btn}
+          onClick={decrementQuantity}
+          style={{ opacity: disabledDown ? 0.5 : 1 }}
+          disabled={disabledDown}
+        >
+          <img src={iconDown} alt="decrease quantity" />
         </button>
       </div>
     </div>

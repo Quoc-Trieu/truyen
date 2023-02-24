@@ -15,14 +15,16 @@ const initialState = {
   idUserPartition: null,
   namePartition: null,
   catchError: {},
+  idScapingEdit: null,
 };
 
-export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAutoComplete", async (prop,{getState}) => {
+export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAutoComplete", async (prop, { getState }) => {
   try {
     const response = await getALLUser({
       page: 1,
       limit: 1000,
       userRole: getState().user.role,
+      userStatus: "ACTIVE",
     });
     console.log(response?.data);
     const result = response?.data?.users;
@@ -32,7 +34,6 @@ export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAut
     console.log(error);
   }
 });
-
 
 const AssignmentSlice = createSlice({
   name: "assignment",
@@ -45,19 +46,22 @@ const AssignmentSlice = createSlice({
       state.searchingAssignment = action.payload;
     },
     setListScaping: (state, action) => {
-      state.listScaping = action.payload
+      state.listScaping = action.payload;
     },
     setIdUserPartition: (state, action) => {
-      state.idUserPartition = action.payload
+      state.idUserPartition = action.payload;
     },
     setNamePartition: (state, action) => {
-      state.namePartition = action.payload
+      state.namePartition = action.payload;
     },
     setCatchError: (state, action) => {
-      state.catchError = {...state.catchError, ...action.payload };
+      state.catchError = { ...state.catchError, ...action.payload };
     },
     clearError: (state, action) => {
       state.catchError = initialState.catchError;
+    },
+    setIdScapingEdit: (state, action) => {
+      state.idScapingEdit = action.payload;
     },
     resetSpacing: (state, action) => {
       state.catchError = initialState.catchError;
@@ -89,7 +93,18 @@ export const listScapingSelector = (state) => state.assignment.listScaping;
 export const idUserPartitionSelector = (state) => state.assignment.idUserPartition;
 export const namePartitionSelector = (state) => state.assignment.namePartition;
 export const catchErrorSelector = (state) => state.assignment.catchError;
+export const idScapingEditSelector = (state) => state.assignment.idScapingEdit;
 
 // sử dụng useDispatch để dispatch action
-export const { setPageCurrentAssignment, setSearchingAssignment, setListScaping, setIdUserPartition, setNamePartition, setCatchError, clearError, resetSpacing } = AssignmentSlice.actions;
+export const {
+  setPageCurrentAssignment,
+  setSearchingAssignment,
+  setListScaping,
+  setIdUserPartition,
+  setNamePartition,
+  setCatchError,
+  clearError,
+  resetSpacing,
+  setIdScapingEdit,
+} = AssignmentSlice.actions;
 export default AssignmentSlice.reducer;

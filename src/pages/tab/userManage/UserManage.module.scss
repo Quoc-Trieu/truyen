@@ -6,6 +6,53 @@
   display: flex;
   flex-direction: column;
 
+  .filterPermission {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    .dropLotToggle{
+      background-color: #FFFFFF;
+      width: 160px;
+      padding: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 4px;
+
+      img {
+        width: 16px;
+        height: 10px;
+      }
+      span {
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+    .filterPermissionMenu {
+      background-color: #FFFFFF;
+      width: 100%;
+      padding: 8px;
+
+      .itemMenu {
+        border-radius: 4px;
+        background-color: #FFFFFF;
+        padding: 7px;
+        margin-bottom: 5px;
+
+        &:hover {
+          background-color: #EFF6E7;
+        }
+      }
+      
+    }
+
+  }
+
   .userBody {
     width: $full-screen;
     display: flex;

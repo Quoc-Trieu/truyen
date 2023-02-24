@@ -10,6 +10,7 @@ import ListAssginment from "./components/ListAssignment/ListAssignment";
 import ModalCreatePartition from "./components/CreatePartition/ModalCreatePartition";
 import { useDispatch } from 'react-redux';
 import { getALLUserAutoComplete, setSearchingAssignment } from './../../../store/assignment/AssignmentSlice';
+import ModalEditCreatePartition from './components/EditPartition/ModalEditCreatePartition';
 
 
 
