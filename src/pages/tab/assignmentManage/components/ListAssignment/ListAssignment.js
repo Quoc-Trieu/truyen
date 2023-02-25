@@ -34,7 +34,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList }) => {
       }
     }
     getList();
-  }, [search, page, showRemove, listScaping])
+  }, [search, page, showRemove, showEditDetail])
 
 
   const formatTime = (inputString) => {

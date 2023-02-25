@@ -24,6 +24,8 @@ import {
   setPageCurrentUser,
 } from "./../../../../../store/user/UserSlice";
 
+const roleLabel = { ADMIN: "Admin", MANAGER: "Quản lý", USER: "User" };
+
 const ListUser = ({ itemsHeaderRow }) => {
   const dispatch = useDispatch();
   const InfoALLUser = useSelector(infoALLUserSelector);
@@ -118,6 +120,7 @@ const ListUser = ({ itemsHeaderRow }) => {
               <div key={index} className={styles.itemUI}>
                 <span>{item?.phone} </span>
                 <span>{item?.fullName} </span>
+                <span>{roleLabel[item?.role[0]]} </span>
                 <div className={styles.actionItem}>
                   <img
                     src={iconEdit}

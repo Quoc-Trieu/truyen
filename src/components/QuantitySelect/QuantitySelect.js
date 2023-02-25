@@ -7,7 +7,6 @@ const QuantitySelect = ({ value = 1, minValue = 1, maxValue = 10, onChange }) =>
   const [quantity, setQuantity] = useState(value);
   const [disabledDown, setDisabledDown] = useState(false);
   const [disabledUp, setDisabledUp] = useState(false);
-  const initValue = value;
 
   useEffect(() => {
     setDisabledDown(quantity <= minValue);

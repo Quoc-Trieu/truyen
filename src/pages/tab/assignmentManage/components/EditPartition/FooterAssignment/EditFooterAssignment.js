@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./EditFooterAssignment.module.scss";
 import ButtonSimple from "./../../../../../../components/Button/ButtonSimple";
+import iconEdit from "./../../../../../../assets/ico/icon-feather-edit.png";
 import {
   idUserPartitionSelector,
   listScapingSelector,
@@ -8,25 +9,37 @@ import {
   setCatchError,
   resetSpacing,
   setListScaping,
-  idScapingEditSelector
+  idScapingEditSelector,
+  isEditSelector,
+  setIsEdit,
 } from "./../../../../../../store/assignment/AssignmentSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { postCreateScaping, putLocationScaping, deleteScaping, getScapingByName } from "./../../../../../../services/assignmentServices";
+import { postCreateScaping, putLocationScaping, deleteScaping, getScapingByName, postCheckTreeInScaping } from "./../../../../../../services/assignmentServices";
 import Notiflix from "notiflix";
 import { Loading } from "notiflix";
 
-const EditFooterAssignment = ({ onCancel }) => {
+const EditFooterAssignment = ({ onCancel, data }) => {
   const dispatch = useDispatch();
   const listScaping = useSelector(listScapingSelector);
   const idUserPartition = useSelector(idUserPartitionSelector);
   const namePartition = useSelector(namePartitionSelector);
   const idScapingScaping = useSelector(idScapingEditSelector);
-
+  const idEdit = useSelector(isEditSelector);
 
   const onSummit = () => {
     console.log("listAssignment: ", listScaping);
+    console.log("idScapingScaping: ", idScapingScaping);
+    console.log("namePartition: ", namePartition);
+    const listTree = convertArrTree(listScaping);
+    const checkTree = async () => {
+      const res = await postCheckTreeInScaping(listTree);
+      console.log("res: ", res);
+
+    }
+    checkTree()
+    console.log("listTree: ", listTree);
     if (!checkErrorEditDetail()) {
-      // CreatePartition(listScaping);
+      CreatePartition(listScaping);
     } else {
       Notiflix.Notify.warning("Vui lòng kiểm tra lại thông tin");
     }
@@ -38,9 +51,11 @@ const EditFooterAssignment = ({ onCancel }) => {
     Loading.standard("Đang thêm vùng cạo");
     let idScaping = "";
     try {
+      //Xóa vùng cạo cũ trước khi cập nhập lại
+      const resDelete = await deleteScaping(idScapingScaping);
       //tạo ra vùng cạo, lấy id vùng cạo để thêm cây vào vùng cạo
       const resCreateScaping = await postCreateScaping({ idUserPartition: idUserPartition, name: namePartition });
-      idScaping = resCreateScaping.data?._id; //res.data?._id;
+      idScaping = resCreateScaping.data?._id; //id vùng cạo
       console.log("create  idScaping: ", idScaping);
       /////////////////////
       try {
@@ -55,9 +70,6 @@ const EditFooterAssignment = ({ onCancel }) => {
         } else {
           Notiflix.Notify.failure("Tạo vùng cao thất bại");
         }
-        //khi tạo vùng cạo thành công nhưng thêm cây thất bại thì xóa vùng cạo
-        const getIdScaping = await getScapingByName(namePartition);
-        const resDelete = await deleteScaping(getIdScaping?.data?._id);
       }
       ////////////////
     } catch (error) {
@@ -71,6 +83,22 @@ const EditFooterAssignment = ({ onCancel }) => {
     Loading.remove();
   };
 
+  // convert ra mảng tất cả các cây từ danh sách vùng cạo người dùng chọn
+  const convertArrTree = (listScaping) => {
+    let listTree = [];
+    for (let i = 0; i < listScaping.length; i++) {
+      const startTree = listScaping[i]?.startTree;
+      const endTree = listScaping[i]?.endTree;
+      const row = listScaping[i]?.row;
+      for (let j = startTree; j <= endTree; j++) {
+        const tree = paddedString(j, 3);
+        listTree.push(row + tree);
+      }
+    }
+    return listTree;
+  }
+
+// tạo ra 4 line để vẽ các cây trên bản đồ
   const convertMap = (listScaping) => {
     let line1 = [];
     let line2 = [];
@@ -113,6 +141,18 @@ const EditFooterAssignment = ({ onCancel }) => {
 
   const checkErrorEditDetail = () => {
     let isError = false;
+    if (idUserPartition == null || idUserPartition == "") {
+      dispatch(setCatchError({ idUserPartitionError: "Vui lòng chọn người thực hiện" }));
+      isError = true;
+    } else {
+      dispatch(setCatchError({ idUserPartitionError: "" }));
+    }
+    if (namePartition == null || namePartition == "") {
+      dispatch(setCatchError({ namePartitionError: "Vui lòng nhập tên vùng cạo" }));
+      isError = true;
+    } else {
+      dispatch(setCatchError({ namePartitionError: "" }));
+    }
     if (listScaping[listScaping.length - 1]?.land == null) {
       dispatch(setCatchError({ landError: "Vui lòng chọn lô" }));
       isError = true;
@@ -135,10 +175,69 @@ const EditFooterAssignment = ({ onCancel }) => {
     return "C" + "0".repeat(numZeros) + strNum;
   };
 
+
+  
+  const NumLandRowTree = (detail) => {
+    let lo = detail?.length;
+    let hang=0;
+    let cay=0;
+
+    if (detail?.length > 0) {
+      detail.map((itemLo, index) => {
+        // console.log(item?.hang.length);
+        hang += itemLo?.hang.length;
+
+        itemLo?.hang.map((itemHang, index) => {
+          // console.log(item?.cay.length);
+          const arrTree = itemHang?.cay;
+          const startTree = parseInt(arrTree[0].slice(arrTree[0].length-3, arrTree[0].length));
+          const endTree = parseInt(arrTree[arrTree.length -1].slice(arrTree[arrTree.length -1].length-3, arrTree[arrTree.length -1].length));
+          cay += (endTree - startTree) + 1;
+        })
+      })
+    }
+    return { lo, hang, cay };
+  }
+
   return (
     <div className={styles.footerAssignment}>
-      <ButtonSimple bold text="Hủy" onSummit={onCancel} />
-      <ButtonSimple bold text="Xác nhận" styleCustom={{ background: "linear-gradient(90deg, #6379f8 0%, #6379f8 100%)" }} onSummit={onSummit} />
+      <div className={styles.footerAssignment__left}>
+        <div className={styles.footerAssignment__left__item}>
+          <span className={styles.footerAssignment__left__item__title}>Số lô cạo:</span>
+          <span className={styles.footerAssignment__left__item__content}>{NumLandRowTree(data?.detail).lo} lô</span>
+        </div>
+        <div className={styles.footerAssignment__left__item}>
+          <span className={styles.footerAssignment__left__item__title}>Số hàng cạo:</span>
+          <span className={styles.footerAssignment__left__item__content}>{NumLandRowTree(data?.detail).hang} hàng</span>
+        </div>
+        <div className={styles.footerAssignment__left__item}>
+          <span className={styles.footerAssignment__left__item__title}>Tổng cây cạo:</span>
+          <span className={styles.footerAssignment__left__item__content}>{NumLandRowTree(data?.detail).cay} cây</span>
+        </div>
+      </div>
+
+      {idEdit ? (
+        <div className={styles.footerAssignment__right}>
+          <ButtonSimple bold text="Hủy" width="170px" onSummit={onCancel} />
+          <ButtonSimple
+            bold
+            text="Xác nhận"
+            width="170px"
+            onSummit={onSummit}
+            styleCustom={{ background: "linear-gradient(90deg, #6379f8 0%, #6379f8 100%)" }}
+          />
+        </div>
+      ) : (
+        <div className={styles.footerAssignment__right}>
+          <ButtonSimple
+            bold
+            text="Chỉnh sửa"
+            icon={iconEdit}
+            onSummit={() => dispatch(setIsEdit(true))}
+            styleCustom={{ background: "linear-gradient(90deg, #00A2FF 0%, #00A2FF 100%)" }}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -7,15 +7,16 @@ import QuantitySelect from "../../../../../../components/QuantitySelect/Quantity
 import DropLandAssignment from "./DropDown/EditDropLandAssignment";
 import DropTreeRowAssignment from "./DropDown/EditDropTreeRowAssignment";
 import { useDispatch, useSelector } from "react-redux";
-import { setListScaping } from "../../../../../../store/assignment/AssignmentSlice";
+import { setCatchError, setListScaping } from "../../../../../../store/assignment/AssignmentSlice";
 import { getALLland, getALLTreeByCondition, getInfoLand } from "../../../../../../services/treeServices";
 import Notiflix from "notiflix";
-import { listScapingSelector, catchErrorSelector } from "../../../../../../store/assignment/AssignmentSlice";
+import { listScapingSelector, catchErrorSelector, isEditSelector } from "../../../../../../store/assignment/AssignmentSlice";
 
 const EditBodyAssignmentList = ({data}) => {
   const dispatch = useDispatch();
   const listScaping = useSelector(listScapingSelector);
   const catchError = useSelector(catchErrorSelector);
+  const idEdit = useSelector(isEditSelector);
 
   const [landALL, setLandALL] = useState();
   const [rowOfLand, setRowOfLand] = useState();
@@ -91,6 +92,7 @@ const EditBodyAssignmentList = ({data}) => {
     } else {
       Notiflix.Notify.failure("Chọn lô thất bại");
     }
+    dispatch(setCatchError({landError: ""}));
   };
 
   const onUnSelectLand = () => {
@@ -109,6 +111,7 @@ const EditBodyAssignmentList = ({data}) => {
       Notiflix.Notify.failure("Lấy cây từ hàng thất bại");
       console.log(error);
     }
+    dispatch(setCatchError({rowError: ""}));
   };
 
   const onChangeTreeStart = (value) => {
@@ -171,8 +174,8 @@ const EditBodyAssignmentList = ({data}) => {
                     <span>Nhập cây kết thúc</span>
                     <QuantitySelect value={item?.endTree} minValue={item?.firstTree} maxValue={item?.lastTree} onChange={onChangeTreeEnd} />
                   </div>
-                  <div className={styles.btnDelete}>
-                    <ButtonDelete text="Xóa" onDelete={() => console.log("Xóa")} />
+                  <div className={styles.btnDelete} style={{pointerEvents: lastItem ? 'auto' : 'auto'}}>
+                    {idEdit && <ButtonDelete text="Xóa" onDelete={() => console.log("Xóa")} />}
                   </div>
                 </div>
             );

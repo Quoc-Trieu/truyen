@@ -16,6 +16,7 @@ export const postCreateScaping = (data) => {
 };
 
 export const putLocationScaping = ({idScaping , data}) => {
+  console.log(data);
   return AxiosClient.put("/scaping/setLocationScaping", {lsNameTree: data}, {params: { idScaping : idScaping }});
 };
 
@@ -40,4 +41,6 @@ export const getScapingByName = (nameScaping) => {
   return AxiosClient.get("/scaping/getScapingByName" , {params: {nameScaping: nameScaping  }} );
 };
 
-
+export const postAddTreeInScaping = ({idScaping, data}) => {
+  return AxiosClient.post("/scaping/configScaping" , data, {params: {idScaping : idScaping  }} );
+};

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./FooterAssignment.module.scss";
 import ButtonSimple from "./../../../../../../components/Button/ButtonSimple";
 import {
@@ -13,16 +13,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { postCreateScaping, putLocationScaping, deleteScaping, getScapingByName } from "./../../../../../../services/assignmentServices";
 import Notiflix from "notiflix";
 import { Loading } from "notiflix";
+import { useLayoutEffect } from "react";
 
 const FooterAssignment = ({ onCancel }) => {
   const dispatch = useDispatch();
   const listScaping = useSelector(listScapingSelector);
   const idUserPartition = useSelector(idUserPartitionSelector);
   const namePartition = useSelector(namePartitionSelector);
+  
 
   const onSummit = () => {
     console.log("listAssignment: ", listScaping);
-    if (!checkError()) {
+    if (!checkErrorInput()) {
       postCreatePartition(listScaping);
     } else {
       Notiflix.Notify.warning("Vui lòng kiểm tra lại thông tin");
@@ -109,7 +111,11 @@ const FooterAssignment = ({ onCancel }) => {
     return dataTreePolyline;
   };
 
-  const checkError = () => {
+  // useEffect(() => {
+  //       checkErrorInput()
+  // }, [listScaping,]);
+
+  const checkErrorInput = () => {
     let isError = false;
     if (idUserPartition == null || idUserPartition == "") {
       dispatch(setCatchError({ idUserPartitionError: "Vui lòng chọn người thực hiện" }));

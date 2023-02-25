@@ -33,7 +33,7 @@ const ModalEditCreatePartition = ({ visible, onCancel, onOk, data }) => {
     >
         <HeaderFilter data={data} />
         <BodyAssignmentList data={data}/>
-        <FooterAssignment onCancel={() => {onCancel(); dispatch(resetSpacing([]))}}/>
+        <FooterAssignment data={data} onCancel={() => {onCancel(); dispatch(resetSpacing([]))}}/>
     </ModalComponent>
   );
 };

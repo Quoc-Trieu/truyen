@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import styles from "./BodyAssignmentList.module.scss";
 import iconAdd from "../../../../../../assets/ico/icon-ionic-add.png";
 import ModalComponent from "../../../../../../components/ModalComponent/ModalComponent";
@@ -7,9 +7,10 @@ import QuantitySelect from "../../../../../../components/QuantitySelect/Quantity
 import DropLandAssignment from "./DropDown/DropLandAssignment";
 import DropTreeRowAssignment from "./DropDown/DropTreeRowAssignment";
 import { useDispatch, useSelector } from "react-redux";
-import { setListScaping } from "../../../../../../store/assignment/AssignmentSlice";
+import { setCatchError, setListScaping } from "../../../../../../store/assignment/AssignmentSlice";
 import { getALLland, getALLTreeByCondition, getInfoLand } from "./../../../../../../services/treeServices";
 import Notiflix from "notiflix";
+import {Loading} from "notiflix";
 import { listScapingSelector, catchErrorSelector } from "./../../../../../../store/assignment/AssignmentSlice";
 
 const BodyAssignmentList = () => {
@@ -20,7 +21,12 @@ const BodyAssignmentList = () => {
   const [landALL, setLandALL] = useState();
   const [rowOfLand, setRowOfLand] = useState();
 
-  const [saveSelectorItem, setSaveSelectorItem] = useState([{ land: null, row: null, startTree: null, endTree: null, firstTree: null, lastTree: null }]);
+  const [saveSelectorItem, setSaveSelectorItem] = useState([]);
+
+  useEffect(() => {
+    setSaveSelectorItem([{ land: null, row: null, startTree: null, endTree: null, firstTree: null, lastTree: null }])
+  }, [])
+  
 
   useEffect(() => {
     dispatch(setListScaping(saveSelectorItem));
@@ -67,6 +73,7 @@ const BodyAssignmentList = () => {
     } else {
       Notiflix.Notify.failure("Chọn lô thất bại");
     }
+    dispatch(setCatchError({landError: ""}));
   };
 
   const onUnSelectLand = () => {
@@ -85,6 +92,7 @@ const BodyAssignmentList = () => {
       Notiflix.Notify.failure("Lấy cây từ hàng thất bại");
       console.log(error);
     }
+    dispatch(setCatchError({rowError: ""}));
   };
 
   const onChangeTreeStart = (value) => {
@@ -111,9 +119,13 @@ const BodyAssignmentList = () => {
   };
 
   const onDeleteItem = (index) => {
-    // const newNumbers = [...listAssignment]; // sao chép mảng hiện tại
-    // newNumbers.splice(index, 1); // thêm số vào trước phần tử cuối của mảng
-    // setListAssignment(newNumbers); // cập nhật mảng mới
+    Loading.pulse("Đang xóa...");
+    const newList = [...saveSelectorItem]; // sao chép mảng hiện tại
+    // xóa phần tử tương ướng với index
+    newList.splice(index, 1);
+    newList[index] = { land: null, row: null, startTree: null, endTree: null, firstTree: null, lastTree: null  };
+    setSaveSelectorItem(newList); // cập nhật mảng mới
+    Loading.remove();
   };
   return (
     <div className={styles.bodyAssignmentList}>
@@ -127,9 +139,9 @@ const BodyAssignmentList = () => {
 
       {/* Item row */}
       <div className={styles.ListContainer}>
-        {saveSelectorItem &&
+        {saveSelectorItem  && saveSelectorItem !== null &&
           saveSelectorItem.map((item, index) => {
-            const lastItem = index == saveSelectorItem.length - 1 ? true : false;
+            const lastItem = index == saveSelectorItem?.length - 1 ? true : true;
             return (
                 <div key={index} className={styles.itemUI}  style={{pointerEvents: lastItem ? 'auto' : 'none'}}>
                   {/* <DropLandRow text="Lô số 1" />
@@ -147,8 +159,8 @@ const BodyAssignmentList = () => {
                     <span>Nhập cây kết thúc</span>
                     <QuantitySelect value={item?.endTree} minValue={item?.firstTree} maxValue={item?.lastTree} onChange={onChangeTreeEnd} />
                   </div>
-                  <div className={styles.btnDelete}>
-                    <ButtonDelete text="Xóa" onDelete={() => console.log("Xóa")} />
+                  <div className={styles.btnDelete} style={{pointerEvents: 'auto'}}>
+                    <ButtonDelete text="Xóa" onDelete={() => onDeleteItem(index)} />
                   </div>
                 </div>
             );

@@ -83,7 +83,7 @@ const UserManage = () => {
 
         }
        
-        <ListUser itemsHeaderRow={["Số điện thoại", "Tên", ""]} />
+        <ListUser itemsHeaderRow={["Số điện thoại", "Tên", "Phân quyền", ""]} />
       </div>
 
       <ModalCreateUser visible={showModal} onCancel={() => setShowModal(false)} onOk={() => setShowModal(false)} />

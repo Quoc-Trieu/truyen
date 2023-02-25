@@ -66,15 +66,16 @@
     }
 }
 
-// button text
+// button Simple
 .buttonSimple {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     background-color: #A3A2A2;
     border-radius: 4px;
-    padding: 10px 50px;
+    padding: 10px 20px;
+    gap: 12px;
     cursor: pointer;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -87,9 +88,14 @@
         font-weight: bold;
         color: $white-color;
     }
+
+     img {
+        width: 20px;
+        height: 20px;
+     }
 }
 
-
+//button icon
 .buttonIcon {
     display: flex;
     flex-direction: row;

@@ -3,7 +3,7 @@ import styles from "./HeaderFilter.module.scss";
 import iconSearch from "../../../../../../assets/ico/icon-feather-search.png";
 import { useForm } from "react-hook-form";
 import Dropdown from "react-bootstrap/Dropdown";
-import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector, catchErrorSelector } from "./../../../../../../store/assignment/AssignmentSlice";
+import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector, catchErrorSelector, setCatchError } from "./../../../../../../store/assignment/AssignmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoSelector } from "./../../../../../../store/user/UserSlice";
 
@@ -33,6 +33,10 @@ const HeaderFilter = () => {
     //xử lý hiển thị gợi ý tìm kiếm khi nhập
     const searchTerms = suggestSearchTerms(value, listUser);
     setListSuggest(searchTerms);
+    //bắt lỗi và xóa lỗi khi nhập tên người thực hiện
+    if(!value){
+      dispatch(setCatchError({idUserPartitionError: "Vui lòng nhập tên vùng cạo"}));
+    }
   };
 
   
@@ -40,6 +44,12 @@ const HeaderFilter = () => {
     // setNameScaping(value)
     console.log(value);
     dispatch(setNamePartition(value))
+    // bắt lỗi và xóa lỗi khi nhập tên vùng cạo
+    if(value) {
+      dispatch(setCatchError({namePartitionError: ""}));
+    }else{
+      dispatch(setCatchError({namePartitionError: "Vui lòng nhập tên vùng cạo"}));
+    }
   };
 
   const suggestSearchTerms = (inputValue, dataArray) => {
@@ -60,9 +70,14 @@ const HeaderFilter = () => {
   }
 
   const onSelectItem = (item) => {
-    setValue(item?.fullName + " - " + item?.phone);
+    setValue(item?.fullName);
     setShowSuggest(false);
     dispatch(setIdUserPartition(item?.phone))
+    dispatch(getALLUserAutoComplete());
+    //xóa lỗi khi chọn người thực hiện
+    if(item) {
+      dispatch(setCatchError({idUserPartitionError: ""}));
+    }
   };
 
   return (

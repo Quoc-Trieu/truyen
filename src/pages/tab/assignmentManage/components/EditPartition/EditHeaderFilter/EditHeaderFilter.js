@@ -3,7 +3,7 @@ import styles from "./EditHeaderFilter.module.scss";
 import iconSearch from "../../../../../../assets/ico/icon-feather-search.png";
 import { useForm } from "react-hook-form";
 import Dropdown from "react-bootstrap/Dropdown";
-import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector, catchErrorSelector, setIdScapingEdit } from "../../../../../../store/assignment/AssignmentSlice";
+import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector, catchErrorSelector, setIdScapingEdit, isEditSelector, namePartitionSelector } from "../../../../../../store/assignment/AssignmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoSelector } from "../../../../../../store/user/UserSlice";
 
@@ -18,9 +18,8 @@ const EditHeaderFilter = ({data}) => {
   const catchError = useSelector(catchErrorSelector);
   const userInfo = useSelector(userInfoSelector);
   const listUser = useSelector(userAutoCompleteSelector);
-
-  //lưu tên idScaping store khi nhấn Detail
-  dispatch(setIdScapingEdit(data?._id));
+  const idEdit = useSelector(isEditSelector);
+  const namePartitionRedux = useSelector(namePartitionSelector);
 
   console.log(listUser);
   const [value, setValue] = useState(data?.nameUser);
@@ -28,6 +27,13 @@ const EditHeaderFilter = ({data}) => {
   console.log(listSuggest);
   const [showSuggest, setShowSuggest] = useState(false);
   const [nameScaping, setNameScaping] = useState(data?.name);
+
+  useEffect(() => {
+  //lưu tên idScaping store khi nhấn Detail
+    dispatch(setIdScapingEdit(data?._id));
+    dispatch(setNamePartition(data?.name))
+    dispatch(setIdUserPartition(data?.idUserPartition));
+  },[])
 
   const onChangeSearch = (value) => {
     setValue(value);
@@ -40,7 +46,7 @@ const EditHeaderFilter = ({data}) => {
 
   
   const onChangeNameScaping = (value) => {
-    // setNameScaping(value)
+    setNameScaping(value)
     console.log(value);
     dispatch(setNamePartition(value))
   };
@@ -69,7 +75,7 @@ const EditHeaderFilter = ({data}) => {
   };
 
   return (
-    <form className={styles.HeaderFilter} onSubmit={handleSubmit(onSubmit)} style={{pointerEvents: 'none'}}>
+    <form className={styles.HeaderFilter} onSubmit={handleSubmit(onSubmit)} style={{pointerEvents: idEdit ? 'auto' :'none'}}>
       {/* Người giao */}
       <div className={styles.deliver}>
         <div className={styles.labelDeliver}>
@@ -102,14 +108,14 @@ const EditHeaderFilter = ({data}) => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu className={styles.performerMenu} style={{ padding: 0 }}>
-          {/* {listSuggest &&
+          {listSuggest &&
             listSuggest?.map((item, index) => {
               return (
                 <Dropdown.Item key={index} className={styles.itemDropdown} onClick={() => onSelectItem(item)}>
                   {item?.fullName + " - " + item?.phone}
                 </Dropdown.Item>
               );
-            })} */}
+            })}
         </Dropdown.Menu>
       </Dropdown>
 
