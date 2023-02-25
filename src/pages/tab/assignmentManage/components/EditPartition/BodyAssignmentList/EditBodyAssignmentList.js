@@ -153,7 +153,7 @@ const EditBodyAssignmentList = ({data}) => {
       </div>
 
       {/* Item row */}
-      <div className={styles.ListContainer}>
+      <div className={styles.ListContainer}  style={{pointerEvents: idEdit ? 'auto' : 'none'}}>
         {saveSelectorItem &&
           saveSelectorItem.map((item, index) => {
             const lastItem = index == saveSelectorItem.length - 1 ? true : false;

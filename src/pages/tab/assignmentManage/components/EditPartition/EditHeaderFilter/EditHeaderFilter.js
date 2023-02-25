@@ -69,7 +69,7 @@ const EditHeaderFilter = ({data}) => {
   }
 
   const onSelectItem = (item) => {
-    setValue(item?.fullName + " - " + item?.phone);
+    setValue(item?.fullName);
     setShowSuggest(false);
     dispatch(setIdUserPartition(item?.phone))
   };
