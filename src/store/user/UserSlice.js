@@ -44,7 +44,7 @@ export const getInfoUserBySearch = createAsyncThunk(
 
 export const getALLInfoUser = createAsyncThunk(
   "user/getALLInfoUser",
-  async (userRole, { getState, dispatch }) => {
+  async (pageProp, { getState, dispatch }) => {
     // lấy trang hiện tại để reload List user
     const page = getState().user.pageCurrent;
     //kiểm tra người dùng có đang thực hiện search hay không, nếu thực hiện search thì lấy textSearch từ store gọi API search
@@ -65,7 +65,7 @@ export const getALLInfoUser = createAsyncThunk(
 
       try {
         const response = await getALLUser({
-          page: page,
+          page: pageProp ?? page,
           limit: 10,
           userRole: paramUserRole,
           query: searchText,

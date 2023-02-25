@@ -185,10 +185,12 @@ const EditBodyAssignmentList = ({data}) => {
             <span >{catchError?.rowError}</span>
           </div>
         {/* Thêm mới */}
-        <div className={styles.btnAddAssignment} onClick={onAddItem}>
+        {idEdit && 
+         <div className={styles.btnAddAssignment} onClick={onAddItem}>
           <img className={styles.iconAdd} src={iconAdd} />
           <span>Thêm mới</span>
         </div>
+        }
       </div>
     </div>
   );
