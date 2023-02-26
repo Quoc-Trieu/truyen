@@ -3,21 +3,19 @@ import styles from "./QuantitySelect.module.scss";
 import iconDown from "../../assets/ico/icon-awesome-caret-down.png";
 import iconUp from "../../assets/ico/icon-awesome-caret-up.png";
 
-const QuantitySelect = ({ value = 1, minValue = 1, maxValue = 10, onChange }) => {
-  const [quantity, setQuantity] = useState(value);
-  const [disabledDown, setDisabledDown] = useState(false);
-  const [disabledUp, setDisabledUp] = useState(false);
+const QuantitySelect = ({keyValue, value = 1 , minValue = 1, maxValue = 10, onChange }) => {
+  const [quantity, setQuantity] = useState();
+  console.log(keyValue," quantity: ",quantity);
 
   useEffect(() => {
-    setDisabledDown(quantity <= minValue);
-    setDisabledUp(quantity >= maxValue);
-    onChange && onChange(quantity);
-  }, [quantity, minValue, maxValue]);
+    onChange && onChange(keyValue, quantity);
+  }, [quantity]);
 
   useEffect(() => {
-    if(value) {
-      setQuantity(value);
-    }
+    console.log("==========",value,"==========");
+    if(value !== quantity && value !== null && value !== undefined) {
+        setQuantity(value);
+    } 
   }, [value]);
 
   const handleQuantityChange = (event) => {
@@ -57,16 +55,16 @@ const QuantitySelect = ({ value = 1, minValue = 1, maxValue = 10, onChange }) =>
         <button
           className={styles.btn}
           onClick={incrementQuantity}
-          style={{ opacity: disabledUp ? 0.5 : 1 }}
-          disabled={disabledUp}
+          style={{ opacity: quantity >= maxValue ? 0.5 : 1 }}
+          disabled={quantity >= maxValue ?  true :  false}
         >
           <img src={iconUp} alt="increase quantity" />
         </button>
         <button
           className={styles.btn}
           onClick={decrementQuantity}
-          style={{ opacity: disabledDown ? 0.5 : 1 }}
-          disabled={disabledDown}
+          style={{ opacity: quantity <= minValue ? 0.5 : 1 }}
+          disabled={quantity <= minValue ? true :  false}
         >
           <img src={iconDown} alt="decrease quantity" />
         </button>

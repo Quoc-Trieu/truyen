@@ -10,7 +10,14 @@ import {
   setListScaping,
 } from "./../../../../../../store/assignment/AssignmentSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { postCreateScaping, putLocationScaping, deleteScaping, getScapingByName } from "./../../../../../../services/assignmentServices";
+import {
+  postCreateScaping,
+  putLocationScaping,
+  deleteScaping,
+  getScapingByName,
+  postCheckTreeInScaping,
+  postAddTreeInScaping,
+} from "./../../../../../../services/assignmentServices";
 import Notiflix from "notiflix";
 import { Loading } from "notiflix";
 import { useLayoutEffect } from "react";
@@ -20,55 +27,80 @@ const FooterAssignment = ({ onCancel }) => {
   const listScaping = useSelector(listScapingSelector);
   const idUserPartition = useSelector(idUserPartitionSelector);
   const namePartition = useSelector(namePartitionSelector);
-  
 
   const onSummit = () => {
     console.log("listAssignment: ", listScaping);
     if (!checkErrorInput()) {
       postCreatePartition(listScaping);
     } else {
-      Notiflix.Notify.warning("Vui lòng kiểm tra lại thông tin");
+      Notiflix.Notify.failure("Vui lòng nhập đầy đủ thông tin");
     }
   };
 
   // tạo vùng cạo
   const postCreatePartition = async (listScaping) => {
     const dataTreePolyline = convertMap(listScaping);
+    const dataListTree = convertArrTree(listScaping);
     Loading.standard("Đang thêm vùng cạo");
     let idScaping = "";
     try {
-      //tạo ra vùng cạo, lấy id vùng cạo để thêm cây vào vùng cạo
-      const resCreateScaping = await postCreateScaping({ idUserPartition: idUserPartition, name: namePartition });
-      idScaping = resCreateScaping.data?._id; //res.data?._id;
-      console.log("create  idScaping: ", idScaping);
-      /////////////////////
-      try {
-        //Api thêm cây vào vùng cạo
-        const resAddTree = await putLocationScaping({ idScaping: idScaping, data: dataTreePolyline });
-        console.log("result putLocationScaping: ", resAddTree);
-        onCancel && onCancel();
-        Notiflix.Notify.success("Tạo vùng cạo thành công");
-      } catch (error) {
-        if (error?.response?.data?.code == "TREE_IS_EXIST_IN_SCAPING") {
-          Notiflix.Notify.failure("Cây nằm trong vùng cạo khác");
-        } else {
-          Notiflix.Notify.failure("Tạo vùng cao thất bại");
+      //kiểm tra xem cây có trong vùng cạo chưa, trả về true nếu có, thực hiện tạo vùng cạo
+      const resCheckTree = await postCheckTreeInScaping(dataListTree);
+      console.log("resCheckTree: ", resCheckTree.data);
+
+      if (resCheckTree.data == true) {
+        try {
+          // tạo ra vùng cạo, lấy id vùng cạo để thêm cây vào vùng cạo
+          const resCreateScaping = await postCreateScaping({ idUserPartition: idUserPartition, name: namePartition });
+          idScaping = resCreateScaping.data?._id;
+          console.log("create idScaping Success: ", idScaping);
+
+          //Api thêm cây vào vùng cạo
+          // const resAddTree = await postAddTreeInScaping({ idScaping: idScaping, data: dataListTree });
+          // console.log("resAddTree AddTree: ", resAddTree);
+
+          //Api vẽ polyline vùng cạo trên bản đồ
+          const resLocation = await putLocationScaping({ idScaping: idScaping, data: dataTreePolyline });
+          console.log("resLocation putLocationScaping: ", resLocation);
+          Notiflix.Notify.success("Tạo vùng cạo thành công");
+          onCancel && onCancel();
+        } catch (error) {
+          console.log("error: ", error);
+          if (error?.response?.data?.code == "SCAPING_EXIST") {
+            Notiflix.Notify.failure("Vùng cạo đã tồn tại");
+          } else {
+            Notiflix.Notify.failure("Tạo vùng cao thất bại");
+          }
+          //khi tạo vùng cạo thành công nhưng thêm cây thất bại thì xóa vùng cạo
+          if(idScaping != ""){
+            const resDelete = await deleteScaping(idScaping);
+          }
         }
-        //khi tạo vùng cạo thành công nhưng thêm cây thất bại thì xóa vùng cạo
-        const getIdScaping = await getScapingByName(namePartition);
-        const resDelete = await deleteScaping(getIdScaping?.data?._id);
       }
-      ////////////////
     } catch (error) {
-      if (error?.response?.data?.code == "SCAPING_EXIST") {
-        Notiflix.Notify.failure("Vùng cạo đã tồn tại");
+      console.log("error: ", error);
+      if (error?.response?.data?.code == "TREE_IS_EXIST_IN_SCAPING") {
+        Notiflix.Notify.failure("Cây nằm trong vùng cạo khác");
       } else {
-        Notiflix.Notify.failure("Tạo vùng cạo thất bại");
+        Notiflix.Notify.failure("Cây trong vùng cạo đã tồn tại");
       }
     }
-
     Loading.remove();
-    postCreatePartition();
+  };
+
+  // convert ra mảng tất cả các cây từ danh sách vùng cạo người dùng chọn
+  const convertArrTree = (listScaping) => {
+    let listTree = [];
+    for (let i = 0; i < listScaping.length; i++) {
+      const startTree = listScaping[i]?.startTree;
+      const endTree = listScaping[i]?.endTree;
+      const row = listScaping[i]?.row;
+      for (let j = startTree; j <= endTree; j++) {
+        const tree = paddedString(j, 3);
+        listTree.push(row + tree);
+      }
+    }
+    return listTree;
   };
 
   const convertMap = (listScaping) => {

@@ -31,4 +31,7 @@ export const getInfoLand = ({id, isName = true}) => {
   return AxiosClient.get("/land/getInfoLand", { params: { id: id, isName: isName } });
 };
 
+export const getRowByLand = (idLand) => {
+  return AxiosClient.get("/land/getRowByLand", {params: {idLand  : idLand   }} );
+};
 

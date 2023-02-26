@@ -5,15 +5,15 @@ import iconDown from "../../../../../../../assets/ico/icon-feather-chevron-down.
 import Dropdown from "react-bootstrap/Dropdown";
 import "./menuDrop.css";
 
-const DropLandAssignment = ({ label, styleCustom, landALL, onSelectLand, onUnSelectLand }) => {
+const DropLandAssignment = ({ keyValue, label, styleCustom, landALL, onSelectLand, onUnSelectLand }) => {
   const [isOpenDrop, setIsOpenDrop] = useState(false);
+
   const onClickItemLand = (item) => {
-    console.log(item);
-    onSelectLand && onSelectLand(item);
+    onSelectLand && onSelectLand(keyValue, item);
   };
 
   const onUnSelectLandItem = () => {
-    onUnSelectLand && onUnSelectLand();
+    onUnSelectLand && onUnSelectLand(keyValue);
   };
 
   const onToggle = (isOpen) => {
