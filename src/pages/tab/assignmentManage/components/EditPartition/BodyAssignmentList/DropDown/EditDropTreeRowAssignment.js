@@ -5,25 +5,23 @@ import iconDown from "../../../../../../../assets/ico/icon-feather-chevron-down.
 import Dropdown from "react-bootstrap/Dropdown";
 import "./menuDrop.css";
 
-const EditDropTreeRowAssignment = ({ label, styleCustom, NumRowOfLand, onSelectRow }) => {
+const EditDropTreeRowAssignment = ({ keyValue, label, styleCustom, NumRowOfLand, onSelectRow }) => {
   const [isOpenDrop, setIsOpenDrop] = useState(false);
+
   const onClickItem = (itemHang) => {
-    onSelectRow && onSelectRow(itemHang);
+    onSelectRow && onSelectRow(keyValue, itemHang);
   };
 
   const onToggle = (isOpen) => {
     if (isOpen) {
       setIsOpenDrop(true);
-    }else{
+    } else {
       setIsOpenDrop(false);
     }
   };
 
   return (
-    <div
-      className={styles.dropDownComponent}
-      style={{ background: "#fff", padding: "0px 10px", ...styleCustom }}
-    >
+    <div className={styles.dropDownComponent} style={{ background: "#fff", padding: "0px 10px", ...styleCustom }}>
       <Dropdown drop="down" className="drop" onToggle={onToggle}>
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>

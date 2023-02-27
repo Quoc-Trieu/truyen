@@ -27,17 +27,19 @@ const EditFooterAssignment = ({ onCancel, data }) => {
   const idEdit = useSelector(isEditSelector);
 
   const onSummit = () => {
-    console.log("listAssignment: ", listScaping);
+    console.log("listAssignment: ");
+    console.table(listScaping);
     console.log("idScapingScaping: ", idScapingScaping);
     console.log("namePartition: ", namePartition);
-    const listTree = convertArrTree(listScaping);
-    const checkTree = async () => {
-      const res = await postCheckTreeInScaping(listTree);
-      console.log("res: ", res);
 
-    }
-    checkTree()
-    console.log("listTree: ", listTree);
+    // const listTree = convertArrTree(listScaping);
+    // const checkTree = async () => {
+    //   const res = await postCheckTreeInScaping(listTree);
+    //   console.log("res: ", res);
+
+    // }
+    // checkTree()
+    // console.log("listTree: ", listTree);
     if (!checkErrorEditDetail()) {
       CreatePartition(listScaping);
     } else {
@@ -140,6 +142,7 @@ const EditFooterAssignment = ({ onCancel, data }) => {
   };
 
   const checkErrorEditDetail = () => {
+    console.log("sssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
     let isError = false;
     if (idUserPartition == null || idUserPartition == "") {
       dispatch(setCatchError({ idUserPartitionError: "Vui lòng chọn người thực hiện" }));

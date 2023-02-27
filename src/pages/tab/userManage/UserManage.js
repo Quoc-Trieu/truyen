@@ -15,12 +15,19 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 const UserManage = () => {
   // dùng value truyền pẩm để lấy User, ADMIN lấy tất cả, MANAGER lấy User, User lấy quản lý
-  const filterUser ={ admin : {label: "Tất cả", value: "ADMIN"}, manager:{label: "Quản lý", value: "USER"}, user: {label: "Người dùng", value: "MANAGER"}}
+  const ROLES ={ admin : {label: "Tất cả", value: "ADMIN"}, manager:{label: "Quản lý", value: "USER"}, user: {label: "Người dùng", value: "MANAGER"}}
   const [showModal, setShowModal] = useState(false);
   const [isDrop, setIsDrop] = useState(false);
   const dispatch = useDispatch();
   const permisson = useSelector(state => state.user.role)
-  const [labelMenu, setLabelMenu] = useState("Tất cả");
+  const filterUser = useSelector(state => state.user.filterUser)
+  const [labelMenu, setLabelMenu] = useState();
+
+  useEffect(() => {
+    // set label từ giá trj redux
+    const filteredRoles = Object.values(ROLES).filter(role => role.value == filterUser);
+    setLabelMenu(filteredRoles[0].label);
+  }, [filterUser])
 
   const onSubmit = async (text) => {
     dispatch(setSearching(text));
@@ -69,13 +76,13 @@ const UserManage = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu  className={styles.filterPermissionMenu}>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(filterUser.admin)}}>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.admin)}}>
                 <span>Tất cả</span>
               </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(filterUser.manager)}}>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.manager)}}>
                 <span>Quản lý</span>
               </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(filterUser.user)}}>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.user)}}>
                 <span>Người dùng</span>
               </Dropdown.Item>
             </Dropdown.Menu>

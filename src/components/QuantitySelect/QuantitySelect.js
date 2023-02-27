@@ -4,7 +4,7 @@ import iconDown from "../../assets/ico/icon-awesome-caret-down.png";
 import iconUp from "../../assets/ico/icon-awesome-caret-up.png";
 
 const QuantitySelect = ({keyValue, value = 1 , minValue = 1, maxValue = 10, onChange }) => {
-  const [quantity, setQuantity] = useState();
+  const [quantity, setQuantity] = useState(value);
   console.log(keyValue," quantity: ",quantity);
 
   useEffect(() => {
