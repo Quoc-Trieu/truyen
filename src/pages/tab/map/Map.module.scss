@@ -3,5 +3,9 @@
 .mapContainer {
     width: $full-screen;
     height: $full-screen;
+    position: relative;
 
+    @include mobile {
+        width: 100vw;
+    }
 }

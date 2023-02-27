@@ -1,6 +1,9 @@
 @use "../../styles/scss/" as *;
 
 .headerStyle {
+  @include mobile {
+    display: none;
+  }
   width: 100%;
   display: flex;
   flex-direction: row;
