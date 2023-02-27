@@ -5,7 +5,7 @@ import iconDown from "../../../../../../../assets/ico/icon-feather-chevron-down.
 import Dropdown from "react-bootstrap/Dropdown";
 import "./menuDrop.css";
 
-const EditDropLandAssignment = ({ keyValue, label, styleCustom, landALL, onSelectLand, onUnSelectLand }) => {
+const EditDropLandAssignment = ({ keyValue, label, styleCustom, landALL, onSelectLand, onUnSelectLand, lastItem }) => {
   const [isOpenDrop, setIsOpenDrop] = useState(false);
 
   const onClickItemLand = (item) => {
@@ -19,21 +19,18 @@ const EditDropLandAssignment = ({ keyValue, label, styleCustom, landALL, onSelec
   const onToggle = (isOpen) => {
     if (isOpen) {
       setIsOpenDrop(true);
-    }else{
+    } else {
       setIsOpenDrop(false);
     }
     console.log(isOpen);
   };
   return (
-    <div
-      className={styles.dropDownComponent}
-      style={{ background: "#fff", padding: "0px 10px" }}
-    >
+    <div className={styles.dropDownComponent} style={{ background: "#fff", padding: "0px 10px" }}>
       <Dropdown drop="down" className="drop" onToggle={onToggle}>
         <Dropdown.Toggle>
           <div className={styles.dropLotToggle}>
             <span> {label ? "Lô số " + label : "Chọn Lô"}</span>
-            <img src={isOpenDrop ? iconDown :  iconUp} className={styles.iconDownEx} />
+            <img src={isOpenDrop ? iconDown : iconUp} className={styles.iconDownEx} />
           </div>
         </Dropdown.Toggle>
 
@@ -51,9 +48,11 @@ const EditDropLandAssignment = ({ keyValue, label, styleCustom, landALL, onSelec
                 );
               })}
           </div>
-          <button className="btn_bo_chon_Lo" onClick={onUnSelectLandItem}>
-            <Dropdown.Item>Bỏ Chọn</Dropdown.Item>
-          </button>
+          {lastItem && (
+            <button className="btn_bo_chon_Lo" onClick={onUnSelectLandItem}>
+              <Dropdown.Item>Bỏ Chọn</Dropdown.Item>
+            </button>
+          )}
         </Dropdown.Menu>
       </Dropdown>
     </div>

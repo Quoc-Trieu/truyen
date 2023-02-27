@@ -165,9 +165,9 @@ const BodyAssignmentList = () => {
         {infoScaping &&
           infoScaping !== null &&
           infoScaping.map((item, index) => {
-            const lastItem = index == listSpacing?.length - 1 ? true : true;
+            const lastItem = index == infoScaping?.length - 1 ? true : false;
             return (
-              <div key={index} className={styles.itemUI} style={{ pointerEvents: lastItem ? "auto" : "none" }}>
+              <div key={index} className={styles.itemUI}>
                 {/* chọn lô */}
                 <DropLandAssignment
                   keyValue={index}
@@ -175,6 +175,7 @@ const BodyAssignmentList = () => {
                   onSelectLand={onSelectLand}
                   label={listSpacing[index]?.land}
                   onUnSelectLand={onUnSelectLand}
+                  lastItem={lastItem}
                 />
                 <span className={styles.line}></span>
                 {/* chọn hàng */}

@@ -253,8 +253,9 @@ const EditBodyAssignmentList = ({ data }) => {
         {infoScaping &&
           infoScaping !== null &&
           infoScaping.map((item, index) => {
+            const lastItem = index == infoScaping?.length - 1 ? true : false;
             return (
-              <div key={index} className={styles.itemUI} style={{ pointerEvents: isEdit ? "auto" : "none" }}>
+              <div key={index} className={styles.itemUI}>
                 {/* chọn lô */}
                 <EditDropLandAssignment
                   keyValue={index}
@@ -262,6 +263,7 @@ const EditBodyAssignmentList = ({ data }) => {
                   onSelectLand={onSelectLand}
                   label={listSpacing[index]?.land}
                   onUnSelectLand={onUnSelectLand}
+                  lastItem={lastItem}
                 />
                 <span className={styles.line}></span>
                 {/* chọn hàng */}
