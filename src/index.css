@@ -253,3 +253,153 @@ button[aria-label='Open React Query Devtools'] {
 .modal-dialog.modal-createOder .modal-content {
     height: 100%;
 }
+
+/* map */
+#map {
+    /* position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; */
+}
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.info.leaflet-control {
+    text-align: center;
+}
+
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.my-div-icon {
+    background: transparent;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.marker-text {
+    text-align: center;
+    transform: rotate(-49deg);
+    padding: 0 3px;
+    border-radius: 4px;
+    white-space: nowrap;
+    width: fit-content;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-tooltip {
+    background-color: transparent;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.custom-tooltip::before {
+    width: 0 !important;
+    height: 0 !important;
+    background-color: transparent !important;
+    border: transparent !important;
+}
+
+#container .WrapperBtn {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    display: flex;
+    background-color: #fff;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgb(0 0 0 / 20%);
+}
+
+#container .my-location {
+    position: absolute;
+    z-index: 999;
+    top: 150px;
+    left: 10px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#container .WrapperBtn .btn {
+    width: 140px;
+    padding: 10px 15px;
+    text-align: center;
+    border-radius: 50px;
+    /* background-color: red; */
+    color: #777;
+    font-weight: bold;
+    cursor: pointer;
+    border: 3px #fff solid;
+    transition: all 0.3s ease;
+}
+
+#container .WrapperBtn .btn.active {
+    background-color: #6AB100;
+    color: #fff;
+}
+
+.leaflet-map-pane canvas {
+    z-index: 1000 !important;
+}
+
+.iconCay {
+    transform: rotate(90deg) !important;
+}
+
+@media (max-width: 600px) {
+
+    .info.leaflet-control {
+        display: none;
+    }
+    /* .leaflet-top {
+        top: 60px !important;
+    } */
+    #container .WrapperBtn .btn {
+        width: unset !important;
+        border-radius: 0;
+    }
+
+    .info.leaflet-control {
+        width: 90px;
+        text-align: center;
+    }
+
+    #container .my-location {
+        top: 85px !important;
+    }
+    #container .WrapperBtn {
+        top: 10px !important;
+        border-radius: 0 !important;
+    }
+    body {
+        width: unset !important;
+    }
+}
+div#container {
+    height: 100%;
+}

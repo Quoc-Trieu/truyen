@@ -56,7 +56,7 @@ export const getALLInfoUser = createAsyncThunk(
         const response = await getALLUser({
           page: pageProp ?? page,
           limit: 10,
-          userRole: "MANAGER",
+          userRole: getState().user.role,
         });
         console.log(response?.data);
         return response?.data;

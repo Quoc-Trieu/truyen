@@ -4,7 +4,7 @@ import AppRoutes from "./routes/AppRoutes";
 import { onlyFullHD } from "./utils/onlyFullHD";
 
 import { Provider } from 'react-redux'
-import  store  from "./store/store";
+import store from "./store/store";
 
 import "./lib/fontawesome";
 import "./lib/notiflix-init";
@@ -16,7 +16,10 @@ function App() {
   Notiflix.Notify.init({
     position: "right-bottom",
   });
-  useEffect(() => onlyFullHD(), []);
+  if (window.screen.width > 600) {
+    useEffect(() => onlyFullHD(), []);
+  }
+  // useEffect(() => onlyFullHD(), []);
   return (
     <Provider store={store}>
       <AppProvider>

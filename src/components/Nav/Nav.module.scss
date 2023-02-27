@@ -1,6 +1,11 @@
 @use "../../styles/scss/" as *;
 
+
 .navStyle {
+  @include mobile {
+    display: none;
+  }
+
   display: flex;
   flex-direction: column;
   height: 100%;

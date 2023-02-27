@@ -1,6 +1,11 @@
 @use "../../styles/scss/" as *;
 
 #loginPage {
+  @include mobile {
+    width: 100vw;
+    height: 100vh;
+  }
+
   background-color: $bg-color;
   display: flex;
   flex-direction: column;
@@ -14,13 +19,17 @@
     height: 28%;
     width: auto;
 
-    .logoLogin{
+    .logoLogin {
       height: 105%;
       width: auto;
     }
   }
 
   .wrapLogin {
+    @include mobile {
+      width: 100%;
+    }
+
     background-color: $white-color;
     display: flex;
     flex-direction: column;
@@ -61,6 +70,10 @@
 
       // custom ô input
       .inputAccount {
+        @include mobile {
+          padding: 0 0;
+        }
+
         background-color: transparent;
         flex: 1;
         padding: 0 32px;
@@ -102,6 +115,10 @@
       }
 
       .inputPassword {
+        @include mobile {
+          padding: 0 0;
+        }
+
         background-color: transparent;
         flex: 1;
         padding: 0 32px;
@@ -123,7 +140,7 @@
       align-self: flex-start;
       font-size: 14px;
       padding-left: 3px;
-      
+
     }
 
     .btnSubmit {
