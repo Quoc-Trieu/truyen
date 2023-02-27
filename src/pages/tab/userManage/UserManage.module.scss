@@ -54,6 +54,7 @@
   }
 
   .userBody {
+    overflow-y: scroll;
     width: $full-screen;
     display: flex;
     flex: 1;
