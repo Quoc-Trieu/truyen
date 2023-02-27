@@ -13,7 +13,7 @@ import Notiflix from 'notiflix';
 import { Loading } from 'notiflix';
 import ModalEditCreatePartition from './../EditPartition/ModalEditCreatePartition';
 
-const ListAssginment = ({ itemsHeaderRow, assignmenList }) => {
+const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
   const [showRemove, setShowRemove] = useState(false);
   const [showEditDetail, setShowEditDetail] = useState(false);
   const [itemDelete, setItemDelete] = useState();
@@ -34,7 +34,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList }) => {
       }
     }
     getList();
-  }, [search, page, showRemove, showEditDetail])
+  }, [search, page, showRemove, showEditDetail, reload])
 
 
   const formatTime = (inputString) => {

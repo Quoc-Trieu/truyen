@@ -12,34 +12,35 @@ import {
   idScapingEditSelector,
   isEditSelector,
   setIsEdit,
+  listScapingFocusEditSelector,
 } from "./../../../../../../store/assignment/AssignmentSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { postCreateScaping, putLocationScaping, deleteScaping, getScapingByName, postCheckTreeInScaping } from "./../../../../../../services/assignmentServices";
+import {
+  postCreateScaping,
+  putLocationScaping,
+  deleteScaping,
+  getScapingByName,
+  postCheckTreeInScaping,
+  postAddTreeByName,
+} from "./../../../../../../services/assignmentServices";
 import Notiflix from "notiflix";
 import { Loading } from "notiflix";
 
 const EditFooterAssignment = ({ onCancel, data }) => {
   const dispatch = useDispatch();
   const listScaping = useSelector(listScapingSelector);
+  const listScapingFocusEdit = useSelector(listScapingFocusEditSelector);
   const idUserPartition = useSelector(idUserPartitionSelector);
   const namePartition = useSelector(namePartitionSelector);
   const idScapingScaping = useSelector(idScapingEditSelector);
   const idEdit = useSelector(isEditSelector);
 
-  const onSummit = () => {
+  const onSummit = async () => {
     console.log("listAssignment: ");
     console.table(listScaping);
     console.log("idScapingScaping: ", idScapingScaping);
     console.log("namePartition: ", namePartition);
 
-    // const listTree = convertArrTree(listScaping);
-    // const checkTree = async () => {
-    //   const res = await postCheckTreeInScaping(listTree);
-    //   console.log("res: ", res);
-
-    // }
-    // checkTree()
-    // console.log("listTree: ", listTree);
     if (!checkErrorEditDetail()) {
       CreatePartition(listScaping);
     } else {
@@ -49,8 +50,31 @@ const EditFooterAssignment = ({ onCancel, data }) => {
 
   // tạo vùng cạo
   const CreatePartition = async (listScaping) => {
+    //danh sách các cây trong vùng cạo
+    const listTree = convertArrTree(listScaping); ///các cây mới
+    const listTreeFocusEdit = convertArrTree(listScapingFocusEdit); //các cây cũ
+    //vẽ polyline dựa theo vùng cạo đã chọn
     const dataTreePolyline = convertMap(listScaping);
+
+    //tìm ra các cây khác nhau sau khi chỉnh sửa để kiểm tra
+    const differentElements = await listTree.filter((x) => !listTreeFocusEdit.includes(x));
+    console.log("res: ", differentElements);
+
     Loading.standard("Đang thêm vùng cạo");
+    if (differentElements.length > 0) {
+      try {
+        const res = await postCheckTreeInScaping(differentElements); // kiểm tra các cây mới có nằm trong vùng cạo khác không?
+        console.log("res: ", res);
+      } catch (error) {
+        console.log("error: ", error.response.data.code);
+        if (error.response.data.code === "TREE_IS_EXIST_IN_SCAPING") {
+          Notiflix.Notify.warning("Cây đã tồn tại trong vùng cạo khác");
+          Loading.remove();
+          return;
+        }
+      }
+    }
+
     let idScaping = "";
     try {
       //Xóa vùng cạo cũ trước khi cập nhập lại
@@ -62,8 +86,11 @@ const EditFooterAssignment = ({ onCancel, data }) => {
       /////////////////////
       try {
         //Api thêm cây vào vùng cạo
-        const resAddTree = await putLocationScaping({ idScaping: idScaping, data: dataTreePolyline });
-        console.log("result putLocationScaping: ", resAddTree);
+        const resAddTree = await postAddTreeByName({ idScaping: idScaping, data: listTree });
+        console.log("result resAddTree: ", resAddTree);
+        //Api vẽ polyline  vùng cạo
+        const resPolyline = await putLocationScaping({ idScaping: idScaping, data: dataTreePolyline });
+        console.log("result resPolyline: ", resPolyline);
         onCancel && onCancel();
         Notiflix.Notify.success("Tạo vùng cạo thành công");
       } catch (error) {
@@ -98,9 +125,9 @@ const EditFooterAssignment = ({ onCancel, data }) => {
       }
     }
     return listTree;
-  }
+  };
 
-// tạo ra 4 line để vẽ các cây trên bản đồ
+  // tạo ra 4 line để vẽ các cây trên bản đồ
   const convertMap = (listScaping) => {
     let line1 = [];
     let line2 = [];
@@ -178,12 +205,10 @@ const EditFooterAssignment = ({ onCancel, data }) => {
     return "C" + "0".repeat(numZeros) + strNum;
   };
 
-
-  
   const NumLandRowTree = (detail) => {
     let lo = detail?.length;
-    let hang=0;
-    let cay=0;
+    let hang = 0;
+    let cay = 0;
 
     if (detail?.length > 0) {
       detail.map((itemLo, index) => {
@@ -193,14 +218,14 @@ const EditFooterAssignment = ({ onCancel, data }) => {
         itemLo?.hang.map((itemHang, index) => {
           // console.log(item?.cay.length);
           const arrTree = itemHang?.cay;
-          const startTree = parseInt(arrTree[0].slice(arrTree[0].length-3, arrTree[0].length));
-          const endTree = parseInt(arrTree[arrTree.length -1].slice(arrTree[arrTree.length -1].length-3, arrTree[arrTree.length -1].length));
-          cay += (endTree - startTree) + 1;
-        })
-      })
+          const startTree = parseInt(arrTree[0].slice(arrTree[0].length - 3, arrTree[0].length));
+          const endTree = parseInt(arrTree[arrTree.length - 1].slice(arrTree[arrTree.length - 1].length - 3, arrTree[arrTree.length - 1].length));
+          cay += endTree - startTree + 1;
+        });
+      });
     }
     return { lo, hang, cay };
-  }
+  };
 
   return (
     <div className={styles.footerAssignment}>

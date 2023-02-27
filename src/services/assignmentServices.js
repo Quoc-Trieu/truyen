@@ -44,3 +44,7 @@ export const getScapingByName = (nameScaping) => {
 export const postAddTreeInScaping = ({idScaping, data}) => {
   return AxiosClient.post("/scaping/configScaping" , data, {params: {idScaping : idScaping  }} );
 };
+
+export const postAddTreeByName = ({idScaping, data}) => {
+  return AxiosClient.post("/scaping/configScapingByName" , data, {params: {idScaping : idScaping  }} );
+};

@@ -17,6 +17,7 @@ const initialState = {
   catchError: {idUserPartitionError: "", namePartitionError:"", landError: "", rowError: ""},  // lưu trữ lỗi
   idScapingEdit: null,
   isEdit: false,
+  listScapingFocusEdit: [],
 };
 
 export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAutoComplete", async (prop, { getState }) => {
@@ -67,6 +68,9 @@ const AssignmentSlice = createSlice({
     setIsEdit: (state, action) => {
       state.isEdit = action.payload;
     },
+    setListScapingFocusEdit: (state, action) => {
+      state.listScapingFocusEdit = action.payload;
+    },
     resetSpacing: (state, action) => {
       state.catchError = initialState.catchError;
       state.idUserPartition = initialState.idUserPartition;
@@ -99,6 +103,7 @@ export const namePartitionSelector = (state) => state.assignment.namePartition;
 export const catchErrorSelector = (state) => state.assignment.catchError;
 export const idScapingEditSelector = (state) => state.assignment.idScapingEdit;
 export const isEditSelector = (state) => state.assignment.isEdit;
+export const listScapingFocusEditSelector = (state) => state.assignment.listScapingFocusEdit;
 
 // sử dụng useDispatch để dispatch action
 export const {
@@ -112,5 +117,6 @@ export const {
   resetSpacing,
   setIdScapingEdit,
   setIsEdit,
+  setListScapingFocusEdit,
 } = AssignmentSlice.actions;
 export default AssignmentSlice.reducer;

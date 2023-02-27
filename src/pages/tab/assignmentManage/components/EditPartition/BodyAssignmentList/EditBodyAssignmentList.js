@@ -7,7 +7,7 @@ import QuantitySelect from "../../../../../../components/QuantitySelect/Quantity
 import EditDropLandAssignment from "./DropDown/EditDropLandAssignment";
 import EditDropTreeRowAssignment from "./DropDown/EditDropTreeRowAssignment";
 import { useDispatch, useSelector } from "react-redux";
-import { isEditSelector, setCatchError, setListScaping } from "../../../../../../store/assignment/AssignmentSlice";
+import { isEditSelector, setCatchError, setListScaping, setListScapingFocusEdit } from "../../../../../../store/assignment/AssignmentSlice";
 import { getALLland, getALLTreeByCondition, getInfoLand, getRowByLand } from "./../../../../../../services/treeServices";
 import Notiflix from "notiflix";
 import { Loading } from "notiflix";
@@ -41,10 +41,14 @@ const EditBodyAssignmentList = ({ data }) => {
         console.log("endTree", endTree);
         // thêm từng hàng vào mảng theo định dạng để tạo thành bảng
         updateListScaping(index, { land: itemLo.lo, row: itemHang.hang, startTree: startTree, endTree: endTree });
+        newListScaping.push({ land: itemLo.lo, row: itemHang.hang, startTree: startTree, endTree: endTree });
         console.log("Chuyển từ dữ liệu Server của vùng cạo sang dạng bảng", newListScaping);
       });
     });
+     //lưu lại mảng trước khi chỉnh sửa
+     dispatch(setListScapingFocusEdit(newListScaping));
 
+   
     //tạo dữ liệu để chỉnh sửa --infoScaping
     const dataEdit = data?.detail; //sao chép lại mảng detail của data vùng cạo
     try {
@@ -208,15 +212,15 @@ const EditBodyAssignmentList = ({ data }) => {
     console.log("listSpacing: ", listSpacing);
     if (
       //kiểm tra các giá trị trong object của phần tử cuối có rỗng không
-      listSpacing[listSpacing.length - 1].land === null ||
-      listSpacing[listSpacing.length - 1].row === null ||
-      listSpacing[listSpacing.length - 1].startTree === null ||
-      listSpacing[listSpacing.length - 1].endTree === null
+      listSpacing[listSpacing.length - 1]?.land === null || listSpacing[listSpacing.length - 1]?.land === undefined ||
+      listSpacing[listSpacing.length - 1]?.row === null || listSpacing[listSpacing.length - 1]?.row === undefined ||
+      listSpacing[listSpacing.length - 1]?.startTree === null ||
+      listSpacing[listSpacing.length - 1]?.endTree === null
     ) {
-      if (listSpacing[listSpacing.length - 1].land === null) {
+      if (listSpacing[listSpacing.length - 1]?.land === null || listSpacing[listSpacing.length - 1]?.land === undefined) {
         dispatch(setCatchError({ landError: "Vui lòng chọn lô" }));
       }
-      if (listSpacing[listSpacing.length - 1].row === null) {
+      if (listSpacing[listSpacing.length - 1]?.row === null || listSpacing[listSpacing.length - 1]?.row === undefined) {
         dispatch(setCatchError({ rowError: "Chưa nhập hàng cạo" }));
       }
     } else {
@@ -255,7 +259,7 @@ const EditBodyAssignmentList = ({ data }) => {
           infoScaping.map((item, index) => {
             const lastItem = index == infoScaping?.length - 1 ? true : false;
             return (
-              <div key={index} className={styles.itemUI}>
+              <div key={index} className={styles.itemUI} style={{ pointerEvents: isEdit ? "auto " : "none" }}>
                 {/* chọn lô */}
                 <EditDropLandAssignment
                   keyValue={index}
@@ -272,11 +276,11 @@ const EditBodyAssignmentList = ({ data }) => {
                   NumRowOfLand={item?.row}
                   onSelectRow={onSelectRow}
                   label={listSpacing[index]?.row}
-                  styleCustom={{ pointerEvents: isEdit && item?.land !== null ? " auto " : "none" }}
+                  styleCustom={{ pointerEvents: isEdit && listSpacing[index]?.land !== null ? " auto " : "none" }}
                 />
                 <span className={styles.line}></span>
                 {/* cây bắt đầu */}
-                <div className={styles.treeBegins}>
+                <div className={styles.treeBegins} style={{ pointerEvents: isEdit && listSpacing[index]?.row !== null ? "auto" : "none" }}>
                   <span>Nhập cây bắt đầu</span>
                   <QuantitySelect
                     keyValue={index}
@@ -288,7 +292,7 @@ const EditBodyAssignmentList = ({ data }) => {
                 </div>
                 <span className={styles.line}></span>
                 {/* cây kết thúc */}
-                <div className={styles.treeBegins}>
+                <div className={styles.treeBegins} style={{ pointerEvents: isEdit && listSpacing[index]?.row !== null ? "auto" : "none" }}>
                   <span>Nhập cây kết thúc</span>
                   <QuantitySelect
                     keyValue={index}

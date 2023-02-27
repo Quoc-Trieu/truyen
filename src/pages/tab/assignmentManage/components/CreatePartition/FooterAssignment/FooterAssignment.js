@@ -17,6 +17,7 @@ import {
   getScapingByName,
   postCheckTreeInScaping,
   postAddTreeInScaping,
+  postAddTreeByName,
 } from "./../../../../../../services/assignmentServices";
 import Notiflix from "notiflix";
 import { Loading } from "notiflix";
@@ -55,9 +56,9 @@ const FooterAssignment = ({ onCancel }) => {
           idScaping = resCreateScaping.data?._id;
           console.log("create idScaping Success: ", idScaping);
 
-          //Api thêm cây vào vùng cạo
-          // const resAddTree = await postAddTreeInScaping({ idScaping: idScaping, data: dataListTree });
-          // console.log("resAddTree AddTree: ", resAddTree);
+          // Api thêm cây vào vùng cạo
+          const resAddTree = await postAddTreeByName({ idScaping: idScaping, data: dataListTree });
+          console.log("resAddTree AddTree: ", resAddTree);
 
           //Api vẽ polyline vùng cạo trên bản đồ
           const resLocation = await putLocationScaping({ idScaping: idScaping, data: dataTreePolyline });
@@ -185,8 +186,8 @@ const FooterAssignment = ({ onCancel }) => {
 
   return (
     <div className={styles.footerAssignment}>
-      <ButtonSimple bold text="Hủy" onSummit={onCancel} />
-      <ButtonSimple bold text="Xác nhận" styleCustom={{ background: "linear-gradient(90deg, #6AB100 0%, #85E000 100%)" }} onSummit={onSummit} />
+      <ButtonSimple bold text="Hủy" onSummit={onCancel} width="180px" />
+      <ButtonSimple bold text="Xác nhận" width="180px"  styleCustom={{ background: "linear-gradient(90deg, #6AB100 0%, #85E000 100%)" }} onSummit={onSummit} />
     </div>
   );
 };

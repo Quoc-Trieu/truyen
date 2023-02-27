@@ -38,6 +38,7 @@ const BodyAssignmentList = () => {
     // cập nhập danh sách vùng cạo vào store
     dispatch(setListScaping(listSpacing));
     console.log("listScaping===========: ", JSON.stringify(listScaping));
+    console.table(listScaping);
   }, [listSpacing]);
 
   const updateInfoScaping = (index, updatedInfo) => {
@@ -120,15 +121,17 @@ const BodyAssignmentList = () => {
     console.log("listSpacing: ", listSpacing);
     if (
       //kiểm tra các giá trị trong object của phần tử cuối có rỗng không
-      listSpacing[listSpacing.length - 1].land === null ||
-      listSpacing[listSpacing.length - 1].row === null ||
-      listSpacing[listSpacing.length - 1].startTree === null ||
-      listSpacing[listSpacing.length - 1].endTree === null
+      listSpacing[listSpacing.length - 1]?.land === null ||
+      listSpacing[listSpacing.length - 1]?.land === undefined ||
+      listSpacing[listSpacing.length - 1]?.row === null ||
+      listSpacing[listSpacing.length - 1]?.row === undefined ||
+      listSpacing[listSpacing.length - 1]?.startTree === null ||
+      listSpacing[listSpacing.length - 1]?.endTree === null
     ) {
-      if (listSpacing[listSpacing.length - 1].land === null) {
+      if (listSpacing[listSpacing.length - 1]?.land === null || listSpacing[listSpacing.length - 1]?.land === undefined) {
         dispatch(setCatchError({ landError: "Vui lòng chọn lô" }));
       }
-      if (listSpacing[listSpacing.length - 1].row === null) {
+      if (listSpacing[listSpacing.length - 1]?.row === null || listSpacing[listSpacing.length - 1]?.row === undefined) {
         dispatch(setCatchError({ rowError: "Chưa nhập hàng cạo" }));
       }
     } else {
@@ -139,15 +142,17 @@ const BodyAssignmentList = () => {
 
   //khi nhấn chọn "xóa" vùng cạo
   const onDeleteItem = (index) => {
-    Loading.pulse("Đang xóa...");
-    const newList = [...listSpacing]; // sao chép mảng hiện tại
-    const newListInfo = [...infoScaping]; // sao chép mảng hiện tại
-    // xóa phần tử tương ướng với index
-    newList.splice(index, 1);
-    newListInfo.splice(index, 1);
-    setListSpacing(newList); // cập nhật mảng mới
-    setInfoScaping(newListInfo); // cập nhật mảng mới
-    Loading.remove();
+    if (index != 0) {
+      Loading.pulse("Đang xóa...");
+      const newList = [...listSpacing]; // sao chép mảng hiện tại
+      const newListInfo = [...infoScaping]; // sao chép mảng hiện tại
+      // xóa phần tử tương ướng với index
+      newList.splice(index, 1);
+      newListInfo.splice(index, 1);
+      setListSpacing(newList); // cập nhật mảng mới
+      setInfoScaping(newListInfo); // cập nhật mảng mới
+      Loading.remove();
+    }
   };
 
   return (
@@ -184,11 +189,11 @@ const BodyAssignmentList = () => {
                   NumRowOfLand={item?.row}
                   onSelectRow={onSelectRow}
                   label={listSpacing[index]?.row}
-                  styleCustom={{ pointerEvents: item?.land == null ? "none" : "auto" }}
+                  styleCustom={{ pointerEvents: listSpacing[index]?.land == null ? "none" : "auto" }}
                 />
                 <span className={styles.line}></span>
                 {/* cây bắt đầu */}
-                <div className={styles.treeBegins}>
+                <div className={styles.treeBegins} style={{ pointerEvents: listSpacing[index]?.row == null ? "none" : "auto" }}>
                   <span>Nhập cây bắt đầu</span>
                   <QuantitySelect
                     keyValue={index}
@@ -200,7 +205,7 @@ const BodyAssignmentList = () => {
                 </div>
                 <span className={styles.line}></span>
                 {/* cây kết thúc */}
-                <div className={styles.treeBegins}>
+                <div className={styles.treeBegins} style={{ pointerEvents: listSpacing[index]?.row == null ? "none" : "auto" }}>
                   <span>Nhập cây kết thúc</span>
                   <QuantitySelect
                     keyValue={index}
@@ -216,11 +221,14 @@ const BodyAssignmentList = () => {
               </div>
             );
           })}
-          {/* hiển thị lỗi  */}
-        <div className={styles.errorItem}>
-          <span>{catchError?.landError}</span>
-          <span>{catchError?.rowError}</span>
-        </div>
+        {/* hiển thị lỗi  */}
+        {catchError?.landError || catchError?.rowError ? (
+          <div className={styles.errorItem}>
+            <span>{catchError?.landError}</span>
+            <span>{catchError?.rowError}</span>
+          </div>
+        ) : null}
+
         {/* Thêm mới */}
         <div className={styles.btnAddAssignment} onClick={onAddItem}>
           <img className={styles.iconAdd} src={iconAdd} />

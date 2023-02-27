@@ -77,13 +77,18 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
         <input
           placeholder="Nhập sđt người dùng"
           className={styles.input}
-          type="number"
+          type="text"
           {...register("phone", {
             required: "Vui lòng không bỏ trống ô này",
             minLength: {
               value: 10,
               message: 'Nhập tối thiểu 10 số',
             },
+            pattern: {
+              value: /^[0-9]+$/,
+              message: "Nhập đúng định dạng số điện thoại"
+            }
+             
           })}
         />
         {errors?.phone &&

@@ -58,6 +58,7 @@ const Assignment = () => {
             "Tổng cây cạo",
             "",
           ]}
+          reload={showModal}
         />
 
         { showModal && <ModalCreatePartition visible={showModal} onCancel={() => setShowModal(false)}/>}
