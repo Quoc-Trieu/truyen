@@ -244,7 +244,7 @@ function MapV() {
                     locationBtn.style.background = '#fff'
                     locationBtn.style.color = '#000'
                     islocation = 0
-                    Notiflix.Loading.remove();
+                    Notiflix.Loading.remove()
                 } else {
                     // Lấy vị trí hiện tại của thiết bị
                     navigator.geolocation.getCurrentPosition(function (position) {
