@@ -271,35 +271,71 @@ function MapL() {
                 }
             })
             // bắt sự kiện click để hiển thị vị trí hiện tại 
-            let islocation = 0;
-            let currentlocation;
-            locationBtn.addEventListener('click', () => {
-                Notiflix.Loading.pulse();
-                if (islocation == 1) {
-                    map.removeLayer(currentlocation).setView([11.534428, 107.129069], 17)
-                    locationBtn.style.background = '#fff'
-                    locationBtn.style.color = '#000'
-                    islocation = 0
-                    Notiflix.Loading.remove();
-                } else {
-                    // Lấy vị trí hiện tại của thiết bị
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        var pos = [position.coords.latitude, position.coords.longitude];
-                        map.setView(pos, 19);
-                        var customIcon = L.icon({
-                            iconUrl: locationIcon,
-                            iconSize: [17, 17], // kích thước của icon
-                            iconAnchor: [8.5, 8.5], // điểm neo của icon
-                            popupAnchor: [0, -8.5] // vị trí hiển thị popup
-                        });
-                        currentlocation = L.marker(pos, { icon: customIcon }).addTo(map)
-                        Notiflix.Loading.remove();
-                    });
-                    locationBtn.style.background = '#6AB100'
-                    locationBtn.style.color = '#fff'
-                    islocation += 1
-                }
-            })
+            // let islocation = 0;
+            // let currentlocation;
+            // locationBtn.addEventListener('click', () => {
+            //     // Kiểm tra xem trình duyệt có hỗ trợ geolocation không
+            //     if (navigator.geolocation) {
+            //         navigator.geolocation.getCurrentPosition(showLocation, showError);
+            //     } else {
+            //         alert("Geolocation không được hỗ trợ bởi trình duyệt này");
+            //     }
+
+            //     // Hàm hiển thị vị trí
+            //     function showLocation(position) {
+            //         var latitude = position.coords.latitude;
+            //         var longitude = position.coords.longitude;
+            //         var accuracy = position.coords.accuracy;
+
+            //         // Hiển thị vị trí của người dùng trên bản đồ
+            //         var myLocation = L.circle([latitude, longitude], accuracy).addTo(map);
+            //         map.setView([latitude, longitude], 13);
+            //     }
+
+            //     // Hàm hiển thị thông báo lỗi
+            //     function showError(error) {
+            //         switch (error.code) {
+            //             case error.PERMISSION_DENIED:
+            //                 L.control.locate().addTo(map);
+            //                 break;
+            //             case error.POSITION_UNAVAILABLE:
+            //                 alert("Không thể xác định được vị trí của người dùng");
+            //                 break;
+            //             case error.TIMEOUT:
+            //                 alert("Yêu cầu xác định vị trí của người dùng đã quá thời gian");
+            //                 break;
+            //             case error.UNKNOWN_ERROR:
+            //                 alert("Lỗi không xác định khi xác định vị trí của người dùng");
+            //                 break;
+            //         }
+            //     }
+            //     // Notiflix.Loading.pulse();
+            //     // if (islocation == 1) {
+            //     //     map.removeLayer(currentlocation).setView([11.534428, 107.129069], 17)
+            //     //     locationBtn.style.background = '#fff'
+            //     //     locationBtn.style.color = '#000'
+            //     //     islocation = 0
+            //     //     Notiflix.Loading.remove();
+            //     // } else {
+            //     //     // Lấy vị trí hiện tại của thiết bị
+            //     //     navigator.geolocation.getCurrentPosition(function (position) {
+            //     //         var pos = [position.coords.latitude, position.coords.longitude];
+            //     //         map.setView(pos, 19);
+            //     //         var customIcon = L.icon({
+            //     //             iconUrl: locationIcon,
+            //     //             iconSize: [17, 17], // kích thước của icon
+            //     //             iconAnchor: [8.5, 8.5], // điểm neo của icon
+            //     //             popupAnchor: [0, -8.5] // vị trí hiển thị popup
+            //     //         });
+            //     //         currentlocation = L.marker(pos, { icon: customIcon }).addTo(map)
+            //     //         Notiflix.Loading.remove();
+            //     //     });
+            //     //     locationBtn.style.background = '#6AB100'
+            //     //     locationBtn.style.color = '#fff'
+            //     //     islocation += 1
+            //     // }
+            // })
+            L.control.locate().addTo(map);
         }
 
     }, [datacay])
