@@ -399,6 +399,10 @@ button[aria-label='Open React Query Devtools'] {
     body {
         width: unset !important;
     }
+
+    #map {
+        height: 100% !important;
+    }
 }
 div#container {
     height: 100%;
