@@ -274,41 +274,7 @@ function MapL() {
             // let islocation = 0;
             // let currentlocation;
             // locationBtn.addEventListener('click', () => {
-            //     // Kiểm tra xem trình duyệt có hỗ trợ geolocation không
-            //     if (navigator.geolocation) {
-            //         navigator.geolocation.getCurrentPosition(showLocation, showError);
-            //     } else {
-            //         alert("Geolocation không được hỗ trợ bởi trình duyệt này");
-            //     }
 
-            //     // Hàm hiển thị vị trí
-            //     function showLocation(position) {
-            //         var latitude = position.coords.latitude;
-            //         var longitude = position.coords.longitude;
-            //         var accuracy = position.coords.accuracy;
-
-            //         // Hiển thị vị trí của người dùng trên bản đồ
-            //         var myLocation = L.circle([latitude, longitude], accuracy).addTo(map);
-            //         map.setView([latitude, longitude], 13);
-            //     }
-
-            //     // Hàm hiển thị thông báo lỗi
-            //     function showError(error) {
-            //         switch (error.code) {
-            //             case error.PERMISSION_DENIED:
-            //                 L.control.locate().addTo(map);
-            //                 break;
-            //             case error.POSITION_UNAVAILABLE:
-            //                 alert("Không thể xác định được vị trí của người dùng");
-            //                 break;
-            //             case error.TIMEOUT:
-            //                 alert("Yêu cầu xác định vị trí của người dùng đã quá thời gian");
-            //                 break;
-            //             case error.UNKNOWN_ERROR:
-            //                 alert("Lỗi không xác định khi xác định vị trí của người dùng");
-            //                 break;
-            //         }
-            //     }
             //     // Notiflix.Loading.pulse();
             //     // if (islocation == 1) {
             //     //     map.removeLayer(currentlocation).setView([11.534428, 107.129069], 17)
@@ -335,36 +301,29 @@ function MapL() {
             //     //     islocation += 1
             //     // }
             // })
-
-            // Xử lý sự kiện khi định vị thành công
+            //Adds the map control and sets the center point to Durham and zoom scale to 10. For more info on the Leaflet map control check out: http://leafletjs.com/reference.html#map-class
             const onLocationFound = (e) => {
                 var radius = e.accuracy / 2;
 
-                // Vẽ một marker tại vị trí của người dùng
+                //Create pop-up to display location accuracy.  Location is coming from IP location or GPS receiver in mobile device
                 L.marker(e.latlng).addTo(map)
-                    .bindPopup("Bạn đang ở đây trong bán kính " + radius + " mét").openPopup();
+                    .bindPopup("You are within " + radius + " meters from this point").openPopup();
 
-                // Vẽ một đường tròn biểu thị độ chính xác của định vị
+                //Create circle to graphically represent location accuracy
                 L.circle(e.latlng, radius).addTo(map);
             }
 
-            // Xử lý sự kiện khi định vị không thành công
+            //Code for handling any errors that come up
             const onLocationError = (e) => {
                 alert(e.message);
             }
-            // Gắn các sự kiện định vị
+
             map.on('locationfound', onLocationFound);
             map.on('locationerror', onLocationError);
-            L.control.locate({
-                position: 'topright', // Vị trí của nút tìm kiếm
-                icon: 'fa fa-location-arrow', // Biểu tượng nút tìm kiếm
-                showPopup: false, // Hiển thị pop-up thông báo khi định vị thành công
-                strings: {
-                    title: "Vị trí của tôi", // Tiêu đề của nút tìm kiếm
-                    metersUnit: "mét", // Đơn vị đo khoảng cách
-                    popup: "Bạn đang ở gần đây" // Nội dung pop-up thông báo khi định vị thành công
-                }
-            }).addTo(map);
+
+            //Locate point and zoom to that location with a zoom level of 16
+            map.locate({ setView: true, maxZoom: 16 });
+            L.control.locate().addTo(map);
         }
 
     }, [datacay])
