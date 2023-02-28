@@ -335,7 +335,36 @@ function MapL() {
             //     //     islocation += 1
             //     // }
             // })
-            L.control.locate().addTo(map);
+
+            // Xử lý sự kiện khi định vị thành công
+            const onLocationFound = (e) => {
+                var radius = e.accuracy / 2;
+
+                // Vẽ một marker tại vị trí của người dùng
+                L.marker(e.latlng).addTo(map)
+                    .bindPopup("Bạn đang ở đây trong bán kính " + radius + " mét").openPopup();
+
+                // Vẽ một đường tròn biểu thị độ chính xác của định vị
+                L.circle(e.latlng, radius).addTo(map);
+            }
+
+            // Xử lý sự kiện khi định vị không thành công
+            const onLocationError = (e) => {
+                alert(e.message);
+            }
+            // Gắn các sự kiện định vị
+            map.on('locationfound', onLocationFound);
+            map.on('locationerror', onLocationError);
+            L.control.locate({
+                position: 'topright', // Vị trí của nút tìm kiếm
+                icon: 'fa fa-location-arrow', // Biểu tượng nút tìm kiếm
+                showPopup: false, // Hiển thị pop-up thông báo khi định vị thành công
+                strings: {
+                    title: "Vị trí của tôi", // Tiêu đề của nút tìm kiếm
+                    metersUnit: "mét", // Đơn vị đo khoảng cách
+                    popup: "Bạn đang ở gần đây" // Nội dung pop-up thông báo khi định vị thành công
+                }
+            }).addTo(map);
         }
 
     }, [datacay])
