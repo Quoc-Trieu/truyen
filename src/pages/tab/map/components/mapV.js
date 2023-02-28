@@ -46,8 +46,8 @@ function MapV() {
                 // smoothWheelZoom: true,  // enable smooth zoom 
                 // smoothSensitivity: 1,   // zoom speed. default is 1
             }).setView([11.533204, 107.128444], 17);
-            var tiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            var tiles = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
                 preferCanvas: true,
                 maxZoom: 23
             }).addTo(map);
