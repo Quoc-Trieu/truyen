@@ -34,9 +34,9 @@ const Map = () => {
             Vùng cạo
           </div>
         </div>
-        {/* <div className='my-location'>
+        <div className='my-location'>
           <FaLocationArrow />
-        </div> */}
+        </div>
         {
           tabValue == 0 ? <MapL /> : <MapV />
         }

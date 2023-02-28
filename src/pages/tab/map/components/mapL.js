@@ -274,49 +274,34 @@ function MapL() {
             // bắt sự kiện click để hiển thị vị trí hiện tại 
             let islocation = 0;
             let currentlocation;
-            // locationBtn.addEventListener('click', () => {
-
-            //     // Notiflix.Loading.pulse();
-            //     // if (islocation == 1) {
-            //     //     map.removeLayer(currentlocation).setView([11.534428, 107.129069], 17)
-            //     //     locationBtn.style.background = '#fff'
-            //     //     locationBtn.style.color = '#000'
-            //     //     islocation = 0
-            //     //     Notiflix.Loading.remove();
-            //     // } else {
-            //     //     // Lấy vị trí hiện tại của thiết bị
-            //     //     navigator.geolocation.getCurrentPosition(function (position) {
-            //     //         var pos = [position.coords.latitude, position.coords.longitude];
-            //     //         map.setView(pos, 19);
-            //     //         var customIcon = L.icon({
-            //     //             iconUrl: locationIcon,
-            //     //             iconSize: [17, 17], // kích thước của icon
-            //     //             iconAnchor: [8.5, 8.5], // điểm neo của icon
-            //     //             popupAnchor: [0, -8.5] // vị trí hiển thị popup
-            //     //         });
-            //     //         currentlocation = L.marker(pos, { icon: customIcon }).addTo(map)
-            //     //         Notiflix.Loading.remove();
-            //     //     });
-            //     //     locationBtn.style.background = '#6AB100'
-            //     //     locationBtn.style.color = '#fff'
-            //     //     islocation += 1
-            //     // }
-            // })
-            L.control.locate().addTo(map);
-            map.on('locationfound', function (e) {
-                console.log('show location succes');
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var pos = [position.coords.latitude, position.coords.longitude];
-                    map.setView(pos, 19);
-                    var customIcon = L.icon({
-                        iconUrl: locationIcon,
-                        iconSize: [17, 17], // kích thước của icon
-                        iconAnchor: [8.5, 8.5], // điểm neo của icon
-                        popupAnchor: [0, -8.5] // vị trí hiển thị popup
+            locationBtn.addEventListener('click', () => {
+                L.control.locate()
+                Notiflix.Loading.pulse();
+                if (islocation == 1) {
+                    map.removeLayer(currentlocation).setView([11.534428, 107.129069], 17)
+                    locationBtn.style.background = '#fff'
+                    locationBtn.style.color = '#000'
+                    islocation = 0
+                    Notiflix.Loading.remove();
+                } else {
+                    // Lấy vị trí hiện tại của thiết bị
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var pos = [position.coords.latitude, position.coords.longitude];
+                        map.setView(pos, 19);
+                        var customIcon = L.icon({
+                            iconUrl: locationIcon,
+                            iconSize: [17, 17], // kích thước của icon
+                            iconAnchor: [8.5, 8.5], // điểm neo của icon
+                            popupAnchor: [0, -8.5] // vị trí hiển thị popup
+                        });
+                        currentlocation = L.marker(pos, { icon: customIcon }).addTo(map)
+                        Notiflix.Loading.remove();
                     });
-                    currentlocation = L.marker(pos, { icon: customIcon }).addTo(map)
-                });
-            });
+                    locationBtn.style.background = '#6AB100'
+                    locationBtn.style.color = '#fff'
+                    islocation += 1
+                }
+            })
         }
 
     }, [datacay])

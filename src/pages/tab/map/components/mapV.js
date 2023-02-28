@@ -34,7 +34,7 @@ function MapV() {
 
     }, [])
 
-    useEffect( () => {
+    useEffect(() => {
 
         const container = L.DomUtil.get(mapContainerRef.current); if (container != null) { container._leaflet_id = null; }
         var geojson;
@@ -238,13 +238,14 @@ function MapV() {
             let islocation = 0;
             let currentlocation;
             locationBtn.addEventListener('click', () => {
+                L.control.locate()
                 Notiflix.Loading.pulse();
                 if (islocation == 1) {
                     map.removeLayer(currentlocation).setView([11.534428, 107.129069], 17)
                     locationBtn.style.background = '#fff'
                     locationBtn.style.color = '#000'
                     islocation = 0
-                    Notiflix.Loading.remove()
+                    Notiflix.Loading.remove();
                 } else {
                     // Lấy vị trí hiện tại của thiết bị
                     navigator.geolocation.getCurrentPosition(function (position) {
