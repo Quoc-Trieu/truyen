@@ -11,7 +11,7 @@ const Map = () => {
   useEffect(() => {
     if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
       // Set giá trị margin top là 10 nếu là iOS
-      document.querySelector("#container .WrapperBtn").style.marginTop = "80px";
+      // document.querySelector("#container .WrapperBtn").style.marginTop = "80px";
     } 
   })
   return (
