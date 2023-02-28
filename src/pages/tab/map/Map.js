@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from "./Map.module.scss";
 import Header from "./../../../components/Header/Header";
 import MapL from './components/mapL';
@@ -8,6 +8,12 @@ import { FaLocationArrow } from 'react-icons/fa'
 const Map = () => {
   const [tabValue, setTabValue] = useState(0);
   const locationBtn = document.querySelector('#container .my-location')
+  useEffect(() => {
+    if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+      // Set giá trị margin top là 10 nếu là iOS
+      // document.querySelector("#container .WrapperBtn").style.marginTop = "80px";
+    } 
+  })
   return (
     <div className={styles.mapContainer}>
       <Header title="Bản đồ" name="Nguyễn Văn A" />

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { stringify } from "qs";
 import { getToken } from "../utils/localStorage";
-const API_ENDPOINT = "https://test.bunny2.thomi.com.vn";
+
+const API_ENDPOINT = "https://test.bunny2.thomi.com.vn/";
 
 const AxiosClient = axios.create({
   baseURL: API_ENDPOINT,
@@ -9,7 +10,7 @@ const AxiosClient = axios.create({
   timeout: 50000,
   paramsSerializer: (params) => stringify(params, { arrayFormat: "repeat" }),
 });
- 
+
 AxiosClient.interceptors.request.use(
   async (config) => {
     const newConfig = config;

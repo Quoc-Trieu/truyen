@@ -393,11 +393,15 @@ button[aria-label='Open React Query Devtools'] {
         top: 85px !important;
     }
     #container .WrapperBtn {
-        top: 10px !important;
+        margin-top: 10px;
         border-radius: 0 !important;
     }
     body {
         width: unset !important;
+    }
+
+    #map {
+        height: 100% !important;
     }
 }
 div#container {

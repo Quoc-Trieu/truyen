@@ -34,7 +34,7 @@ function MapV() {
 
     }, [])
 
-    useEffect( () => {
+    useEffect(() => {
 
         const container = L.DomUtil.get(mapContainerRef.current); if (container != null) { container._leaflet_id = null; }
         var geojson;
@@ -46,8 +46,8 @@ function MapV() {
                 // smoothWheelZoom: true,  // enable smooth zoom 
                 // smoothSensitivity: 1,   // zoom speed. default is 1
             }).setView([11.533204, 107.128444], 17);
-            var tiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            var tiles = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
                 preferCanvas: true,
                 maxZoom: 23
             }).addTo(map);
@@ -239,30 +239,47 @@ function MapV() {
             let currentlocation;
             locationBtn.addEventListener('click', () => {
                 Notiflix.Loading.pulse();
-                if (islocation == 1) {
-                    map.removeLayer(currentlocation).setView([11.534428, 107.129069], 17)
-                    locationBtn.style.background = '#fff'
-                    locationBtn.style.color = '#000'
-                    islocation = 0
-                    Notiflix.Loading.remove();
-                } else {
-                    // Lấy vị trí hiện tại của thiết bị
+                L.control.locate()
+                if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position) {
-                        var pos = [position.coords.latitude, position.coords.longitude];
-                        map.setView(pos, 19);
-                        var customIcon = L.icon({
-                            iconUrl: locationIcon,
-                            iconSize: [17, 17], // kích thước của icon
-                            iconAnchor: [8.5, 8.5], // điểm neo của icon
-                            popupAnchor: [0, -8.5] // vị trí hiển thị popup
-                        });
-                        currentlocation = L.marker(pos, { icon: customIcon }).addTo(map)
-                        Notiflix.Loading.remove();
+                        // do something with the user's position
+                        console.log('my location');
+                        if (islocation == 1) {
+                            map.removeLayer(currentlocation).setView([11.534428, 107.129069], 17)
+                            locationBtn.style.background = '#fff'
+                            locationBtn.style.color = '#000'
+                            islocation = 0
+                            Notiflix.Loading.remove();
+                        } else {
+                            // Lấy vị trí hiện tại của thiết bị
+                            var pos = [position.coords.latitude, position.coords.longitude];
+                            map.setView(pos, 19);
+                            var customIcon = L.icon({
+                                iconUrl: locationIcon,
+                                iconSize: [17, 17], // kích thước của icon
+                                iconAnchor: [8.5, 8.5], // điểm neo của icon
+                                popupAnchor: [0, -8.5] // vị trí hiển thị popup
+                            });
+                            currentlocation = L.marker(pos, { icon: customIcon }).addTo(map)
+                            Notiflix.Loading.remove();
+                            locationBtn.style.background = '#6AB100'
+                            locationBtn.style.color = '#fff'
+                            islocation += 1
+                        }
+                    }, function (error) {
+                        console.log(error);
+                        if (error.code === error.PERMISSION_DENIED) {
+                            // alert("Vui lòng bật chia sẻ vị trí để sử dụng tính năng này.");
+                            Notiflix.Loading.remove();
+                        } else {
+                            alert("Thiết bị không truy cập được vị trí.");
+                            Notiflix.Loading.remove();
+                        }
                     });
-                    locationBtn.style.background = '#6AB100'
-                    locationBtn.style.color = '#fff'
-                    islocation += 1
+                } else {
+                    alert("Trình duyệt của bạn không hỗ trợ chia sẻ vị trí.");
                 }
+
             })
         }
 

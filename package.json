@@ -21,6 +21,7 @@
     "chartjs-plugin-datalabels": "^2.0.0",
     "date-fns": "^2.28.0",
     "dotenv": "^16.0.1",
+    "esri-leaflet": "^3.0.10",
     "firebase": "^9.8.4",
     "leaflet": "^1.9.3",
     "leaflet-canvas-marker": "^0.2.0",
