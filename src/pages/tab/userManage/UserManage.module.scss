@@ -2,7 +2,7 @@
 
 .userContainer {
   width: $full-screen;
-  height: $full-screen;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 
@@ -54,15 +54,17 @@
   }
 
   .userBody {
-    overflow-y: scroll;
-    width: $full-screen;
+    // overflow-y: scroll;
+    // width: $full-screen;
     display: flex;
+    height: 100%;
     flex: 1;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
     padding: 0 20px;
     background-color: #EFF6E7;
+    overflow-y: auto;
 
     .toolbar {
       display: flex;

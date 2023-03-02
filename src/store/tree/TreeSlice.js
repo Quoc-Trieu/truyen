@@ -6,24 +6,24 @@ const initialState = {
   pageCurrentTree: 1,
   pageTotal: null,
   infoALLTree: [],
-  filter: {typeTree : null, land : null, row : null, nameTree : null},
+  filter: { typeTree: null, land: null, row: null, nameTree: null },
   loading: false,
 };
 
-export const getALLTrees = createAsyncThunk("tree/getALLTree", async ( resetPage = false ,{ getState, dispatch }) => {
+export const getALLTrees = createAsyncThunk("tree/getALLTree", async (resetPage = false, { getState, dispatch }) => {
   if (resetPage) {
     dispatch(setPageCurrentTree(1));
   }
   const filter = getState().tree.filter;
   const pageCurrent = getState().tree.pageCurrentTree;
-  
+
   // cộng chuỗi tìm kiếm cây theo id cây
   let concatFindTree = null;
   if (filter.nameTree) {
     concatFindTree = filter.row + filter.nameTree;
   }
 
-  const response = await getALLTreeByCondition({ page: pageCurrent, limit: 10, typeTree: filter.typeTree, idLand: filter.land, idRow: filter.row, idTree: concatFindTree});
+  const response = await getALLTreeByCondition({ page: pageCurrent, limit: 10, typeTree: filter.typeTree, idLand: filter.land, idRow: filter.row, idTree: concatFindTree });
   console.log(response?.data);
   return response?.data;
 });

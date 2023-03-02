@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./BoxTreeParameter.module.scss";
 import { useSelector } from "react-redux";
 import { infoALLTreeSelector } from './../../../../../store/tree/TreeSlice';
-import { getALLTreeByCondition } from './../../../../../services/treeServices';
+import { getALLTreeByCondition, getTotalTypeTree } from './../../../../../services/treeServices';
 
 const BoxTreeParameter = () => {
   const renderStyles = {
@@ -37,8 +37,19 @@ const BoxTreeParameter = () => {
       BgColor: "#FDF2F0",
     },
   };
-  const allTree = useSelector(infoALLTreeSelector);
-  
+  const [allTree, setAllTree] = useState([])
+
+  useEffect(() => {
+    getTotalTypeTree()
+      .then(res => {
+        const { trees, ...rest } = res.data
+        setAllTree(rest)
+      })
+      .catch(err => console.log(err))
+  }, [])
+
+  console.log(allTree);
+
   // const [statics, setStatics] = useState([]);
   // useEffect(() => {
   //   try {
