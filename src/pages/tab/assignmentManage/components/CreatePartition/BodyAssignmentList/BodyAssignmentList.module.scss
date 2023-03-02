@@ -11,6 +11,8 @@ $width-col-item: 280px;
   align-items: flex-start;
   width: 100%;
   background-color: #E2E2E2;
+  height: 400px;
+  overflow-y: scroll;
 
   .headerRow {
     width: 100%;
