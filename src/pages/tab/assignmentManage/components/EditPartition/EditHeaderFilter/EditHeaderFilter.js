@@ -6,6 +6,8 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector, catchErrorSelector, setIdScapingEdit, isEditSelector, namePartitionSelector } from "../../../../../../store/assignment/AssignmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoSelector } from "../../../../../../store/user/UserSlice";
+import { getInfo } from './../../../../../../services/userServies';
+import { getScapingByName } from "./../../../../../../services/assignmentServices";
 
 const EditHeaderFilter = ({data}) => {
   const {
@@ -20,6 +22,7 @@ const EditHeaderFilter = ({data}) => {
   const listUser = useSelector(userAutoCompleteSelector);
   const idEdit = useSelector(isEditSelector);
   const namePartitionRedux = useSelector(namePartitionSelector);
+  const [nameMaster, setNameMaster] = useState('');
 
   console.log(listUser);
   const [value, setValue] = useState(data?.nameUser);
@@ -74,6 +77,20 @@ const EditHeaderFilter = ({data}) => {
     dispatch(setIdUserPartition(item?.phone))
   };
 
+  useEffect(() => {
+    const getNameTaskMaster = async () => {
+      try {
+        // tìm vùng cạo và lấy tên người giao
+        const resInfo = await getScapingByName(data?.name);
+        const resName = await getInfo(resInfo?.data?.taskMaster);
+        setNameMaster(resName?.data?.fullName);
+      } catch (error) {
+        console.log('error getNameTaskMaster' + error);
+      }
+    };
+    getNameTaskMaster();
+  },[])
+
   return (
     <form className={styles.HeaderFilter} onSubmit={handleSubmit(onSubmit)} style={{pointerEvents: idEdit ? 'auto' :'none'}}>
       {/* Người giao */}
@@ -82,7 +99,7 @@ const EditHeaderFilter = ({data}) => {
           <div className={styles.circle}></div>
           <span>Người giao</span>
         </div>
-        <input readOnly={true} placeholder={userInfo?.fullName} className={styles.inputDeliver}/>
+        <input readOnly={true} placeholder={nameMaster} className={styles.inputDeliver}/>
       </div>
 
       <Dropdown className={styles.dropPerformer} show={showSuggest}>
