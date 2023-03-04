@@ -9,6 +9,7 @@ $width-col: 170px;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  overflow: scroll;
 
   .headerRow {
     width: 100%;

@@ -42,6 +42,9 @@ const treeSlice = createSlice({
     resetTree: (state) => {
       return { ...initialState, pageCurrentTree: state.pageCurrentTree, infoALLTree: state.infoALLTree };
     },
+    resetTab: (state) => {
+      return { ...initialState};
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getALLTrees.fulfilled, (state, action) => {
@@ -57,5 +60,5 @@ export const infoALLTreeSelector = (state) => state.tree.infoALLTree;
 export const filterTreeSelector = (state) => state.tree.filter;
 
 
-export const { setPageCurrentTree, setFilter } = treeSlice.actions;
+export const { setPageCurrentTree, setFilter, resetTab } = treeSlice.actions;
 export default treeSlice.reducer;
