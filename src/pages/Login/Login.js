@@ -50,6 +50,7 @@ const Login = () => {
         case "USER_NOT_FOUND": Notiflix.Notify.failure('Tài khoản không tồn tại'); break;
         case "USERNAME_WRONG": Notiflix.Notify.failure('Tài khoản không tồn tại'); break;
         case "PASSWORD_WRONG": Notiflix.Notify.failure('Mật khẩu không đúng'); break;
+        case "INVALID_STATUS": Notiflix.Notify.failure('Tài khoản bị khóa'); break;
         default: Notiflix.Notify.failure('Đăng nhập thất bại'); break;
       }
 
