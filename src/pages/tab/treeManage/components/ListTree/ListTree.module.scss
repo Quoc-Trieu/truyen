@@ -3,7 +3,7 @@
 // chiều cao của hàng
 $height-col: 60px;
 // chiều dài của cột trong item
-$width-col-item: 280px;
+$width-col-item: 250px;
 
 .listTree {
   width: 100%;
@@ -44,8 +44,8 @@ $width-col-item: 280px;
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
-    margin: 10px 0;
     font-size: 18px;
+    padding: 10px 0;
 
     .itemRow {
       height: 60px;

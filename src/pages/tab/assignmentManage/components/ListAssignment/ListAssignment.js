@@ -38,14 +38,24 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
   }, [search, page, showRemove, showEditDetail, reload])
 
 
-  const formatTime = (inputString) => {
-    const date = new Date(inputString);
-    const hours = date.getUTCHours() + 7;
-    const minutes = date.getUTCMinutes();
-    const formattedHours = hours < 10 ? `0${hours}` : hours;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    const formattedDate = `${formattedHours}:${formattedMinutes} / ${date.getUTCDate()}-${date.getUTCMonth() + 1}-${date.getUTCFullYear()}`;
-    return formattedDate;
+  const formatTime = (dateTimeString) => {
+    // Chuyển đổi chuỗi thời gian sang đối tượng Date
+    let dateTime = new Date(dateTimeString);
+
+    // Lấy giờ và phút hiện tại
+    let hours = dateTime.getHours();
+    let minutes = dateTime.getMinutes();
+
+    // Lấy ngày, tháng và năm
+    let day = dateTime.getDate();
+    let month = dateTime.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
+    let year = dateTime.getFullYear();
+
+    // Định dạng thời gian mới
+    let formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} / ${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}`;
+
+    // Trả về định dạng thời gian mới
+    return formattedTime;
   }
 
   const NumLandRowTree = (detail) => {
@@ -118,7 +128,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
               {/* Vùng cạo */}
               <div className={styles.shaverAreaStyle}>
                 <span>{item?.name}</span>
-                <span>{format(new Date(item?.createdAt), 'hh:mm / dd-MM-yyyy')}</span>
+                <span>{formatTime(item?.createdAt)}</span>
               </div>
               {/* Người cạo */}
               <div className={styles.userShaverStyle}>

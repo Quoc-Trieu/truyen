@@ -9,7 +9,7 @@ $width-col: 170px;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  overflow: scroll;
+  overflow-y: auto;
 
   .headerRow {
     width: 100%;
@@ -42,9 +42,9 @@ $width-col: 170px;
     flex: 1;
     justify-content: flex-start;
     align-items: center;
+    overflow-y: scroll;
     gap: 10px;
-    margin: 10px 0;
-    overflow: scroll;
+    padding: 10px 0;
 
     .itemUI {
       height: 80px;
