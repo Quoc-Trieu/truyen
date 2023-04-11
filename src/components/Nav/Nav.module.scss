@@ -1,15 +1,12 @@
-@use "../../styles/scss/" as *;
-
+@use '../../styles/scss/' as *;
 
 .navStyle {
   @include mobile {
     display: none;
   }
-
+  
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 250px;
   justify-content: flex-start;
   background-image: linear-gradient($green-color, $brightGreen-color);
 
@@ -19,6 +16,11 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  .openNav {
+    align-self: end;
+    margin: 10px 18px 10px 10px;
+  }
 
   .ulNav {
     display: flex;
@@ -30,13 +32,17 @@
     gap: 15px;
 
     .logo {
-      width: 220px;
-      height: 220px;
-      overflow: hidden;
+      width: 100%;
+      height: 0;
+      padding-bottom: 100%;
+      position: relative;
 
       img {
         width: 100%;
-        height: auto;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
       }
     }
 
