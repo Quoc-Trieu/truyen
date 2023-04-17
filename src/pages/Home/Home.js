@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import styles from "./Home.module.scss";
 import { getPhoneLocalStorage } from './../../utils/localStorage';
 import { useDispatch } from 'react-redux';
-import { setRole, userInfoSelector } from "../../store/user/UserSlice";
-import { getInfoUser, getALLInfoUser } from './../../store/user/UserSlice';
+import { getALLInfoUser } from './../../store/user/UserSlice';
+import { getInfoUser } from './../../store/auth/authSlice';
 import { getALLTrees } from './../../store/tree/TreeSlice';
 
 function Home() {

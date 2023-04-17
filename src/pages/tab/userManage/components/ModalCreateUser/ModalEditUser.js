@@ -11,8 +11,10 @@ import  Notiflix  from "notiflix";
 import { useDispatch } from "react-redux";
 import {
   getALLInfoUser,
-  roleUserSelector,
 } from "../../../../../store/user/UserSlice";
+import {
+  roleUserSelector,
+} from "../../../../../store/auth/authSlice";
 import { Loading } from "notiflix";
 import { putUpdateUser, getPassNoHas } from "./../../../../../services/userServies";
 

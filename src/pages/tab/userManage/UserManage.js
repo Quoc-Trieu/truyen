@@ -12,16 +12,16 @@ import { getALLInfoUser, setFilterUser, setSearching, setPageCurrentUser } from 
 import iconUp from "../../..//assets/ico/icon-feather-chevron-up.png";
 import iconDown from "../../../assets/ico/icon-feather-chevron-down.png";
 import Dropdown from "react-bootstrap/Dropdown";
+import ROLES from "../../../constants/roles";
 
 const UserManage = () => {
   // dùng value truyền pẩm để lấy User, ADMIN lấy tất cả, MANAGER lấy User, User lấy quản lý
-  const ROLES ={ admin : {label: "Tất cả", value: "ADMIN"}, manager:{label: "Quản lý", value: "USER"}, user: {label: "Người dùng", value: "MANAGER"}}
   const [showModal, setShowModal] = useState(false);
   const [isDrop, setIsDrop] = useState(false);
   const [labelMenu, setLabelMenu] = useState();
   
   const dispatch = useDispatch();
-  const permisson = useSelector(state => state.user.role)
+  const permisson = useSelector(state => state.auth.role)
   const filterUser = useSelector(state => state.user.filterUser)
   const searchText = useSelector(state => state.user.searching)
 
@@ -83,14 +83,23 @@ const UserManage = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu  className={styles.filterPermissionMenu}>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.admin)}}>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.all)}}>
                 <span>Tất cả</span>
               </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.manager)}}>
-                <span>Quản lý</span>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.admin)}}>
+                <span>ADMIN</span>
               </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.user)}}>
-                <span>Người dùng</span>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.manager)}}>
+                <span>Quản trị</span>
+              </Dropdown.Item>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.groupLeader)}}>
+                <span>Tổ Trưởng</span>
+              </Dropdown.Item>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.accountant)}}>
+                <span>Kế Toán</span>
+              </Dropdown.Item>
+              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.labor)}}>
+                <span>Nhân Công</span>
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

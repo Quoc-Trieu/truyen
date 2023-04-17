@@ -75,6 +75,11 @@ function Nav() {
           <img src={iconPlantTree} />
           {isOpenNav && <span>Quản lý cây</span>}
         </li>
+
+        <li onClick={() => onChangeNav('quantity')} className={pathname === '/quantity' ? styles.li_Selected : ''}>
+          <img src={iconPlantTree} />
+          {isOpenNav && <span>Sản lượng</span>}
+        </li>
       </ul>
     </div>
   );

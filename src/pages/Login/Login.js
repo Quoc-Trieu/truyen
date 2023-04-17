@@ -11,7 +11,7 @@ import { login } from "./../../services/authServices";
 import { setPhoneLocalStorage, setToken } from "./../../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Notiflix from 'notiflix';
-import { getInfoUser } from './../../store/user/UserSlice';
+import { getInfoUser } from './../../store/auth/authSlice';
 import { Loading } from 'notiflix';
 
 const Login = () => {

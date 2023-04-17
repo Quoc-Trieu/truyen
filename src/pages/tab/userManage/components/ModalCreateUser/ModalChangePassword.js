@@ -5,7 +5,8 @@ import ModalComponent from "../../../../../components/ModalComponent/ModalCompon
 import { postCreateUser, putChangePass } from "../../../../../services/userServies";
 import Notiflix from "notiflix";
 import { useDispatch, useSelector } from "react-redux";
-import { getALLInfoUser, userInfoSelector } from "../../../../../store/user/UserSlice";
+import { userInfoSelector } from "../../../../../store/auth/authSlice";
+import { getALLInfoUser } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
 
 const ModalChangePassword = ({ visible, onCancel, onOk }) => {

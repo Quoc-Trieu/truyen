@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Dropdown from "react-bootstrap/Dropdown";
 import { getALLUserAutoComplete, setIdUserPartition, setNamePartition, userAutoCompleteSelector, catchErrorSelector, setCatchError } from "./../../../../../../store/assignment/AssignmentSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { userInfoSelector } from "./../../../../../../store/user/UserSlice";
+import { userInfoSelector } from "./../../../../../../store/auth/authSlice";
 
 const HeaderFilter = () => {
   const {

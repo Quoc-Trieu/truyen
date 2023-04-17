@@ -15,7 +15,7 @@ import {
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getALLInfoUser } from "../../../../../store/user/UserSlice";
-import { infoALLUserSelector } from "../../../../../store/user/UserSlice";
+import { listUserSelector } from "../../../../../store/user/UserSlice";
 import Notiflix from "notiflix";
 import ModalEditUser from "../ModalCreateUser/ModalEditUser";
 import Pagination from "../../../../../components/Pagination/Pagination";
@@ -28,7 +28,7 @@ const roleLabel = { ADMIN: "Admin", MANAGER: "Quản lý", USER: "User" };
 
 const ListUser = ({ itemsHeaderRow }) => {
   const dispatch = useDispatch();
-  const InfoALLUser = useSelector(infoALLUserSelector);
+  const listUser = useSelector(listUserSelector);
   const pageCurrentUser = useSelector(pageCurrentUserSelector);
 
   const [showModalRemove, setShowModalRemove] = useState(false);
@@ -110,8 +110,8 @@ const ListUser = ({ itemsHeaderRow }) => {
 
       {/* Item row */}
       <div className={styles.itemContainer}>
-        { InfoALLUser?.users && InfoALLUser?.users[0] !== undefined &&
-          InfoALLUser?.users?.map((item, index) => {
+        { listUser?.users && listUser?.users[0] !== undefined &&
+          listUser?.users?.map((item, index) => {
             // kiểm tra trạng thái của user có bị khóa hay không, nếu bị khóa thì trả về true, ngược lại trả về false
             const isUserActive = item?.status == "ACTIVE" ? true : false;
             const getIconUserLocked = isUserActive ? iconUnLock : iconLock;
@@ -174,7 +174,7 @@ const ListUser = ({ itemsHeaderRow }) => {
       <Pagination
         align="flex-end"
         initValue={pageCurrentUser}
-        pageTotalNum={InfoALLUser?.totalPages}
+        pageTotalNum={listUser?.totalPages}
         OnChangePage={OnChangePage}
       />
       

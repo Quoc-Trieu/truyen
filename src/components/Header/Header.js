@@ -6,7 +6,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from './../../utils/localStorage';
 import { useSelector } from 'react-redux';
-import { userInfoSelector } from "../../store/user/UserSlice";
+import { userInfoSelector } from "../../store/auth/authSlice";
 import ModalChangePassword from './../../pages/tab/userManage/components/ModalCreateUser/ModalChangePassword';
 
 const assignment = ({ title, name }) => {
