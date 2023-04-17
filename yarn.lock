@@ -9258,6 +9258,11 @@
     "prop-types" "^15.6.0"
     "react-transition-group" "^4.3.0"
 
+"react-table@^7.8.0":
+  "integrity" "sha512-hNaz4ygkZO4bESeFfnfOft73iBUj8K5oKi1EcSHPAibEydfsX2MyU6Z8KCr3mv3C9Kqqh71U+DhZkFvibbnPbA=="
+  "resolved" "https://registry.npmjs.org/react-table/-/react-table-7.8.0.tgz"
+  "version" "7.8.0"
+
 "react-time-input@^1.0.1":
   "integrity" "sha512-iBrKSs8XrEuu/7S2EcVehdiUhbVs2bU+3wkTpGd4cnyU7D+KMC4X1AVMoc2A8XjPghXjPe/smf+A1V6TtwrD7Q=="
   "resolved" "https://registry.npmjs.org/react-time-input/-/react-time-input-1.0.1.tgz"

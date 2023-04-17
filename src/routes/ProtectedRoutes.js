@@ -4,6 +4,7 @@ import Map from "./../pages/tab/map/Map";
 import TreeManage from "./../pages/tab/treeManage/TreeManage";
 import Assignment from "./../pages/tab/assignmentManage/Assignment";
 import UserManage from "./../pages/tab/userManage/UserManage";
+import AttendanceCheck from "./../pages/tab/attendanceCheck/AttendanceCheck";
 
 const ProtectedRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const ProtectedRoutes = () => {
         <Route path="/userManage" element={<UserManage />} />
         <Route path="/assignment" element={<Assignment />} />
         <Route path="/treeManage" element={<TreeManage />} />
+        <Route path="/AttendanceCheck" element={<AttendanceCheck />} />
       </Route>
     </Routes>
   );
