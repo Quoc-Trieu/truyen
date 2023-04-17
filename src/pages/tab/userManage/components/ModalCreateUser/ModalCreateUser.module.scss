@@ -64,6 +64,46 @@
     }
   }
 
+  .dropDown {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid #878484;
+    font-size: $default-fontSize;
+    padding: 0 10px;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .containerToggle {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+
+      img {
+        width: 16px;
+        height: 10px;
+      }
+    }
+
+    .dropMenu {
+      padding: 0;
+      width: 100%;
+      // transform: translate(0px, 50px) !important;
+
+      .dropItem {
+        padding: 8px 16px;
+      }
+    }
+
+  }
+  
+
   .btnSubmit {
     width: 180px;
     height: 60px;
