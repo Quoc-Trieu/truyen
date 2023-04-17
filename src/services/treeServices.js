@@ -35,3 +35,6 @@ export const getRowByLand = (idLand) => {
   return AxiosClient.get("/land/getRowByLand", {params: {idLand  : idLand   }} );
 };
 
+export const getTotalTypeTree = () => {
+  return AxiosClient.get("tree/getTreeByCondition");
+}

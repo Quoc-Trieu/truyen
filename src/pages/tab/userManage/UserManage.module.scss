@@ -2,7 +2,7 @@
 
 .userContainer {
   width: $full-screen;
-  height: $full-screen;
+  flex: 1;
   display: flex;
   flex-direction: column;
 
@@ -54,15 +54,17 @@
   }
 
   .userBody {
-    overflow-y: scroll;
-    width: $full-screen;
+    // overflow-y: scroll;
+    // width: $full-screen;
     display: flex;
+    height: 100%;
     flex: 1;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 0 20px;
+    padding: 15px 20px;
     background-color: #EFF6E7;
+    overflow-y: auto;
 
     .toolbar {
       display: flex;
@@ -70,7 +72,7 @@
       justify-content: flex-start;
       align-items: center;
       gap: 20px;
-      padding: 20px 0px;
+      padding-bottom: 15px;
     }
 
     .paginationUser {

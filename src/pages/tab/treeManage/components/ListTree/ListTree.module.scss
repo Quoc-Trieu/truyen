@@ -3,7 +3,7 @@
 // chiều cao của hàng
 $height-col: 60px;
 // chiều dài của cột trong item
-$width-col-item: 280px;
+$width-col-item: 250px;
 
 .listTree {
   width: 100%;
@@ -12,6 +12,7 @@ $width-col-item: 280px;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  overflow-y: scroll;
 
   .headerListTree {
     width: 100%;
@@ -36,14 +37,15 @@ $width-col-item: 280px;
 
   .listContainer {
     width: 100%;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     flex: 1;
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
-    margin: 10px 0;
     font-size: 18px;
+    padding: 10px 0;
 
     .itemRow {
       height: 60px;
@@ -53,7 +55,7 @@ $width-col-item: 280px;
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
-      padding: 0 20px;
+      padding: 30px 20px;
       gap: 10px;
       border-radius: 3px;
 

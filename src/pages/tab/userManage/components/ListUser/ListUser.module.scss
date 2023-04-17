@@ -3,12 +3,13 @@ $width-col: 250px;
 
 .listUser {
   width: $full-screen;
-  height: auto;
+  height: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  overflow-y: scroll;
 
   .headerRow {
     width: 100%;
@@ -35,18 +36,19 @@ $width-col: 250px;
 
   .itemContainer {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
     flex-direction: column;
     flex: 1;
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
-    margin: 10px 0;
-    overflow: scroll;
+    padding: 10px 0;
+    overflow-y: scroll;
+    position: relative;
 
     .itemUI {
-      height: 60px;
+      height: 80px;
       width: 100%;
       display: flex;
       flex-direction: row;
@@ -72,6 +74,7 @@ $width-col: 250px;
         font-size: 17px;
         color: $text-color;
         width: $width-col;
+        margin: 15px 0;
       }
 
       .actionItem {
@@ -101,8 +104,8 @@ $width-col: 250px;
             justify-content: flex-start;
             align-items: center;
             gap: 15px;
-            height: 70%;
-            padding: 0 12px;
+            height: 75%;
+            padding: 0 15px;
             border-radius: 4px;
             background-color: #F5F5F5;
 
@@ -122,8 +125,8 @@ $width-col: 250px;
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
-            gap: 5px;
-            padding: 10px 10px;
+            // gap: 5px;
+            // padding: 10px 10px;
             border-radius: 2px;
 
 

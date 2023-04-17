@@ -5,12 +5,13 @@ import SearchInput from "./../../../components/SearchInput/SearchInput";
 import IconAdd from "./../../../assets/ico/icon-material-add-circle-outline.png";
 import Button from "./../../../components/Button/Button";
 import Pagination from "./../../../components/Pagination/Pagination";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ListAssginment from "./components/ListAssignment/ListAssignment";
 import ModalCreatePartition from "./components/CreatePartition/ModalCreatePartition";
 import { useDispatch } from 'react-redux';
 import { getALLUserAutoComplete, setSearchingAssignment } from './../../../store/assignment/AssignmentSlice';
 import ModalEditCreatePartition from './components/EditPartition/ModalEditCreatePartition';
+import { useSelector } from 'react-redux';
 
 
 
@@ -18,6 +19,12 @@ const Assignment = () => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   dispatch(getALLUserAutoComplete());
+  const search = useSelector(state => state.assignment.searchingAssignment);
+
+  useEffect(() => {
+    dispatch(setSearchingAssignment(""));
+  }, [])
+
 
   const onSearch = (searchText) => {
     dispatch(setSearchingAssignment(searchText));

@@ -18,16 +18,23 @@ const UserManage = () => {
   const ROLES ={ admin : {label: "Tất cả", value: "ADMIN"}, manager:{label: "Quản lý", value: "USER"}, user: {label: "Người dùng", value: "MANAGER"}}
   const [showModal, setShowModal] = useState(false);
   const [isDrop, setIsDrop] = useState(false);
+  const [labelMenu, setLabelMenu] = useState();
+  
   const dispatch = useDispatch();
   const permisson = useSelector(state => state.user.role)
   const filterUser = useSelector(state => state.user.filterUser)
-  const [labelMenu, setLabelMenu] = useState();
+  const searchText = useSelector(state => state.user.searching)
 
   useEffect(() => {
     // set label từ giá trj redux
     const filteredRoles = Object.values(ROLES).filter(role => role.value == filterUser);
     setLabelMenu(filteredRoles[0].label);
   }, [filterUser])
+
+  useEffect(() => {
+    dispatch(setSearching(""));
+    dispatch(getALLInfoUser());
+  }, []);
 
   const onSubmit = async (text) => {
     dispatch(setSearching(text));

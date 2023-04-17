@@ -6,7 +6,7 @@ import DropTypeOfTree from '../../../../../components/DropDownComponent/DropType
 import DropLand from '../../../../../components/DropDownComponent/DropLand';
 import DropTreeRow from '../../../../../components/DropDownComponent/DropTreeRow';
 import ButtonIcon from './../../../../../components/Button/ButtonIcon';
-import { setFilter, getALLTrees, filterTreeSelector } from "./../../../../../store/tree/TreeSlice";
+import { setFilter, getALLTrees, filterTreeSelector, resetTab } from "./../../../../../store/tree/TreeSlice";
 import { useDispatch, useSelector } from 'react-redux';
 
 const SelectionBar = () => {
@@ -23,6 +23,10 @@ const SelectionBar = () => {
       setValue("");
     }
   }, [disableSearch]);
+
+  useEffect(() => {
+    dispatch(resetTab());
+  }, []);
 
   const onChangeSearch = (e) => {
     setValue(e.target.value);

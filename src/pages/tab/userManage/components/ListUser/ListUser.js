@@ -133,7 +133,7 @@ const ListUser = ({ itemsHeaderRow }) => {
                     onClick={() => onRemove(item)}
                   />
 
-                  <Dropdown style={{ height: "100%" }}>
+                  <Dropdown style={{ height: "100%" }} drop="down">
                     <Dropdown.Toggle style={{ height: "100%" }}>
                       <div className={styles.lockUser}>
                         <img
@@ -144,7 +144,7 @@ const ListUser = ({ itemsHeaderRow }) => {
                       </div>
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu style={{ padding: 0 }} align="end">
+                    <Dropdown.Menu style={{ padding: 0 }}>
                       <Dropdown.Item
                         className={styles.lockDropdown}
                         onClick={() => onChangeLock(item)}

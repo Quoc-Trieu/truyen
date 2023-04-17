@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ListAssginment.module.scss";
 import iconEye from "../../../../../assets/ico/icon-material-remove-green-eye.png";
 import iconRemove from "../../../../../assets/ico/icon-remove.png";
@@ -12,6 +12,7 @@ import Pagination from './../../../../../components/Pagination/Pagination';
 import Notiflix from 'notiflix';
 import { Loading } from 'notiflix';
 import ModalEditCreatePartition from './../EditPartition/ModalEditCreatePartition';
+import { format } from "date-fns";
 
 const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
   const [showRemove, setShowRemove] = useState(false);
@@ -26,7 +27,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
   useEffect(() => {
     const getList = async () => {
       try {
-        const res = await getInfoAllScaping({page: page, limit: 10, query: search});
+        const res = await getInfoAllScaping({ page: page, limit: 10, query: search });
         setList(res?.data);
         console.log(res?.data);
       } catch (error) {
@@ -37,20 +38,30 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
   }, [search, page, showRemove, showEditDetail, reload])
 
 
-  const formatTime = (inputString) => {
-    const date = new Date(inputString);
-    const hours = date.getUTCHours() + 7;
-    const minutes = date.getUTCMinutes();
-    const formattedHours = hours < 10 ? `0${hours}` : hours;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    const formattedDate = `${formattedHours}:${formattedMinutes} / ${date.getUTCDate()}-${date.getUTCMonth() + 1}-${date.getUTCFullYear()}`;
-    return formattedDate;
+  const formatTime = (dateTimeString) => {
+    // Chuyển đổi chuỗi thời gian sang đối tượng Date
+    let dateTime = new Date(dateTimeString);
+
+    // Lấy giờ và phút hiện tại
+    let hours = dateTime.getHours();
+    let minutes = dateTime.getMinutes();
+
+    // Lấy ngày, tháng và năm
+    let day = dateTime.getDate();
+    let month = dateTime.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
+    let year = dateTime.getFullYear();
+
+    // Định dạng thời gian mới
+    let formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} / ${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}`;
+
+    // Trả về định dạng thời gian mới
+    return formattedTime;
   }
 
   const NumLandRowTree = (detail) => {
     let lo = detail?.length;
-    let hang=0;
-    let cay=0;
+    let hang = 0;
+    let cay = 0;
 
     if (detail?.length > 0) {
       detail.map((itemLo, index) => {
@@ -60,8 +71,8 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
         itemLo?.hang.map((itemHang, index) => {
           // console.log(item?.cay.length);
           const arrTree = itemHang?.cay;
-          const startTree = parseInt(arrTree[0].slice(arrTree[0].length-3, arrTree[0].length));
-          const endTree = parseInt(arrTree[arrTree.length -1].slice(arrTree[arrTree.length -1].length-3, arrTree[arrTree.length -1].length));
+          const startTree = parseInt(arrTree[0].slice(arrTree[0].length - 3, arrTree[0].length));
+          const endTree = parseInt(arrTree[arrTree.length - 1].slice(arrTree[arrTree.length - 1].length - 3, arrTree[arrTree.length - 1].length));
           cay += (endTree - startTree) + 1;
         })
       })
@@ -97,7 +108,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
   const onDetail = (item) => {
     setShowEditDetail(true);
     setItemDetail(item);
-    console.log("Data Item Detail: ",item);
+    console.log("Data Item Detail: ", item);
   };
 
   return (
@@ -114,7 +125,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
         {list?.data && list?.data.map((item, index) => {
           return (
             <div key={index} className={styles.itemUI}>
-                {/* Vùng cạo */}
+              {/* Vùng cạo */}
               <div className={styles.shaverAreaStyle}>
                 <span>{item?.name}</span>
                 <span>{formatTime(item?.createdAt)}</span>
@@ -124,12 +135,12 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
                 <span>{item?.nameUser}</span>
                 <span>{item?.idUserPartition}</span>
               </div>
-                {/* Số lô, hàng, tổng cây cạo */}
+              {/* Số lô, hàng, tổng cây cạo */}
               <span>{NumLandRowTree(item?.detail).lo} lô</span>
               <span>{NumLandRowTree(item?.detail).hang} hàng</span>
               <span>{NumLandRowTree(item?.detail).cay} cây</span>
 
-                {/* Action */}
+              {/* Action */}
               <div className={styles.actionItem}>
                 <img
                   src={iconRemove}
@@ -147,13 +158,13 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
       </div>
 
       <Pagination
-        initValue = {1}
+        initValue={1}
         pageTotalNum={list?.totalPages}
-          align="flex-end"
-          OnChangePage={onChangePage}
-        />
+        align="flex-end"
+        OnChangePage={onChangePage}
+      />
 
-      { showRemove &&
+      {showRemove &&
         <ModalConfirm
           visible={showRemove}
           title="Xác nhận xóa phân vùng"
@@ -163,7 +174,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
         />
       }
 
-      { showEditDetail && <ModalEditCreatePartition visible={showEditDetail} onCancel={() => setShowEditDetail(false)} data={itemDetail}/> }
+      {showEditDetail && <ModalEditCreatePartition visible={showEditDetail} onCancel={() => setShowEditDetail(false)} data={itemDetail} />}
     </div>
   );
 };
