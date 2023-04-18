@@ -17,6 +17,13 @@
     flex-direction: row;
     justify-content: flex-start;
     align-self: center;
+    gap: 20px;
+
+    img {
+      height: 38px;
+      aspect-ratio: 24/15;
+      cursor: pointer;
+    }
 
     span {
         color: $darkGreen-color;

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./Header.module.scss";
 import iconDown from "../../assets/ico/icon-awesome-caret-down.png";
 import avatar from "../../assets/images/avatar-account.png";
+import iconBack from "../../assets/ico/icon-back-orange.png";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from './../../utils/localStorage';
@@ -9,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { userInfoSelector } from "../../store/auth/authSlice";
 import ModalChangePassword from './../../pages/tab/userManage/components/ModalCreateUser/ModalChangePassword';
 
-const assignment = ({ title, name }) => {
+const assignment = ({ title, name, back }) => {
   const navigate = useNavigate();
   const userInfo = useSelector(userInfoSelector)
   const [showModalChangePassword, setShowModalChangePassword] = useState(false);
@@ -28,6 +29,7 @@ const assignment = ({ title, name }) => {
   return (
     <div className={styles.headerStyle}>
       <div className={styles.headerLeft}>
+        {back && <img src={iconBack} onClick={() => navigate(-1)}/>}
         <span>{title}</span>
       </div>
 

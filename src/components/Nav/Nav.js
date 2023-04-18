@@ -61,7 +61,7 @@ function Nav() {
             </li>
 
             {/* màn hình quản lý công việc */}
-            <li onClick={() => onChangeNav('assignment')} className={pathname === '/assignment' ? styles.li_Selected : ''}>
+            <li onClick={() => onChangeNav('divisions')} className={pathname === '/divisions' || pathname === '/assignment' ? styles.li_Selected : ''}>
               <img src={iconList} />
               {isOpenNav && <span>Quản lý công việc</span>}
             </li>

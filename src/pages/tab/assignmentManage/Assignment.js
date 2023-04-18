@@ -12,11 +12,14 @@ import { useDispatch } from 'react-redux';
 import { getALLUserAutoComplete, setSearchingAssignment } from './../../../store/assignment/AssignmentSlice';
 import ModalEditCreatePartition from './components/EditPartition/ModalEditCreatePartition';
 import { useSelector } from 'react-redux';
-
+import { useLocation } from "react-router-dom";
 
 
 const Assignment = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const subDivision = location.state?.subDivision;
+
   const [showModal, setShowModal] = useState(false);
   dispatch(getALLUserAutoComplete());
   const search = useSelector(state => state.assignment.searchingAssignment);
@@ -39,7 +42,7 @@ const Assignment = () => {
 
   return (
     <div className={styles.assignmentContainer}>
-      <Header title="Quản lý công việc" name="Nguyễn Văn A" />
+      <Header title={"Phần cạo khu " + subDivision} back name="Nguyễn Văn A" />
       <div className={styles.assignmentBody}>
         <div className={styles.toolbar}>
           <SearchInput
