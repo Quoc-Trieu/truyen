@@ -262,6 +262,7 @@ button[aria-label='Open React Query Devtools'] {
     right: 0;
     bottom: 0; */
 }
+
 .info {
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
@@ -273,6 +274,7 @@ button[aria-label='Open React Query Devtools'] {
 
 .info.leaflet-control {
     text-align: center;
+    /* display: none; */
 }
 
 .info h4 {
@@ -289,6 +291,7 @@ button[aria-label='Open React Query Devtools'] {
     justify-content: center;
     border-radius: 4px;
     z-index: 1000;
+    position: relative;
 }
 
 .marker-text {
@@ -298,10 +301,17 @@ button[aria-label='Open React Query Devtools'] {
     border-radius: 4px;
     white-space: nowrap;
     width: fit-content;
-    height: 80px;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    top: -15px;
+    left: -22px;
+}
+
+.marker-text.active {
+
 }
 
 .custom-tooltip {
@@ -367,15 +377,19 @@ button[aria-label='Open React Query Devtools'] {
     z-index: 1000 !important;
 }
 
-.iconCay {
+/* .iconCay {
     transform: rotate(90deg) !important;
-}
+    background-color: #007BFF;
+    width: 20px;
+    height: 20px;
+} */
 
 @media (max-width: 600px) {
 
     .info.leaflet-control {
         display: none;
     }
+
     /* .leaflet-top {
         top: 60px !important;
     } */
@@ -392,10 +406,12 @@ button[aria-label='Open React Query Devtools'] {
     #container .my-location {
         top: 85px !important;
     }
+
     #container .WrapperBtn {
         margin-top: 10px;
         border-radius: 0 !important;
     }
+
     body {
         width: unset !important;
     }
@@ -404,6 +420,7 @@ button[aria-label='Open React Query Devtools'] {
         height: 100% !important;
     }
 }
+
 div#container {
     height: 100%;
 }
