@@ -217,8 +217,8 @@ function MapL() {
             }
             const onEachFeature = (feature, layer) => {
                 layer.on({
-                    mouseover: highlightFeature,
-                    mouseout: resetHighlight,
+                    // mouseover: highlightFeature,
+                    // mouseout: resetHighlight,
                     click: zoomToFeature
                 });
             }
@@ -348,7 +348,7 @@ function MapL() {
             // var markers = [];
             // bắt sự kiện zoom
             map.on('zoomend', function () {
-                console.log(map.getZoom() > 18)
+                console.log(map.getZoom());
                 if (map.getZoom() > 21.73) {
                     for (let i = 0; i < markers.length; i++) {
                         let newIconSize = [0, 0];
@@ -371,7 +371,7 @@ function MapL() {
                     // sự kiện lấy data của cây khi move trên bản đồ
                     map.on('moveend', movedFunc);
                 }
-                else if (map.getZoom() > 18 && map.getZoom() < 22) {
+                else if (map.getZoom() >= 19 && map.getZoom() < 22) {
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
@@ -390,6 +390,7 @@ function MapL() {
                             }
                         }
                     });
+                    Notiflix.Loading.pulse()
                     for (let i = 0; i < markers.length; i++) {
                         // Lấy kích thước và vị trí hiện tại của biểu tượng
                         var iconSize = markers[i].options.icon.options.iconSize;
@@ -419,6 +420,10 @@ function MapL() {
                             iconSize: newIconSize,
                             iconAnchor: newIconAnchor
                         }));
+
+                        if (i === markers.length - 1) {
+                            Notiflix.Loading.remove()
+                        }
                     }
                 }
                 else {
