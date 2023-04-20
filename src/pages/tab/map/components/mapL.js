@@ -244,40 +244,7 @@ function MapL() {
             };
             // add info vào map
             info.addTo(map);
-            // XỬ LÝ ADD CÂY
-            // hàm khởi tạo maker
-            var ciLayer = L.canvasIconLayer({}).addTo(map);
-            // add xự kiện lcick vào maker
-            ciLayer.addOnClickListener(function (e, data) {
-                console.log(data[0].data.mydata)
-            });
-            // hàm check icon
-            const getIcon = (d) => {
-                return d === 'X' ? xanhIcon :
-                    d === 'CD' ? timIcon :
-                        d === 'KM' ? xamIcon :
-                            d === 'K' ? vangIcon :
-                                doIcon
-            }
-            // khởi tạo icon
-            const getIconStatus = (status) => {
-                var icon = L.icon({
-                    iconUrl: getIcon(status),
-                    iconSize: [0, 0],
-                    iconAnchor: [0, 0],
-                    className: 'iconCay',
-                });
 
-                return icon;
-            }
-            // xử lý conver data geojson sang maker json
-            var markers = [];
-            for (var i = 0; i < datacay.features.length; i++) {
-                var marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
-                marker.mydata = datacay.features[i].properties.name1
-                markers.push(marker);
-            }
-            ciLayer.addLayers(markers);
             // SỰ KIỆN ZOOM ĐỂ GET TRẠNG THÁI CÂY VÀ XOÁ ĐI LAYER CANVAR
             // custom colors cho trang thái cây
             const getColor = (d) => {
@@ -318,7 +285,7 @@ function MapL() {
 
                 var polygonJSONString = JSON.stringify(polygonGeoJSON);
 
-                console.log(polygonJSONString);
+                // Notiflix.Loading.pulse()
 
                 axios.get('https://test.bunny2.thomi.com.vn/draw/drawTreeInSquare', {
                     params: {
@@ -340,38 +307,34 @@ function MapL() {
                         });
                         // console.log(geojsonitem);
                         geojsonitem.addTo(map);
+                        // Notiflix.Loading.remove()
                     })
                     .catch(err => {
+                        // Notiflix.Loading.remove()
                         console.log(err);
                     })
             }
-            // var markers = [];
+            let markers = [];
+            let ciLayer;
             // bắt sự kiện zoom
             map.on('zoomend', function () {
                 console.log(map.getZoom());
                 if (map.getZoom() > 21.73) {
-                    for (let i = 0; i < markers.length; i++) {
-                        let newIconSize = [0, 0];
-                        let newIconAnchor = [0, 0];
+                    // for (let i = 0; i < markers.length; i++) {
+                    //     let newIconSize = [0, 0];
+                    //     let newIconAnchor = [0, 0];
 
-                        // Cập nhật kích thước và vị trí của biểu tượng
-                        markers[i].setIcon(L.icon({
-                            iconUrl: markers[i].options.icon.options.iconUrl,
-                            iconSize: newIconSize,
-                            iconAnchor: newIconAnchor
-                        }));
-                    }
-                    map.eachLayer(function (layer) {
-                        // Kiểm tra xem lớp có phải là LineString hay không
-                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
-                            // Nếu đúng, xoá lớp khỏi bản đồ
-                            map.removeLayer(layer);
-                        }
-                    });
+                    //     // Cập nhật kích thước và vị trí của biểu tượng
+                    //     markers[i].setIcon(L.icon({
+                    //         iconUrl: markers[i].options.icon.options.iconUrl,
+                    //         iconSize: newIconSize,
+                    //         iconAnchor: newIconAnchor
+                    //     }));
+                    // }
                     // sự kiện lấy data của cây khi move trên bản đồ
                     map.on('moveend', movedFunc);
                 }
-                else if (map.getZoom() >= 19 && map.getZoom() < 22) {
+                else if (map.getZoom() >= 20 && map.getZoom() < 22) {
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
@@ -390,54 +353,76 @@ function MapL() {
                             }
                         }
                     });
-                    Notiflix.Loading.pulse()
-                    for (let i = 0; i < markers.length; i++) {
-                        // Lấy kích thước và vị trí hiện tại của biểu tượng
-                        var iconSize = markers[i].options.icon.options.iconSize;
-                        var iconAnchor = markers[i].options.icon.options.iconAnchor;
-                        let newIconSize
-                        let newIconAnchor
-
-                        // Tính toán kích thước và vị trí mới dựa trên mức độ phóng to của bản đồ
-
-                        if (map.getZoom() >= 19 && map.getZoom() < 20) {
-                            newIconSize = [10, 8];
-                            newIconAnchor = [5, 8];
-                        } else if (map.getZoom() >= 20 && map.getZoom() < 21) {
-                            newIconSize = [20, 18];
-                            newIconAnchor = [10, 9];
-                        } else if (map.getZoom() >= 21 && map.getZoom() < 22) {
-                            newIconSize = [45, 40];
-                            newIconAnchor = [25, 19];
-                        } else {
-                            newIconSize = [0, 0];
-                            newIconAnchor = [0, 0];
-                        }
-
-                        // Cập nhật kích thước và vị trí của biểu tượng
-                        markers[i].setIcon(L.icon({
-                            iconUrl: markers[i].options.icon.options.iconUrl,
-                            iconSize: newIconSize,
-                            iconAnchor: newIconAnchor
-                        }));
-
-                        if (i === markers.length - 1) {
-                            Notiflix.Loading.remove()
-                        }
+                    // XỬ LÝ ADD CÂY
+                    // hàm khởi tạo maker
+                    ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
                     }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        var icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [20, 18],
+                            iconAnchor: [10, 9],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (var i = 0; i < datacay.features.length; i++) {
+                        var marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                    // Notiflix.Loading.pulse()
+                    // for (let i = 0; i < markers.length; i++) {
+                    //     // Lấy kích thước và vị trí hiện tại của biểu tượng
+                    //     var iconSize = markers[i].options.icon.options.iconSize;
+                    //     var iconAnchor = markers[i].options.icon.options.iconAnchor;
+                    //     let newIconSize
+                    //     let newIconAnchor
+
+                    //     // Tính toán kích thước và vị trí mới dựa trên mức độ phóng to của bản đồ
+
+                    //     if (map.getZoom() >= 19 && map.getZoom() < 20) {
+                    //         newIconSize = [10, 8];
+                    //         newIconAnchor = [5, 8];
+                    //     } else if (map.getZoom() >= 20 && map.getZoom() < 21) {
+                    //         newIconSize = [20, 18];
+                    //         newIconAnchor = [10, 9];
+                    //     } else if (map.getZoom() >= 21 && map.getZoom() < 22) {
+                    //         newIconSize = [45, 40];
+                    //         newIconAnchor = [25, 19];
+                    //     } else {
+                    //         newIconSize = [0, 0];
+                    //         newIconAnchor = [0, 0];
+                    //     }
+
+                    //     // Cập nhật kích thước và vị trí của biểu tượng
+                    //     markers[i].setIcon(L.icon({
+                    //         iconUrl: markers[i].options.icon.options.iconUrl,
+                    //         iconSize: newIconSize,
+                    //         iconAnchor: newIconAnchor
+                    //     }));
+
+                    //     if (i === markers.length - 1) {
+                    //         Notiflix.Loading.remove()
+                    //     }
+                    // }
                 }
                 else {
-                    for (let i = 0; i < markers.length; i++) {
-                        let newIconSize = [0, 0];
-                        let newIconAnchor = [0, 0];
-
-                        // Cập nhật kích thước và vị trí của biểu tượng
-                        markers[i].setIcon(L.icon({
-                            iconUrl: markers[i].options.icon.options.iconUrl,
-                            iconSize: newIconSize,
-                            iconAnchor: newIconAnchor
-                        }));
-                    }
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
@@ -456,6 +441,10 @@ function MapL() {
                             }
                         }
                     });
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
                 }
             })
             // bắt sự kiện click để hiển thị vị trí hiện tại 
