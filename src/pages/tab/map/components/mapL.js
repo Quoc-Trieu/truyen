@@ -320,17 +320,10 @@ function MapL() {
             map.on('zoomend', function () {
                 console.log(map.getZoom());
                 if (map.getZoom() > 21.73) {
-                    // for (let i = 0; i < markers.length; i++) {
-                    //     let newIconSize = [0, 0];
-                    //     let newIconAnchor = [0, 0];
-
-                    //     // Cập nhật kích thước và vị trí của biểu tượng
-                    //     markers[i].setIcon(L.icon({
-                    //         iconUrl: markers[i].options.icon.options.iconUrl,
-                    //         iconSize: newIconSize,
-                    //         iconAnchor: newIconAnchor
-                    //     }));
-                    // }
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
                     // sự kiện lấy data của cây khi move trên bản đồ
                     map.on('moveend', movedFunc);
                 }
