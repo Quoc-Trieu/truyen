@@ -340,7 +340,7 @@ function MapL() {
                     // sự kiện lấy data của cây khi move trên bản đồ
                     map.on('moveend', movedFunc);
                 }
-                else if (map.getZoom() >= 16 && map.getZoom() < 18) {
+                else if (map.getZoom() >= 15 && map.getZoom() < 18) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
                         item.remove()
                         item.style.display = 'none';
