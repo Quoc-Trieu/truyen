@@ -22,6 +22,7 @@ function MapL() {
     // const [zoomLevel, setZoomLevel] = useState(16);
     const [data, setData] = useState();
     const [datacay, setDatacay] = useState();
+    const [dataLine, setDataLine] = useState();
     const locationBtn = document.querySelector('#container .my-location')
     const mapContainerRef = useRef(null)
     const [levelZoom, setLevelZoom] = useState();
@@ -30,6 +31,19 @@ function MapL() {
         Notiflix.Loading.pulse();
         axios.get('https://test.bunny2.thomi.com.vn/draw/getAllLands', { params: { isHadScaping: false } })
             .then(res => {
+                axios.get(`https://test.bunny2.thomi.com.vn/draw/drawRowOFLand?id=${res.data[0].properties._id}`)
+                    .then(res => {
+                        console.log(res.data);
+                        Notiflix.Loading.remove();
+                        setDataLine({
+                            "type": "FeatureCollection",
+                            "features": [...res.data]
+                        })
+                    })
+                    .catch(err => {
+                        Notiflix.Loading.remove();
+                        console.log(err);
+                    })
                 setData({
                     "type": "FeatureCollection",
                     "features": [...res.data]
@@ -50,6 +64,7 @@ function MapL() {
                 Notiflix.Loading.remove();
                 console.log(err);
             })
+
 
     }, [])
 
@@ -170,7 +185,7 @@ function MapL() {
                 scrollWheelZoom: false, // disable original zoom function
                 smoothWheelZoom: true,  // enable smooth zoom 
                 smoothSensitivity: 1,   // zoom speed. default is 1
-            }).setView([11.533204, 107.128444], 16);
+            }).setView([11.533204, 107.128444], 14);
 
             var tiles = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -325,128 +340,156 @@ function MapL() {
                     // sự kiện lấy data của cây khi move trên bản đồ
                     map.on('moveend', movedFunc);
                 }
-                else if (map.getZoom() >= 17 && map.getZoom() < 17.68) {
+                else if (map.getZoom() >= 16 && map.getZoom() < 18) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
                         item.remove()
                         item.style.display = 'none';
                     })
-                    map.off('moveend', movedFunc);
-                    map.eachLayer(function (layer) {
-                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
-                            map.removeLayer(layer);
-                        }
-                        else if (layer instanceof L.LayerGroup) {
-                            var hasPoints = false;
-                            layer.eachLayer(function (subLayer) {
-                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
-                                    hasPoints = true;
-                                    return;
-                                }
-                            });
-                            if (hasPoints) {
-                                layer.clearLayers();
-                            }
-                        }
-                    });
-                    // XỬ LÝ ADD CÂY
-                    const markers = [];
-                    // hàm khởi tạo maker
-                    const ciLayer = L.canvasIconLayer({}).addTo(map);
-                    // add xự kiện lcick vào maker
-                    ciLayer.addOnClickListener(function (e, data) {
-                        console.log(data[0].data.mydata)
-                    });
-                    // hàm check icon
-                    const getIcon = (d) => {
-                        return d === 'X' ? xanhIcon :
-                            d === 'CD' ? timIcon :
-                                d === 'KM' ? xamIcon :
-                                    d === 'K' ? vangIcon :
-                                        doIcon
-                    }
-                    // khởi tạo icon
-                    const getIconStatus = (status) => {
-                        let icon = L.icon({
-                            iconUrl: getIcon(status),
-                            iconSize: [5, 5],
-                            iconAnchor: [2.5, 2.5],
-                            className: 'iconCay',
-                        });
+                    L.geoJson(dataLine, {
+                        style: {
+                            fillColor: '#74c200',
+                            weight: 1,
+                            color: '#74c200',
+                        },
+                    }).addTo(map)
+                    // map.off('moveend', movedFunc);
+                    // map.eachLayer(function (layer) {
+                    //     if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                    //         map.removeLayer(layer);
+                    //     }
+                    //     else if (layer instanceof L.LayerGroup) {
+                    //         var hasPoints = false;
+                    //         layer.eachLayer(function (subLayer) {
+                    //             if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                    //                 hasPoints = true;
+                    //                 return;
+                    //             }
+                    //         });
+                    //         if (hasPoints) {
+                    //             layer.clearLayers();
+                    //         }
+                    //     }
+                    // });
+                    // // XỬ LÝ ADD CÂY
+                    // const markers = [];
+                    // // hàm khởi tạo maker
+                    // const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // // add xự kiện lcick vào maker
+                    // ciLayer.addOnClickListener(function (e, data) {
+                    //     console.log(data[0].data.mydata)
+                    // });
+                    // // hàm check icon
+                    // const getIcon = (d) => {
+                    //     return d === 'X' ? xanhIcon :
+                    //         d === 'CD' ? timIcon :
+                    //             d === 'KM' ? xamIcon :
+                    //                 d === 'K' ? vangIcon :
+                    //                     doIcon
+                    // }
+                    // // khởi tạo icon
+                    // const getIconStatus = (status) => {
+                    //     let icon = L.icon({
+                    //         iconUrl: getIcon(status),
+                    //         iconSize: [5, 5],
+                    //         iconAnchor: [2.5, 2.5],
+                    //         className: 'iconCay',
+                    //     });
 
-                        return icon;
-                    }
-                    // xử lý conver data geojson sang maker json
-                    for (let i = 0; i < datacay.features.length; i++) {
-                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
-                        marker.mydata = datacay.features[i].properties.name1
-                        markers.push(marker);
-                    }
-                    ciLayer.addLayers(markers);
+                    //     return icon;
+                    // }
+                    // // xử lý conver data geojson sang maker json
+                    // for (let i = 0; i < datacay.features.length; i++) {
+                    //     let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                    //     marker.mydata = datacay.features[i].properties.name1
+                    //     markers.push(marker);
+                    // }
+                    // ciLayer.addLayers(markers);
                 }
-                else if (map.getZoom() >= 17.68 && map.getZoom() < 18) {
-                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
-                        item.remove()
-                        item.style.display = 'none';
-                    })
-                    map.off('moveend', movedFunc);
-                    map.eachLayer(function (layer) {
-                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
-                            map.removeLayer(layer);
-                        }
-                        else if (layer instanceof L.LayerGroup) {
-                            var hasPoints = false;
-                            layer.eachLayer(function (subLayer) {
-                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
-                                    hasPoints = true;
-                                    return;
-                                }
-                            });
-                            if (hasPoints) {
-                                layer.clearLayers();
-                            }
-                        }
-                    });
-                    // XỬ LÝ ADD CÂY
-                    const markers = [];
-                    // hàm khởi tạo maker
-                    const ciLayer = L.canvasIconLayer({}).addTo(map);
-                    // add xự kiện lcick vào maker
-                    ciLayer.addOnClickListener(function (e, data) {
-                        console.log(data[0].data.mydata)
-                    });
-                    // hàm check icon
-                    const getIcon = (d) => {
-                        return d === 'X' ? xanhIcon :
-                            d === 'CD' ? timIcon :
-                                d === 'KM' ? xamIcon :
-                                    d === 'K' ? vangIcon :
-                                        doIcon
-                    }
-                    // khởi tạo icon
-                    const getIconStatus = (status) => {
-                        let icon = L.icon({
-                            iconUrl: getIcon(status),
-                            iconSize: [7, 7],
-                            iconAnchor: [3.5, 3.5],
-                            className: 'iconCay',
-                        });
+                // else if (map.getZoom() >= 17.68 && map.getZoom() < 18) {
+                //     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                //         item.remove()
+                //         item.style.display = 'none';
+                //     })
+                //     map.off('moveend', movedFunc);
+                //     map.eachLayer(function (layer) {
+                //         // Kiểm tra xem lớp có phải là LineString hay không
+                //         if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                //             // Nếu đúng, xoá lớp khỏi bản đồ
+                //             map.removeLayer(layer);
+                //         }
+                //     });
+                //     map.eachLayer(function (layer) {
+                //         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                //             map.removeLayer(layer);
+                //         }
+                //         else if (layer instanceof L.LayerGroup) {
+                //             var hasPoints = false;
+                //             layer.eachLayer(function (subLayer) {
+                //                 if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                //                     hasPoints = true;
+                //                     return;
+                //                 }
+                //             });
+                //             if (hasPoints) {
+                //                 layer.clearLayers();
+                //             }
+                //         }
+                //     });
+                //     // XỬ LÝ ADD CÂY
+                //     const markers = [];
+                //     // hàm khởi tạo maker
+                //     const ciLayer = L.canvasIconLayer({}).addTo(map);
+                //     // add xự kiện lcick vào maker
+                //     ciLayer.addOnClickListener(function (e, data) {
+                //         console.log(data[0].data.mydata)
+                //     });
+                //     // hàm check icon
+                //     const getIcon = (d) => {
+                //         return d === 'X' ? xanhIcon :
+                //             d === 'CD' ? timIcon :
+                //                 d === 'KM' ? xamIcon :
+                //                     d === 'K' ? vangIcon :
+                //                         doIcon
+                //     }
+                //     // khởi tạo icon
+                //     const getIconStatus = (status) => {
+                //         let icon = L.icon({
+                //             iconUrl: getIcon(status),
+                //             iconSize: [7, 7],
+                //             iconAnchor: [3.5, 3.5],
+                //             className: 'iconCay',
+                //         });
 
-                        return icon;
-                    }
-                    // xử lý conver data geojson sang maker json
-                    for (let i = 0; i < datacay.features.length; i++) {
-                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
-                        marker.mydata = datacay.features[i].properties.name1
-                        markers.push(marker);
-                    }
-                    ciLayer.addLayers(markers);
-                }
+                //         return icon;
+                //     }
+                //     // xử lý conver data geojson sang maker json
+                //     for (let i = 0; i < datacay.features.length; i++) {
+                //         let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                //         marker.mydata = datacay.features[i].properties.name1
+                //         markers.push(marker);
+                //     }
+                //     ciLayer.addLayers(markers);
+                // }
                 else if (map.getZoom() >= 18 && map.getZoom() < 18.61) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
                         item.remove()
                         item.style.display = 'none';
                     })
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
@@ -506,6 +549,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -563,6 +613,13 @@ function MapL() {
                         item.style.display = 'none';
                     })
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
@@ -657,6 +714,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -714,6 +778,13 @@ function MapL() {
                         item.style.display = 'none';
                     })
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
@@ -773,6 +844,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -830,6 +908,13 @@ function MapL() {
                         item.style.display = 'none';
                     })
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
@@ -889,6 +974,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -946,6 +1038,13 @@ function MapL() {
                         item.style.display = 'none';
                     })
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
@@ -1005,6 +1104,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -1062,6 +1168,13 @@ function MapL() {
                         item.style.display = 'none';
                     })
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
@@ -1121,6 +1234,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -1178,6 +1298,13 @@ function MapL() {
                         item.style.display = 'none';
                     })
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
@@ -1237,6 +1364,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -1294,6 +1428,13 @@ function MapL() {
                         item.style.display = 'none';
                     })
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
@@ -1353,6 +1494,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -1411,6 +1559,13 @@ function MapL() {
                     })
                     map.off('moveend', movedFunc);
                     map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
+                    map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
                         }
@@ -1464,6 +1619,13 @@ function MapL() {
                 }
                 else {
                     map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        // Kiểm tra xem lớp có phải là LineString hay không
+                        if (layer instanceof L.Polyline && layer.toGeoJSON().geometry.type === 'LineString') {
+                            // Nếu đúng, xoá lớp khỏi bản đồ
+                            map.removeLayer(layer);
+                        }
+                    });
                     map.eachLayer(function (layer) {
                         if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
                             map.removeLayer(layer);
