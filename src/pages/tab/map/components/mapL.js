@@ -170,7 +170,7 @@ function MapL() {
                 scrollWheelZoom: false, // disable original zoom function
                 smoothWheelZoom: true,  // enable smooth zoom 
                 smoothSensitivity: 1,   // zoom speed. default is 1
-            }).setView([11.533204, 107.128444], 17);
+            }).setView([11.533204, 107.128444], 16);
 
             var tiles = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -317,13 +317,129 @@ function MapL() {
             // bắt sự kiện zoom
             map.on('zoomend', function () {
                 console.log(map.getZoom());
-                if (map.getZoom() > 21.34) {
+                if (map.getZoom() >= 21.95) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
                         item.remove()
                         item.style.display = 'none';
                     })
                     // sự kiện lấy data của cây khi move trên bản đồ
                     map.on('moveend', movedFunc);
+                }
+                else if (map.getZoom() >= 17 && map.getZoom() < 17.68) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [5, 5],
+                            iconAnchor: [2.5, 2.5],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 17.68 && map.getZoom() < 18) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [7, 7],
+                            iconAnchor: [3.5, 3.5],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
                 }
                 else if (map.getZoom() >= 18 && map.getZoom() < 18.61) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
@@ -368,8 +484,8 @@ function MapL() {
                     const getIconStatus = (status) => {
                         let icon = L.icon({
                             iconUrl: getIcon(status),
-                            iconSize: [10, 8.5],
-                            iconAnchor: [5, 4.25],
+                            iconSize: [10, 9],
+                            iconAnchor: [5, 4.5],
                             className: 'iconCay',
                         });
 
@@ -383,7 +499,7 @@ function MapL() {
                     }
                     ciLayer.addLayers(markers);
                 }
-                else if (map.getZoom() >= 18.61 && map.getZoom() < 19) {
+                else if (map.getZoom() >= 18.61 && map.getZoom() < 19.3) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
                         item.remove()
                         item.style.display = 'none';
@@ -426,8 +542,8 @@ function MapL() {
                     const getIconStatus = (status) => {
                         let icon = L.icon({
                             iconUrl: getIcon(status),
-                            iconSize: [15, 15],
-                            iconAnchor: [7.5, 7.5],
+                            iconSize: [15, 13.7],
+                            iconAnchor: [7.5, 6.85],
                             className: 'iconCay',
                         });
 
@@ -441,7 +557,7 @@ function MapL() {
                     }
                     ciLayer.addLayers(markers);
                 }
-                else if (map.getZoom() >= 19 && map.getZoom() < 19.59) {
+                else if (map.getZoom() >= 19.3 && map.getZoom() < 19.59) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
                         item.remove()
                         item.style.display = 'none';
@@ -484,8 +600,8 @@ function MapL() {
                     const getIconStatus = (status) => {
                         var icon = L.icon({
                             iconUrl: getIcon(status),
-                            iconSize: [20, 18],
-                            iconAnchor: [10, 9],
+                            iconSize: [18, 17],
+                            iconAnchor: [9, 8.5],
                             className: 'iconCay',
                         });
 
@@ -534,7 +650,7 @@ function MapL() {
                     //     }
                     // }
                 }
-                else if (map.getZoom() >= 19.59 && map.getZoom() < 20.4) {
+                else if (map.getZoom() >= 19.59 && map.getZoom() < 19.8) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
                         item.remove()
                         item.style.display = 'none';
@@ -577,8 +693,8 @@ function MapL() {
                     const getIconStatus = (status) => {
                         let icon = L.icon({
                             iconUrl: getIcon(status),
-                            iconSize: [35, 34],
-                            iconAnchor: [17, 17],
+                            iconSize: [21, 19.7],
+                            iconAnchor: [10.5, 9.85],
                             className: 'iconCay',
                         });
 
@@ -592,7 +708,7 @@ function MapL() {
                     }
                     ciLayer.addLayers(markers);
                 }
-                else if (map.getZoom() >= 20.4 && map.getZoom() < 21.34) {
+                else if (map.getZoom() >= 19.8 && map.getZoom() < 19.99) {
                     document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
                         item.remove()
                         item.style.display = 'none';
@@ -635,8 +751,704 @@ function MapL() {
                     const getIconStatus = (status) => {
                         let icon = L.icon({
                             iconUrl: getIcon(status),
-                            iconSize: [65, 63],
-                            iconAnchor: [32.5, 31.5],
+                            iconSize: [25, 23.7],
+                            iconAnchor: [12.5, 11.85],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 19.99 && map.getZoom() < 20.22) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [29, 27.7],
+                            iconAnchor: [14.5, 13.85],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 20.22 && map.getZoom() < 20.4) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [32, 30.7],
+                            iconAnchor: [16, 15.35],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 20.4 && map.getZoom() < 20.62) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [37, 35.7],
+                            iconAnchor: [18.5, 17.85],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 20.62 && map.getZoom() < 20.87) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [45, 43.7],
+                            iconAnchor: [22.5, 21.85],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 20.87 && map.getZoom() < 21) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [48, 46.7],
+                            iconAnchor: [24, 23.35],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 21 && map.getZoom() < 21.15) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [55, 53.7],
+                            iconAnchor: [27.5, 26.85],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 21.15 && map.getZoom() < 21.26) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [60, 58.7],
+                            iconAnchor: [30, 29.35],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 21.26 && map.getZoom() < 21.34) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [63, 61.7],
+                            iconAnchor: [31.5, 30.85],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 21.34 && map.getZoom() < 21.5) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [70, 68.7],
+                            iconAnchor: [35, 34.35],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 21.5 && map.getZoom() < 21.67) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [78, 76.7],
+                            iconAnchor: [39.5, 38.35],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 21.67 && map.getZoom() < 21.78) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [85, 83.7],
+                            iconAnchor: [42.5, 41.85],
+                            className: 'iconCay',
+                        });
+
+                        return icon;
+                    }
+                    // xử lý conver data geojson sang maker json
+                    for (let i = 0; i < datacay.features.length; i++) {
+                        let marker = L.marker([datacay.features[i].geometry.coordinates[1], datacay.features[i].geometry.coordinates[0]], { icon: getIconStatus(datacay.features[i].properties.status), rotationAngle: 90 }).bindPopup(datacay.features[i].properties.name1);
+                        marker.mydata = datacay.features[i].properties.name1
+                        markers.push(marker);
+                    }
+                    ciLayer.addLayers(markers);
+                }
+                else if (map.getZoom() >= 21.78 && map.getZoom() < 21.95) {
+                    document.querySelectorAll('canvas.leaflet-canvas-icon-layer').forEach(item => {
+                        item.remove()
+                        item.style.display = 'none';
+                    })
+                    map.off('moveend', movedFunc);
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker && layer.options.icon.options.className === "my-div-icon") {
+                            map.removeLayer(layer);
+                        }
+                        else if (layer instanceof L.LayerGroup) {
+                            var hasPoints = false;
+                            layer.eachLayer(function (subLayer) {
+                                if (subLayer instanceof L.Marker && subLayer.options.icon.options.className === "my-div-icon") {
+                                    hasPoints = true;
+                                    return;
+                                }
+                            });
+                            if (hasPoints) {
+                                layer.clearLayers();
+                            }
+                        }
+                    });
+                    // XỬ LÝ ADD CÂY
+                    const markers = [];
+                    // hàm khởi tạo maker
+                    const ciLayer = L.canvasIconLayer({}).addTo(map);
+                    // add xự kiện lcick vào maker
+                    ciLayer.addOnClickListener(function (e, data) {
+                        console.log(data[0].data.mydata)
+                    });
+                    // hàm check icon
+                    const getIcon = (d) => {
+                        return d === 'X' ? xanhIcon :
+                            d === 'CD' ? timIcon :
+                                d === 'KM' ? xamIcon :
+                                    d === 'K' ? vangIcon :
+                                        doIcon
+                    }
+                    // khởi tạo icon
+                    const getIconStatus = (status) => {
+                        let icon = L.icon({
+                            iconUrl: getIcon(status),
+                            iconSize: [93, 91.7],
+                            iconAnchor: [46.5, 45.85],
                             className: 'iconCay',
                         });
 

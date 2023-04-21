@@ -301,7 +301,7 @@ button[aria-label='Open React Query Devtools'] {
     /* border-radius: 4px; */
     white-space: nowrap;
     width: fit-content;
-    height: 88px;
+    height: 78px;
     display: flex;
     justify-content: center;
     align-items: start;
