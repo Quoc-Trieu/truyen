@@ -1,11 +1,186 @@
-@use "../../../styles/scss/" as *;
+@use '../../../styles/scss/' as *;
+
+$column-1-width: 60px;
+$column-2-width: 100px;
+$column-3-width: 200px;
+$column-4-width: 100px;
+$column-5-width: 50px;
 
 .attendanceCheck {
+  width: $full-screen;
+  height: $full-screen;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+
+  .body {
+    background-color: #d6dcce;
     width: $full-screen;
-    height: $full-screen;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    position: absolute;
+    justify-content: space-between;
+    align-self: start;
+    padding: 30px 0 0px 30px;
+    gap: 10px;
 
-    
+    .toolbar {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 15px;
+    }
+
+    .tableContainer {
+      width: 100%;
+      flex: 1;
+      overflow: auto;
+      position: relative;
+      border: 1px solid #ffffff;
+      // chỉnh kích thước của thanh scroll
+      &::-webkit-scrollbar-track {
+        background-color: #e2e2e2;
+      }
+      &::-webkit-scrollbar {
+        height: 12px;
+      }
+
+      table {
+        width: max-content;
+        flex: 1;
+        min-width: 100%;
+        border-spacing: 0 !important;
+
+        th,
+        td {
+          padding: 10px;
+          border: 1px solid #c7c7c7;
+          text-align: center;
+          font-weight: 800;
+          white-space: pre-line;
+        }
+
+        th {
+          color: #00502b;
+          // border: 1px solid #FFFFFF;
+        }
+
+        // cột STT - số thứ tự
+        th:nth-child(1),
+        td:nth-child(1) {
+          width: $column-1-width;
+          position: sticky;
+          left: 0;
+          z-index: 1;
+          border: 1px solid #c7c7c7;
+          background-color: #ecf0f9;
+        }
+
+        // cột Vùng cạo
+        th:nth-child(2),
+        td:nth-child(2) {
+          width: $column-2-width;
+          position: sticky;
+          left: $column-1-width;
+          z-index: 1;
+          border: 1px solid #c7c7c7;
+          background-color: #ecf0f9;
+        }
+
+        // cột Tên và sđt
+        th:nth-child(3),
+        td:nth-child(3) {
+          width: $column-3-width;
+          position: sticky;
+          left: $column-1-width + $column-2-width;
+          z-index: 1;
+          border: 1px solid #c7c7c7;
+          background-color: #ecf0f9;
+        }
+
+        // cột Tổng ngày công
+        th:nth-child(4),
+        td:nth-child(4) {
+          width: $column-4-width;
+          position: sticky;
+          left: $column-1-width + $column-2-width + $column-3-width;
+          z-index: 1;
+          border: 1px solid #c7c7c7;
+          background-color: #ecf0f9;
+        }
+
+        th:nth-child(4) {
+          color: #ff2c2c;
+        }
+
+        // Các cột ngày trong tháng
+        $column-count: 31;
+        // Lặp qua tất cả các cột và thiết lập chiều rộng cho các cột từ cột số 5 trở đi
+        @for $i from 1 through $column-count {
+          $columnItem: $i + 4;
+          th:nth-child(#{$columnItem}) {
+            width: $column-5-width;
+            background-color: #dae5ff;
+          }
+          td:nth-child(#{$columnItem}) {
+            width: $column-5-width;
+            background-color: #ffffff;
+          }
+        }
+      }
+    }
+
+    .footerBody {
+      width: 100%;
+      background-color: #ffffff;
+      padding: 5px 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 20px;
+
+      .elementContainer {
+        padding: 8px 0px 8px 0px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+
+        span {
+          font-size: 16px;
+          font-weight: 600;
+          color: #777777;
+
+          span {
+            font-size: 18px;
+            font-weight: 800;
+            color: #00502b;
+          }
+        }
+      }
+
+      .BoxTimeAttendance {
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        padding: 8px 15px;
+
+        .dots {
+          width: 20px;
+          height: 20px;
+          border-radius: 99px;
+        }
+
+        span {
+          font-size: 16px;
+          font-weight: 800;
+        }
+      }
+    }
+  }
 }

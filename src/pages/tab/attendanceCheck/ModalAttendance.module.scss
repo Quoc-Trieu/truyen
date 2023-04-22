@@ -1,0 +1,282 @@
+@use '../../../styles/scss/' as *;
+
+.wrapperModalAttendance {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0px 40px;
+
+  .infoUser {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 5px;
+
+    .date {
+      .dateText {
+        font-size: 15px;
+        font-weight: 500;
+        color: #777777;
+      }
+
+      .dateValue {
+        font-size: 16px;
+        font-weight: 500;
+        color: #ff8000;
+      }
+    }
+
+    .dropDown {
+      height: 45px;
+      width: 210px;
+      border-radius: 5px;
+      border: 1px solid #878484;
+      font-size: $default-fontSize;
+      padding: 0 10px;
+      transition: all 0.3s ease-in-out;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0px;
+
+      .containerToggle {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+
+        span {
+          font-size: 16px;
+          color: #777777;
+          font-weight: 500;
+        }
+
+        img {
+          width: 16px;
+          height: 10px;
+        }
+      }
+
+      .dropMenu {
+        padding: 0;
+        width: 100%;
+
+        .dropItem {
+          padding: 12px 16px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .lineBreak {
+    width: 100%;
+    height: 1px;
+    background-color: #878484;
+    margin: 10px 0px;
+  }
+
+  .labelQuantity {
+    margin: 10px 0;
+    font-size: 20px;
+    color: $text-color;
+    font-weight: 600;
+  }
+
+  .selectShavingArea {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+
+    .dropDown {
+      height: 45px;
+      width: 240px;
+      border-radius: 5px;
+      border: 1px solid #ff8000;
+      box-shadow: 0px 0px 2px 0px #ff8000;
+      font-size: $default-fontSize;
+      transition: all 0.3s ease-in-out;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 15px;
+      margin: 10px 0px;
+
+      .containerToggle {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        span {
+          font-size: 16px;
+          color: $text-color;
+          font-weight: 500;
+        }
+
+        img {
+          width: 16px;
+          height: 10px;
+        }
+      }
+
+      .dropMenu {
+        padding: 10px 8px;
+        width: 100%;
+
+        .dropItem {
+          padding: 8px 12px;
+        }
+      }
+    }
+  }
+
+  .latex {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background-color: #fafafa;
+    padding: 20px 20px;
+    border: 0.5px solid #707070;
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px 0px #b3b3b3;
+    margin-top: 20px;
+
+    .latexItem {
+      width: 15%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      border-radius: 5px;
+      border: 1px solid #e2e2e2;
+      overflow: hidden;
+
+      .labelLatex {
+        width: 100%;
+        height: 50px;
+        font-size: 18px;
+        color: #fff;
+        background-color: #777777;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .inputConcentration {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-bottom: 1px solid #e2e2e2;
+
+        input {
+          width: 60%;
+          height: 100%;
+          border: none;
+          outline: none;
+          font-size: 18px;
+          color: #000000;
+          font-weight: 600;
+          text-align: left;
+          padding-left: 20px;
+        }
+
+        .unit {
+          flex: 1;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          color: $text-color;
+          font-weight: 600;
+          background-color: #f5f5f5;
+        }
+      }
+    }
+
+    .itemEqual {
+      width: 45px;
+      height: 45px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ff8000;
+
+      span {
+        font-size: 30px;
+        color: #fff;
+        font-weight: 400;
+        padding-bottom: 2px;
+      }
+    }
+  }
+
+  .footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 40px 0px;
+
+    .btnCancel {
+      display: flex;
+      width: 140px;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      background-color: #a3a2a2;
+      border-radius: 4px;
+      padding: 8px 0px;
+      gap: 12px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      font-size: 18px;
+      font-weight: 600;
+      color: $white-color;
+    }
+
+    .btnSubmit {
+      display: flex;
+      width: 140px;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(90deg, #6ab100 0%, #85e000 100%);
+      border-radius: 4px;
+      padding: 8px 0px;
+      gap: 12px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      font-size: 18px;
+      font-weight: 600;
+      color: $white-color;
+    }
+  }
+}

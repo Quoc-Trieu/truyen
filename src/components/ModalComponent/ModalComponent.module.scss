@@ -10,7 +10,7 @@
     padding: 20px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 
     .titleModal {
       flex: 1;
@@ -18,14 +18,12 @@
       color: $text-color;
       font-weight: bold;
       text-align: center;
-      padding: 10px 0;
     }
 
     .iconClose {
       width: 25px;
       height: 25px;
       cursor: pointer;
-      margin-top: 15px;
     }
   }
 
