@@ -6,6 +6,7 @@ import iconUser from '../../assets/ico/icon-group-user.png';
 import iconList from '../../assets/ico/icon-list.png';
 import iconPlantTree from '../../assets/ico/icon-plant-tree.png';
 import iconOpenNav from '../../assets/ico/icon-navbar.png';
+import iconPieChart from '../../assets/ico/icon-pie-chart.png';
 
 import close from '../../assets/images/close.png';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -79,6 +80,11 @@ function Nav() {
         <li onClick={() => onChangeNav('attendanceCheck')} className={pathname === '/attendanceCheck' ? styles.li_Selected : ''}>
           <img src={iconPlantTree} />
           {isOpenNav && <span>Điểm danh</span>}
+        </li>
+
+        <li onClick={() => onChangeNav('statisticsProduction')} className={pathname === '/statisticsProduction' ? styles.li_Selected : ''}>
+          <img src={iconPieChart} />
+          {isOpenNav && <span>Sản lượng</span>}
         </li>
       </ul>
     </div>
