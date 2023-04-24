@@ -4,7 +4,7 @@
   @include mobile {
     display: none;
   }
-  
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -17,9 +17,31 @@
   -ms-user-select: none;
   user-select: none;
 
-  .openNav {
+  .footerNav {
+    display: flex;
     align-self: end;
-    margin: 10px 18px 10px 10px;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex: 1;
+    width: 100%;
+    padding: 0 10px;
+
+    .openNav {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0px 0px 20px 0px;
+
+      .line {
+        flex: 1;
+        height: 1px;
+        margin: 0 5px;
+        background-color: #fff;
+      }
+    }
   }
 
   .ulNav {
@@ -36,6 +58,10 @@
       height: 0;
       padding-bottom: 100%;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
 
       img {
         width: 100%;

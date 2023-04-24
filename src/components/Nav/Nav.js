@@ -5,7 +5,8 @@ import iconLocation from '../../assets/ico/icon-location.png';
 import iconUser from '../../assets/ico/icon-group-user.png';
 import iconList from '../../assets/ico/icon-list.png';
 import iconPlantTree from '../../assets/ico/icon-plant-tree.png';
-import iconOpenNav from '../../assets/ico/icon-navbar.png';
+import iconOpenNav from '../../assets/ico/icon-close-menu.png';
+import iconPieChart from '../../assets/ico/icon-pie-chart.png';
 
 import close from '../../assets/images/close.png';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -40,9 +41,8 @@ function Nav() {
   };
   return (
     <div className={styles.navStyle} width={isOpenNav ? '250px' : '100px'}>
-      <img className={styles.openNav} onClick={() => setIsOpenNav(!isOpenNav)} src={iconOpenNav} width="30px" height="30px" />
       <ul className={styles.ulNav}>
-        <li className={styles.logo}>
+        <li className={styles.logo} style={{ marginBottom: !isOpenNav ? '50px' : '0px' }}>
           <img src={logo} />
         </li>
 
@@ -61,7 +61,10 @@ function Nav() {
             </li>
 
             {/* màn hình quản lý công việc */}
-            <li onClick={() => onChangeNav('divisions')} className={pathname === '/divisions' || pathname === '/assignment' ? styles.li_Selected : ''}>
+            <li
+              onClick={() => onChangeNav('divisions')}
+              className={pathname === '/divisions' || pathname === '/assignment' ? styles.li_Selected : ''}
+            >
               <img src={iconList} />
               {isOpenNav && <span>Quản lý công việc</span>}
             </li>
@@ -80,7 +83,19 @@ function Nav() {
           <img src={iconPlantTree} />
           {isOpenNav && <span>Điểm danh</span>}
         </li>
+
+        <li onClick={() => onChangeNav('statisticsProduction')} className={pathname === '/statisticsProduction' ? styles.li_Selected : ''}>
+          <img src={iconPieChart} />
+          {isOpenNav && <span>Sản lượng</span>}
+        </li>
       </ul>
+
+      <div className={styles.footerNav}>
+        <div className={styles.openNav}>
+          {isOpenNav && <p className={styles.line}></p>}
+          <img onClick={() => setIsOpenNav(!isOpenNav)} src={iconOpenNav} width="35px" height="35px" />
+        </div>
+      </div>
     </div>
   );
 }
