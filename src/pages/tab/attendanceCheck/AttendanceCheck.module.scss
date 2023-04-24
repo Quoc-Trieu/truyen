@@ -33,6 +33,29 @@ $column-5-width: 50px;
       padding-bottom: 15px;
     }
 
+    .datePicker {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      width: 220px;
+      gap: 15px;
+      background-color: #ffffff;
+      border-radius: 4px;
+      border: 0.5px solid #c7c7c7;
+      padding: 8px 10px;
+      position: relative;
+      cursor: pointer;
+
+
+      // cho img của datePicker cuối cùng nằm bên phải
+      span {
+        font-size: 14px;
+        font-weight: 600;
+        color: #000;
+      }
+    }
+
     .tableContainer {
       width: 100%;
       flex: 1;
@@ -73,7 +96,6 @@ $column-5-width: 50px;
           width: $column-1-width;
           position: sticky;
           left: 0;
-          z-index: 1;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
         }
@@ -84,7 +106,6 @@ $column-5-width: 50px;
           width: $column-2-width;
           position: sticky;
           left: $column-1-width;
-          z-index: 1;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
         }
@@ -95,7 +116,6 @@ $column-5-width: 50px;
           width: $column-3-width;
           position: sticky;
           left: $column-1-width + $column-2-width;
-          z-index: 1;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
         }
@@ -106,7 +126,6 @@ $column-5-width: 50px;
           width: $column-4-width;
           position: sticky;
           left: $column-1-width + $column-2-width + $column-3-width;
-          z-index: 1;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
         }

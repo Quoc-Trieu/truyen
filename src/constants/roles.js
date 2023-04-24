@@ -1,10 +1,10 @@
 const ROLES = {
   all: { label: 'Tất cả', value: 'ALL' },
   admin: { label: 'ADMIN', value: 'ADMIN' },
-  manager: { label: 'Quản trị', value: 'MANAGER' },
-  groupLeader: { label: 'Tổ Trưởng', value: 'GROUPLEADER' },
+  manager: { label: 'Quản trị', value: 'VIEWER' },
+  groupLeader: { label: 'Tổ Trưởng', value: 'MANAGER' },
   accountant: { label: 'Kế Toán', value: 'ACCOUNTANT' },
-  labor: { label: 'Nhân Công', value: 'LABOR' },
+  labor: { label: 'Nhân Công', value: 'USER' },
 };
 
 export default ROLES;

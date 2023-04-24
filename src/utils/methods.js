@@ -1,6 +1,7 @@
 export const getDaysInCurrentMonth = () => {
   const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  // return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  return now
 };
 
 export const getCurrentDay = () => {
@@ -18,7 +19,8 @@ export const getDayFromDateString = (dateString) => {
 };
 
 //trả về mảng các ngày trong tháng YYYY-MM-DD
-export const getDaysInMonth = (date) => {
+export const getDaysInMonth = (dateString) => {
+  const date = new Date(dateString);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const daysInMonth = new Date(year, month, 0).getDate();
@@ -26,8 +28,8 @@ export const getDaysInMonth = (date) => {
 
   for (let i = 1; i <= daysInMonth; i++) {
     const day = i < 10 ? `0${i}` : i;
-    const date = `${year}-${month < 10 ? `0${month}` : month}-${day}`;
-    daysArray.push(date);
+    const dates = `${year}-${month < 10 ? `0${month}` : month}-${day}`;
+    daysArray.push(dates);
   }
 
   return daysArray;

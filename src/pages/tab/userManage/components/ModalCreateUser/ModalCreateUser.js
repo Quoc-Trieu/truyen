@@ -11,10 +11,10 @@ import { useDispatch } from 'react-redux';
 import { getALLInfoUser } from '../../../../../store/user/UserSlice';
 import { Loading } from 'notiflix';
 import { useSelector } from 'react-redux';
-import iconUp from "../../../../../assets/ico/icon-feather-chevron-up.png";
-import iconDown from "../../../../../assets/ico/icon-feather-chevron-down.png";
-import Dropdown from "react-bootstrap/Dropdown";
-
+import iconUp from '../../../../../assets/ico/icon-feather-chevron-up.png';
+import iconDown from '../../../../../assets/ico/icon-feather-chevron-down.png';
+import Dropdown from 'react-bootstrap/Dropdown';
+import ROLES from '../../../../../constants/roles';
 
 const ModalCreateUser = ({ visible, onCancel, onOk }) => {
   const ROLE = { USER: 'USER', MANAGER: 'MANAGER' };
@@ -37,14 +37,14 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
     },
   });
   const dispatch = useDispatch();
-  const [selectedRole, setSelectedRole] = useState(ROLE.USER);
+  const [selectedRole, setSelectedRole] = useState(ROLES.labor);
   const [isDrop, setIsDrop] = useState(false);
 
-  const onSelectRole = (roleName) => {
+  const onSelectRole = (role) => {
     //cập nhật giá trị cho selectedRole để render lại RadioButton
-    setSelectedRole(roleName);
+    setSelectedRole(role);
     //setValue để lưu giá trị vào hook form
-    setValue('role', roleName);
+    setValue('role', role?.value);
   };
 
   const onSubmit = async (data) => {
@@ -75,10 +75,10 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
   const handToggle = (isOpen) => {
     if (isOpen) {
       setIsDrop(true);
-    }else {
+    } else {
       setIsDrop(false);
     }
-  }
+  };
 
   return (
     <ModalComponent
@@ -161,29 +161,30 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
         {/* Bộ phận */}
         <span className={styles.label}>Bộ phận</span>
         <Dropdown className={styles.dropDown} onToggle={handToggle}>
-          <Dropdown.Toggle className={styles.containerToggle} style={{width: '100%'}}>
-              <span> Chọn bộ phận</span>
-              <img src={isDrop ? iconDown : iconUp}  />
+          <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
+            { selectedRole ? <span> {selectedRole.label} </span> : <span> Chọn bộ phận</span>}
+            <img src={isDrop ? iconDown : iconUp} />
           </Dropdown.Toggle>
 
           <Dropdown.Menu style={{ padding: 0 }} className={styles.dropMenu}>
-              <Dropdown.Item className={styles.dropItem}>Kế toán</Dropdown.Item>
-              <Dropdown.Item className={styles.dropItem}>Nhân viên</Dropdown.Item>
-              <Dropdown.Item className={styles.dropItem}>Tổ trưởng</Dropdown.Item>
+            <Dropdown.Item className={styles.dropItem} onClick={() => onSelectRole(ROLES.groupLeader)}>{ROLES.groupLeader.label}</Dropdown.Item>
+            <Dropdown.Item className={styles.dropItem} onClick={() => onSelectRole(ROLES.accountant)}>{ROLES.accountant.label}</Dropdown.Item>
+            <Dropdown.Item className={styles.dropItem} onClick={() => onSelectRole(ROLES.labor)}>{ROLES.labor.label}</Dropdown.Item>
+            <Dropdown.Item className={styles.dropItem} onClick={() => onSelectRole(ROLES.manager)}>{ROLES.manager.label}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
 
-          {/* Tổ Trưởng */}
+        {/* Tổ Trưởng */}
         <span className={styles.label}>Tổ trưởng</span>
         <Dropdown className={styles.dropDown} onToggle={handToggle}>
-          <Dropdown.Toggle className={styles.containerToggle} style={{width: '100%'}}>
-              <span> Chọn tổ trưởng</span>
-              <img src={isDrop ? iconDown : iconUp}  />
+          <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
+            <span> Chọn tổ trưởng</span>
+            <img src={isDrop ? iconDown : iconUp} />
           </Dropdown.Toggle>
 
           <Dropdown.Menu style={{ padding: 0 }} className={styles.dropMenu}>
-              <Dropdown.Item className={styles.dropItem}>Tổ 1</Dropdown.Item>
-              <Dropdown.Item className={styles.dropItem}>Tổ 2</Dropdown.Item>
+            <Dropdown.Item className={styles.dropItem}>Tổ 1</Dropdown.Item>
+            <Dropdown.Item className={styles.dropItem}>Tổ 2</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
 

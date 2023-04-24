@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import { useTable } from 'react-table';
 import Header from './../../../components/Header/Header';
 import styles from './AttendanceCheck.module.scss';
@@ -8,11 +8,15 @@ import ColorDots from './../../../components/ColorDots/ColorDots';
 import STATUS_ATTENDANCE from './../../../constants/statusAttendance';
 import ModalAttendance from './ModalAttendance';
 import SearchInput from './../../../components/SearchInput/SearchInput';
+import DatePicker from 'react-datepicker';
+import iconCalendar from './../../../assets/ico/icon-calendar.png';
+import iconDown from './../../../assets/ico/icon-feather-chevron-down.png';
+import { vi } from 'date-fns/locale';
 
 const AttendanceCheck = () => {
-  const [dayOfMonth, setDayOfMonth] = useState(getDaysInCurrentMonth());
-  const today = new Date();
-  const dates = useMemo(() => getDaysInMonth(today), [today]);
+  const [monthOfTable, setMonthOfTable] = useState(new Date());
+  console.log('today', monthOfTable);
+  const dates = useMemo(() => getDaysInMonth(monthOfTable), [monthOfTable]);
   const dayNow = getCurrentDay();
   const dayRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -38,7 +42,7 @@ const AttendanceCheck = () => {
     const dataTable = dataAttendance?.arrayUser.map((item, index) => {
       const idUser = item?.idUserPartition;
       //tìm các ngày công của user trong tháng
-      const arrayAttendanceUser = dataAttendance.arrayResult.find((arr) => arr.some((obj) => obj.idUser === idUser)) ?? [];
+      const arrayAttendanceUser = dataAttendance.arrayResult.find((arr) => arr.some((obj) => obj.phoneUser === idUser)) ?? [];
 
       //lọc ra các ngày có đi làm để tính tổng ngày công của user trong tháng
       const arrayTotalWorkdays = arrayAttendanceUser.filter((item) => item.isWork === true);
@@ -47,7 +51,7 @@ const AttendanceCheck = () => {
       const objRow = {
         stt: index + 1,
         vungCao: item.name,
-        ten: `${item.infoUser.fullName}\n${item.idUserPartition}`,
+        ten: `${item.infoUser.fullName}\n${idUser}`,
         tongNgayCong: arrayTotalWorkdays.length,
       };
 
@@ -77,7 +81,7 @@ const AttendanceCheck = () => {
     });
 
     return dataTable;
-  }, [dataAttendance]);
+  }, [dataAttendance, monthOfTable]);
 
   const columns = useMemo(
     () => [
@@ -102,7 +106,7 @@ const AttendanceCheck = () => {
         accessor: `colDate_${date}`,
       })),
     ],
-    []
+    [monthOfTable]
   );
 
   const tableInstance = useTable({ columns, data });
@@ -138,7 +142,28 @@ const AttendanceCheck = () => {
     const response = await getAttendanceInMonth({ date: now, query: value });
     setDataAttendance(response?.data);
   };
+  const [startDate, setStartDate] = useState(() => {
+    const date = new Date();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    return `tháng ${month + 1}-${year}`;
+  });
+  const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
+  const handleChange = (e) => {
+    console.log(e.toISOString());
+    const date = new Date(e.toISOString());
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const textDatePicker = `tháng ${month + 1}-${year}`;
 
+    setStartDate(textDatePicker);
+    setMonthOfTable(new Date(e.toISOString()))
+    setIsOpenDatePicker(!isOpenDatePicker);
+  };
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIsOpenDatePicker(!isOpenDatePicker);
+  };
   return (
     <div className={styles.attendanceCheck}>
       <Header title="Điểm danh nhân công" />
@@ -146,6 +171,17 @@ const AttendanceCheck = () => {
       <div className={styles.body}>
         <div className={styles.toolbar}>
           <SearchInput placeholder="Nhập nhân viên cạo" onChangeText={onChangeTextSearch} onSubmit={onSubmitSearch} />
+          <div className={styles.datePicker} onClick={handleClick}>
+            <img src={iconCalendar} alt="iconCalendar" width="20px" height="20px" />
+            {/* hiển thị startDate ra giao diện */}
+            <span>{startDate}</span>
+            <img style={{ marginLeft: 'auto' }} src={iconDown} alt="iconDown" width="10px" height="6px" />
+            {isOpenDatePicker && (
+              <div style={{ width: '800px', position: 'absolute', top: '100%', left: 0, zIndex: 10 }}>
+                <DatePicker selected={monthOfTable} onChange={handleChange} inline showMonthYearPicker showFullMonthYearPicker />
+              </div>
+            )}
+          </div>
         </div>
         <div className={styles.tableContainer}>
           <table {...getTableProps()}>
