@@ -1,73 +1,233 @@
-@use "../../../styles/scss/" as *;
+@use '../../../styles/scss/' as *;
 
 .statisticsProduction {
+  width: $full-screen;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .body1 {
     width: $full-screen;
-    height: $full-screen;
+    // chiều cao 100% trừ thanh header 70px
+    height: calc(100vh - 25%);
+
     display: flex;
     flex-direction: column;
-    
-    .body {
-        background-color: #F8FFEF;
-        width: 100%;
-        height: 100%;
-        flex: 1;
+    padding: 0px 40px;
+    overflow: hidden;
+
+    .toolBar {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 25px;
+      height: 80px;
+
+      .dropDown {
+        height: 45px;
+        width: 240px;
+        border-radius: 5px;
+        border: 1px solid #ff8000;
+        box-shadow: 0px 0px 2px 0px #ff8000;
+        font-size: $default-fontSize;
+        padding: 0 10px;
+        transition: all 0.3s ease-in-out;
         display: flex;
-        flex-direction: column;
         justify-content: space-between;
-        align-items: start;
-        padding: 30px 0 0px 30px;
-        gap: 10px;
-    
-        .toolbar {
+        align-items: center;
+
+        .containerToggle {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          gap: 10px;
+
+          span {
+            font-size: 16px;
+            color: #777777;
+            font-weight: 500;
+          }
+
+          img {
+            width: 16px;
+            height: 10px;
+          }
+        }
+      }
+      .dropMenu {
+        .dropItem {
+          font-size: medium;
+        }
+      }
+
+      .datePicker {
         display: flex;
+        height: 45px;
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
-        gap: 20px;
-        padding-bottom: 15px;
-        }
-    
-        .tableContainer {
-        width: 100%;
-        flex: 1;
-        overflow: auto;
+        width: 220px;
+        gap: 15px;
+        background-color: #ffffff;
+        border-radius: 4px;
+        border: 0.5px solid #c7c7c7;
+        padding: 8px 10px;
         position: relative;
-        border: 1px solid #ffffff;
-        // chỉnh kích thước của thanh scroll
-        &::-webkit-scrollbar-track {
-            background-color: #e2e2e2;
+        cursor: pointer;
+
+        // cho img của datePicker cuối cùng nằm bên phải
+        span {
+          font-size: 14px;
+          font-weight: 600;
+          color: #000;
         }
-        &::-webkit-scrollbar {
-            height: 12px;
+      }
+
+      .justifyEnd {
+        margin-left: auto;
+
+        .xuatExcelContainer {
+          flex: 1;
+          display: flex;
+          margin-left: auto;
+          border: 0.5px solid #b3b3b3;
+          box-shadow: 0px 0px 2px 0px #b3b3b3;
+          width: 200px;
+          height: 45px;
+          border-radius: 5px;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          cursor: pointer;
+
+          img {
+            width: 20px;
+            height: 20px;
+          }
+
+          span {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+          }
         }
-    
-        table {
-            width: max-content;
-            flex: 1;
-            min-width: 100%;
-            border-spacing: 0 !important;
-    
-            th,
-            td {
-            padding: 10px;
-            border: 1px solid #c7c7c7;
-            text-align: center;
-            }
-    
-            th {
-            background-color: #ffffff;
-            color: #000000;
-            font-weight: 500;
-            font-size: 16px;
-            }
-    
-            td {
-            background-color: #ffffff;
-            color: #000000;
-            font-weight: 400;
-            font-size: 16px;
-            }
-        }
-        }
+      }
     }
+
+    .boxContainer {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 30px;
+      margin: 0px  0 20px 0;
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
+        height: 100%;
+        padding: 15px 20px;
+        background-color: #fff;
+        border-radius: 4px;
+        gap: 5px;
+
+        .title {
+          font-size: 18px;
+          font-weight: 600;
+          color: #61a300;
+        }
+
+        .value {
+          font-size: 28px;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .totalScapping {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      height: 70px;
+      background-color: #fff;
+      padding: 0 20px;
+
+      span {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000;
+      }
+
+      .box {
+        padding: 4px 7px;
+        border: 0.5px solid #bbbbbb;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        color: #ff5f03;
+        box-shadow: 0px 0px 2px 0px rgb(228, 228, 228)
+      }
+    }
+
+    .tableContainer {
+      width: 100%;
+      flex: 1;
+      overflow: auto;
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        border-radius: 2px;
+      }
+
+      tbody {
+        overflow: auto;
+      }
+
+      th,
+      td {
+        padding: 16px 8px;
+        text-align: left;
+        background-color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+      }
+
+      //custom th, td phần tử đầu tiên
+      tr:first-child,
+      th:first-child,
+      td:first-child {
+        padding-left: 20px;
+      }
+
+      tr:last-child,
+      th:last-child,
+      td:last-child {
+        text-align: center;
+      }
+
+      th {
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        background-color: #ddd;
+      }
+
+      td {
+        border-bottom: 0.5px solid #707070;
+      }
+
+    }
+  }
 }
