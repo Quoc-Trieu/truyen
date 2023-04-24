@@ -323,6 +323,7 @@ function MapL() {
                         // console.log(geojsonitem);
                         geojsonitem.addTo(map);
                         // Notiflix.Loading.remove()
+                    
                     })
                     .catch(err => {
                         // Notiflix.Loading.remove()
