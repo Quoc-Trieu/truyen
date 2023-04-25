@@ -8,7 +8,7 @@ import Pagination from "../../../components/Pagination/Pagination";
 import ModalCreateUser from "./components/ModalCreateUser/ModalCreateUser";
 import iconAddUser from "../../../assets/ico/icon-awesome-user-plus.png";
 import { useDispatch, useSelector } from "react-redux";
-import { getALLInfoUser, setFilterUser, setSearching, setPageCurrentUser } from "./../../../store/user/UserSlice";
+import { setFilterUser, setSearching, setPageCurrentUser } from "./../../../store/user/UserSlice";
 import iconUp from "../../..//assets/ico/icon-feather-chevron-up.png";
 import iconDown from "../../../assets/ico/icon-feather-chevron-down.png";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -33,17 +33,14 @@ const UserManage = () => {
 
   useEffect(() => {
     dispatch(setSearching(""));
-    dispatch(getALLInfoUser());
   }, []);
 
   const onSubmit = async (text) => {
     dispatch(setSearching(text));
-    dispatch(getALLInfoUser());
   };
   const onChangeText = (text) => {
     if (text === "") {
       dispatch(setSearching(""));
-      dispatch(getALLInfoUser());
     }
   };
 
@@ -51,7 +48,6 @@ const UserManage = () => {
     setLabelMenu(item.label);
     dispatch(setFilterUser(item.value));
     dispatch(setPageCurrentUser(1));
-    dispatch(getALLInfoUser());
   }
 
   const handToggle = (isOpen) => {
@@ -83,24 +79,12 @@ const UserManage = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu  className={styles.filterPermissionMenu}>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.all)}}>
-                <span>Tất cả</span>
-              </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.admin)}}>
-                <span>ADMIN</span>
-              </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.manager)}}>
-                <span>Quản trị</span>
-              </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.groupLeader)}}>
-                <span>Tổ Trưởng</span>
-              </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.accountant)}}>
-                <span>Kế Toán</span>
-              </Dropdown.Item>
-              <Dropdown.Item className={styles.itemMenu} onClick={() => {onClickItem(ROLES.labor)}}>
-                <span>Nhân Công</span>
-              </Dropdown.Item>
+              {/* map object ROLES */}
+              {Object.values(ROLES).map((item, index) => {
+                return (
+                  <Dropdown.Item className={styles.itemMenu} key={index} onClick={() => onClickItem(item)}>{item?.label}</Dropdown.Item>
+                )
+              })}
             </Dropdown.Menu>
           </Dropdown>
         </div>

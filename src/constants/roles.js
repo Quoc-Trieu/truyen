@@ -1,5 +1,5 @@
 const ROLES = {
-  all: { label: 'Tất cả', value: 'ALL' },
+  all: { label: 'Tất cả', value: 'ROOT' },
   admin: { label: 'ADMIN', value: 'ADMIN' },
   manager: { label: 'Quản trị', value: 'VIEWER' },
   groupLeader: { label: 'Tổ Trưởng', value: 'MANAGER' },

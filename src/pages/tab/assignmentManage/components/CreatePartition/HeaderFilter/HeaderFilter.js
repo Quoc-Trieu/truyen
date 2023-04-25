@@ -54,7 +54,7 @@ const HeaderFilter = () => {
 
   const suggestSearchTerms = (inputValue, dataArray) => {
     const suggestions = [];
-    for (let i = 0; i < dataArray.length; i++) {
+    for (let i = 0; i < dataArray?.length; i++) {
       // tìm kiếm theo tên và số điện thoại
       if ( dataArray[i]?.fullName.toLowerCase().includes(inputValue.toLowerCase()) ||
           dataArray[i]?.phone.toLowerCase().includes(inputValue.toLowerCase()) ) 
