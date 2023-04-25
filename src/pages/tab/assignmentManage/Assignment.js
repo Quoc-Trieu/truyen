@@ -42,7 +42,7 @@ const Assignment = () => {
 
   return (
     <div className={styles.assignmentContainer}>
-      <Header title={"Phần cạo khu " + subDivision} back name="Nguyễn Văn A" />
+      <Header title={"Phần cạo " + subDivision?.name} back name="Nguyễn Văn A" />
       <div className={styles.assignmentBody}>
         <div className={styles.toolbar}>
           <SearchInput
@@ -60,6 +60,7 @@ const Assignment = () => {
         </div>
 
         <ListAssginment
+          subDivision={subDivision}
           itemsHeaderRow={[
             "Vùng cạo",
             "Người cạo",

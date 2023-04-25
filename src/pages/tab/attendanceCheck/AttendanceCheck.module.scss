@@ -146,6 +146,7 @@ $column-5-width: 50px;
           td:nth-child(#{$columnItem}) {
             width: $column-5-width;
             background-color: #ffffff;
+            text-align: center;
           }
         }
       }

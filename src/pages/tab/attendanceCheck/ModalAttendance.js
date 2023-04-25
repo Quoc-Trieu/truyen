@@ -25,7 +25,10 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   const dispatch = useDispatch();
   const nameUser = name?.split('\n')[0] ?? '';
   const phoneUser = name?.split('\n')[1] ?? ''; //id là sđt của nhân viên
-  const idUser = findIdUserByPhone({phone: phoneUser, arrayResult: dataAttendance?.arrayResult})
+  const idUser = findIdUserByPhone({ phone: phoneUser, arrayResult: dataAttendance?.arrayResult });
+
+  //tính mủ chuẩn
+  const [totalLatex, setTotalLatex] = useState();
 
   const [isDropLeave, setIsDropLeave] = useState(false);
   const [isDropZone, setIsDropZone] = useState(false);
@@ -51,7 +54,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   }, []);
 
   const onSubmit = async (data) => {
-    // console.log(data); //data lấy từ form
+    //  console.log(data); //data lấy từ form
     try {
       //điểm danh User
       const res = await postAttendance({
@@ -78,6 +81,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             latexSolidified: Number(data?.latexSolidified),
             latexWire: Number(data?.latexWire),
           });
+          onOk();
           Notiflix.Notify.success('Điểm danh thành công');
         } catch (err) {
           console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
@@ -102,6 +106,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             latexSolidified: Number(data?.latexSolidified),
             latexWire: Number(data?.latexWire),
           });
+          onOk();
           Notiflix.Notify.success('Điểm danh thành công');
         } catch (err) {
           console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
@@ -117,6 +122,24 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
     }
   };
 
+  const onCalculateLatex = handleSubmit((data) => {
+    console.log(data);
+    const latexWater = Number(data?.latexWater);
+    const latexCup = Number(data?.latexCup);
+    const latexSolidified = Number(data?.latexSolidified);
+    const latexWire = Number(data?.latexWire);
+
+    const temp = Number(data?.temp); //nhiệt độ nước
+    const tempCup = Number(data?.tempCup); //nhiệt độ chén
+
+    const total = (latexWater * temp) / 100 + (latexCup * tempCup) / 100 + (latexWire * 50) / 100 + (latexSolidified * 40) / 100;
+    setTotalLatex(total);
+  });
+
+  const handleOnInput = (event) => {
+    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+  };
+
   return (
     <ModalComponent
       title="THÔNG TIN ĐIỂM DANH"
@@ -124,7 +147,6 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
       onOk={onOk}
       onCancel={() => {
         onCancel();
-        dispatch(resetSpacing([]));
       }}
       width={1000}
       alignHeader="left"
@@ -231,11 +253,11 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ nước</span>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('temp', { required: true })} placeholder="00" className={styles.input} />
+                <input onInput={handleOnInput} type="text" {...register('temp', { required: true })} placeholder="00" className={styles.input} />
                 <span className={styles.unit}>%</span>
               </div>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('latexWater', { required: true })} placeholder="00" className={styles.input} />
+                <input onInput={handleOnInput} type="text" {...register('latexWater', { required: true })} placeholder="00" className={styles.input} />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
@@ -243,11 +265,11 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ chén</span>
               <div className={styles.inputConcentration}>
-                <input readOnly type="text" value={40} {...register('tempCup', { required: true })} className={styles.input} />
+                <input onInput={handleOnInput} readOnly type="text" value={40} {...register('tempCup', { required: true })} className={styles.input} />
                 <span className={styles.unit}>%</span>
               </div>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('latexCup', { required: true })} placeholder="00" className={styles.input} />
+                <input onInput={handleOnInput} type="text" {...register('latexCup', { required: true })} placeholder="00" className={styles.input} />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
@@ -255,11 +277,17 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ dây</span>
               <div className={styles.inputConcentration}>
-                <input readOnly type="text" value={50} className={styles.input} />
+                <input onInput={handleOnInput} readOnly type="text" value={50} className={styles.input} />
                 <span className={styles.unit}>%</span>
               </div>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('latexWire', { required: true })} placeholder="00" className={styles.input} />
+                <input
+                  onInput={handleOnInput}
+                  type="text"
+                  {...register('latexWire', { required: true })}
+                  placeholder="00"
+                  className={styles.input}
+                />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
@@ -267,17 +295,17 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ đông</span>
               <div className={styles.inputConcentration}>
-                <input readOnly type="text" value={40} className={styles.input} />
+                <input onInput={handleOnInput} readOnly type="text" value={40} className={styles.input} />
                 <span className={styles.unit}>%</span>
               </div>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('latexSolidified', { required: true })} placeholder="00" className={styles.input} />
+                <input onInput={handleOnInput} type="text" {...register('latexSolidified', { required: true })} placeholder="00" className={styles.input} />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
 
             {/* nút dấu bằng */}
-            <div className={styles.itemEqual}>
+            <div className={styles.itemEqual} onClick={onCalculateLatex}>
               <span className={styles.labelLatex}>=</span>
             </div>
 
@@ -287,7 +315,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
                 Mủ chuẩn
               </span>
               <div className={styles.inputConcentration}>
-                <input readOnly type="text" className={styles.input} />
+                <input readOnly type="text" value={totalLatex} className={styles.input} />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
@@ -298,7 +326,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             <button
               className={styles.btnCancel}
               onClick={() => {
-                console.log('Hủy');
+                onCancel();
               }}
             >
               Hủy

@@ -8,10 +8,27 @@ import ColorDots from './../../../components/ColorDots/ColorDots';
 import STATUS_ATTENDANCE from './../../../constants/statusAttendance';
 import ModalAttendance from './ModalAttendance';
 import SearchInput from './../../../components/SearchInput/SearchInput';
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 import iconCalendar from './../../../assets/ico/icon-calendar.png';
 import iconDown from './../../../assets/ico/icon-feather-chevron-down.png';
-import { vi } from 'date-fns/locale';
+import vi from 'date-fns/locale/vi';
+
+const vietnameseMonths = {
+  0: 'Tháng 1',
+  1: 'Tháng 2',
+  2: 'Tháng 3',
+  3: 'Tháng 4',
+  4: 'Tháng 5',
+  5: 'Tháng 6',
+  6: 'Tháng 7',
+  7: 'Tháng8',
+  8: 'Tháng 9',
+  9: 'Tháng 10',
+  10: 'Tháng 11',
+  11: 'Tháng 12',
+};
+
+registerLocale('vi', { ...vi, localize: { month: n => vietnameseMonths[n] } });
 
 const AttendanceCheck = () => {
   const [monthOfTable, setMonthOfTable] = useState(new Date());
@@ -150,6 +167,9 @@ const AttendanceCheck = () => {
   });
   const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
   const handleChange = (e) => {
+    setTimeout(() => {
+      setIsOpenDatePicker(false);
+    }, 100);
     console.log(e.toISOString());
     const date = new Date(e.toISOString());
     const month = date.getMonth();
@@ -162,7 +182,7 @@ const AttendanceCheck = () => {
   };
   const handleClick = (e) => {
     e.preventDefault();
-    setIsOpenDatePicker(!isOpenDatePicker);
+    setIsOpenDatePicker(true);
   };
   return (
     <div className={styles.attendanceCheck}>
@@ -178,7 +198,7 @@ const AttendanceCheck = () => {
             <img style={{ marginLeft: 'auto' }} src={iconDown} alt="iconDown" width="10px" height="6px" />
             {isOpenDatePicker && (
               <div style={{ width: '800px', position: 'absolute', top: '100%', left: 0, zIndex: 10 }}>
-                <DatePicker selected={monthOfTable} onChange={handleChange} inline showMonthYearPicker showFullMonthYearPicker />
+                <DatePicker selected={monthOfTable} locale="vi" onChange={handleChange} inline showMonthYearPicker showFullMonthYearPicker />
               </div>
             )}
           </div>

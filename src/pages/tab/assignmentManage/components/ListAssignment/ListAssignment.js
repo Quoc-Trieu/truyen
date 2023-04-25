@@ -14,7 +14,7 @@ import { Loading } from 'notiflix';
 import ModalEditCreatePartition from './../EditPartition/ModalEditCreatePartition';
 import { format } from "date-fns";
 
-const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
+const ListAssginment = ({ itemsHeaderRow, assignmenList, reload, subDivision }) => {
   const [showRemove, setShowRemove] = useState(false);
   const [showEditDetail, setShowEditDetail] = useState(false);
   const [itemDelete, setItemDelete] = useState();
@@ -27,7 +27,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload }) => {
   useEffect(() => {
     const getList = async () => {
       try {
-        const res = await getInfoAllScaping({ page: page, limit: 10, query: search });
+        const res = await getInfoAllScaping({ page: page, limit: 10, query: search, idAreaScaping : subDivision?._id });
         setList(res?.data);
         console.log(res?.data);
       } catch (error) {
