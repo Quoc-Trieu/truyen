@@ -44,7 +44,7 @@ const AttendanceCheck = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [visible]);
 
   const fetchData = async () => {
     const now = new Date().toISOString();

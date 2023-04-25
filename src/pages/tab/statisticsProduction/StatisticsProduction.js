@@ -103,7 +103,7 @@ const StatisticsProduction = () => {
         <div className={styles.boxContainer}>
           <div className={styles.item}>
             <span className={styles.title}>Mủ chuẩn</span>
-            <span className={styles.value}>{dataTotal?.totalLatex} kg</span>
+            <span className={styles.value}>{dataTotal?.totalLatex.toFixed(2)} kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ nước</span>
@@ -147,7 +147,7 @@ const StatisticsProduction = () => {
                   return (
                     <tr key={index}>
                       <td>{item?.lsScaping[0]?.scapingName}</td>
-                      <td>{item?.total}</td>
+                      <td>{item?.total?.toFixed(2)}</td>
                       <td>{item?.waterScaping}</td>
                       <td>{item?.cupScaping}</td>
                       <td>{item?.wireScaping}</td>
