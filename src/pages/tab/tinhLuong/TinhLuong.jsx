@@ -57,32 +57,32 @@ function TinhLuong() {
       .then((res) => {
         setDataSalary(res.data.dataSalary);
         setTotalSanluong(() => {
-          return dataSalary.reduce((total, item) => {
+          return res.data.dataSalary.reduce((total, item) => {
             return total + item.quantity;
           }, 0);
         });
         setTotalWork(() => {
-          return dataSalary.reduce((total, item) => {
+          return res.data.dataSalary.reduce((total, item) => {
             return total + item.dayWork;
           }, 0);
         });
         setTotalLuongSanluong(() => {
-          return dataSalary.reduce((total, item) => {
+          return res.data.dataSalary.reduce((total, item) => {
             return total + item.salaryQuantity;
           }, 0);
         });
         setTotalLuongChedo(() => {
-          return dataSalary.reduce((total, item) => {
+          return res.data.dataSalary.reduce((total, item) => {
             return total + item.salaryWork;
           }, 0);
         });
         setTotalLuongKhac(() => {
-          return dataSalary.reduce((total, item) => {
+          return res.data.dataSalary.reduce((total, item) => {
             return total + item.salaryMore;
           }, 0);
         });
         setTotal(() => {
-          return dataSalary.reduce((total, item) => {
+          return res.data.dataSalary.reduce((total, item) => {
             return total + item.salaryAll;
           }, 0);
         });
