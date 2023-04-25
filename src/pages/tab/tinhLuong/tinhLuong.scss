@@ -44,65 +44,121 @@
           cursor: pointer;
         }
       }
+
+      .left-top {
+        .datePickerBox {
+          position: relative;
+          width: max-content;
+
+          .datePickerInput {
+            width: max-content;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            z-index: 10;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px solid #A3A2A2;
+            display: flex;
+            padding: 13px 12px;
+            align-items: center;
+            cursor: pointer;
+
+            img:nth-child(1) {
+              width: 29px;
+              height: 29px;
+            }
+
+            img:nth-child(3) {
+              width: 12px;
+              height: 6px;
+            }
+
+            span {
+              white-space: nowrap;
+              margin: 0 67px 0 13px;
+              font-size: 18px;
+              font-weight: 600;
+            }
+          }
+        }
+      }
     }
+
     .colum {
       flex: 1;
       overflow-y: scroll;
       border: 3px solid #707070;
-    }
-    table {
-      border-radius: 3px;
-      background-color: #fff;
-      border-collapse: collapse;
-      border-spacing: 0;
-      min-width: max-content;
 
-      th,
-      td {
-        text-align: center;
-        font-size: 17px;
-        vertical-align: middle;
-      }
-      thead > tr {
-        *,
-        ::before,
-        ::after {
-          border: 0;
-        }
-      }
-      thead > tr:nth-child(2) {
-        font-weight: 600;
+      table {
+        border-radius: 3px;
+        background-color: #fff;
+        border-collapse: collapse;
+        border-spacing: 0;
+        min-width: max-content;
+
+        th,
         td {
-          background-color: #f6f9ff;
-          border-left: 1px solid #000;
-          border-right: 1px solid #000;
+          text-align: center;
+          font-size: 17px;
+          vertical-align: middle;
         }
-      }
-      thead > tr:nth-child(1) {
-        font-weight: 600;
-        th {
-          background-color: #efedf7;
-          padding: 20px 20px;
-          border-left: 1px solid #000;
-          border-right: 1px solid #000;
-        }
-      }
-      tbody {
-        border: 0;
 
-        tr {
-          td {
-            border: 1px solid #000;
+        thead>tr {
+
+          *,
+          ::before,
+          ::after {
+            border: 0;
           }
         }
+
+        thead>tr:nth-child(2) {
+          font-weight: 600;
+
+          td {
+            background-color: #f6f9ff;
+            border-left: 1px solid #000;
+            border-right: 1px solid #000;
+          }
+        }
+
+        thead>tr:nth-child(1) {
+          font-weight: 600;
+
+          th {
+            background-color: #efedf7;
+            padding: 20px 20px;
+            border-left: 1px solid #000;
+            border-right: 1px solid #000;
+          }
+        }
+
+        tbody {
+          border: 0;
+
+          tr {
+            td {
+              border: 1px solid #000;
+            }
+          }
+        }
+
+        td {
+          padding: 15px 10px;
+        }
       }
-      td {
-        padding: 15px 10px;
+
+      table th {
+        position: sticky;
+        top: 0px;
       }
     }
-    table th {
-      position: sticky;
-      top: 0px;
+
+    .rdtPicker td {
+      white-space: nowrap;
+      padding: 0 10px;
     }
   }
 }
