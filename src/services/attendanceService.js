@@ -53,6 +53,7 @@ export const postAttendance = ({
 
 export const postCreateQuantity = ({
   phoneUser,
+  idUser,
   date,
   idScaping,
   latexWater,
@@ -62,5 +63,5 @@ export const postCreateQuantity = ({
   latexSolidified,
   latexWire,
 }) => {
-  return AxiosClient.post('/quantity/createQuantity', { phoneUser, date, idScaping, latexWater, temp, latexCup, tempCup, latexSolidified, latexWire });
+  return AxiosClient.post('/quantity/createQuantity', { phoneUser, idUser, date, idScaping, latexWater, temp, latexCup, tempCup, latexSolidified, latexWire });
 };

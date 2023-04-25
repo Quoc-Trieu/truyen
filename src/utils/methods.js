@@ -34,3 +34,14 @@ export const getDaysInMonth = (dateString) => {
 
   return daysArray;
 }
+
+export const findIdUserByPhone = ({phone, arrayResult}) => {
+  let result = null;
+  arrayResult.forEach((subArray) => {
+    const foundItem = subArray.find((item) => item.phoneUser === phone);
+    if (foundItem) {
+      result = foundItem.idUser;
+    }
+  });
+  return result;
+}

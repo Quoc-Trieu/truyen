@@ -12,6 +12,7 @@ import iconClose from '../../../assets/images/close.png';
 import ButtonSimple from '../../../components/Button/ButtonSimple';
 import { getInfoAreaScaping, postAttendance, postAttendanceAllInOne, postCreateQuantity } from '../../../services/attendanceService';
 import Notiflix from 'notiflix';
+import { findIdUserByPhone } from '../../../utils/methods';
 
 const dataCheckAttendance = {
   co_di_lam: { value: 'co_di_lam', isWord: true, isPermission: null, color: '#272727', text: 'Xin nghỉ phép' },
@@ -19,15 +20,27 @@ const dataCheckAttendance = {
   nghi_khong_phep: { value: 'nghi_khong_phep', isWord: false, isPermission: false, color: '#F44336', text: 'Nghỉ không phép' },
 };
 
-const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
-  const { register, handleSubmit, watch, errors } = useForm();
+const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
   const nameUser = name?.split('\n')[0] ?? '';
-  const idUser = name?.split('\n')[1] ?? ''; //id là sđt của nhân viên
+  const phoneUser = name?.split('\n')[1] ?? ''; //id là sđt của nhân viên
+  const idUser = findIdUserByPhone({ phone: phoneUser, arrayResult: dataAttendance?.arrayResult });
+
+  //tính mủ chuẩn
+  const [totalLatex, setTotalLatex] = useState();
 
   const [isDropLeave, setIsDropLeave] = useState(false);
   const [isDropZone, setIsDropZone] = useState(false);
   const [isDropArea, setIsDropArea] = useState(false);
+
+  const [isConfirm, setIsConfirm] = useState(false); // lưu trạng thái nhấn xác nhận điểm danh, false là chưa nhấn
 
   const dates = new Date(date ?? '2022-04-22');
   const isoDate = dates.toISOString();
@@ -49,7 +62,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
   }, []);
 
   const onSubmit = async (data) => {
-    // console.log(data); //data lấy từ form
+    //  console.log(data); //data lấy từ form
     try {
       //điểm danh User
       const res = await postAttendance({
@@ -65,7 +78,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
         try {
           //thêm sản lượng User
           const resQuantity = await postCreateQuantity({
-            phoneUser: idUser,
+            phoneUser: phoneUser,
+            idUser: idUser,
             date: isoDate,
             idScaping: selectShaveScaping?._id,
             latexWater: Number(data?.latexWater),
@@ -75,6 +89,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
             latexSolidified: Number(data?.latexSolidified),
             latexWire: Number(data?.latexWire),
           });
+          onOk();
+          reset();
           Notiflix.Notify.success('Điểm danh thành công');
         } catch (err) {
           console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
@@ -88,7 +104,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
         try {
           //thêm sản lượng User
           const resQuantity = await postCreateQuantity({
-            phoneUser: idUser,
+            phoneUser: phoneUser,
+            idUser: idUser,
             date: isoDate,
             idScaping: selectShaveScaping?._id,
             latexWater: Number(data?.latexWater),
@@ -98,6 +115,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
             latexSolidified: Number(data?.latexSolidified),
             latexWire: Number(data?.latexWire),
           });
+          onOk();
+          reset();
           Notiflix.Notify.success('Điểm danh thành công');
         } catch (err) {
           console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
@@ -113,6 +132,28 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
     }
   };
 
+  const onCalculateLatex = handleSubmit((data) => {
+    console.log(data);
+    const latexWater = Number(data?.latexWater);
+    const latexCup = Number(data?.latexCup);
+    const latexSolidified = Number(data?.latexSolidified);
+    const latexWire = Number(data?.latexWire);
+
+    const temp = Number(data?.temp); //nhiệt độ nước
+    const tempCup = Number(data?.tempCup); //nhiệt độ chén
+
+    const total = (latexWater * temp) / 100 + (latexCup * tempCup) / 100 + (latexWire * 50) / 100 + (latexSolidified * 40) / 100;
+    setTotalLatex(total);
+  });
+
+  const handleOnInput = (event) => {
+    const value = event.target.value;
+    const regex = /^[0-9]*\.?[0-9]*$/; // chỉ cho phép nhập số và dấu chấm
+    if (!regex.test(value)) {
+      event.target.value = value.slice(0, -1); // loại bỏ ký tự cuối cùng nếu không hợp lệ
+    }
+  };
+
   return (
     <ModalComponent
       title="THÔNG TIN ĐIỂM DANH"
@@ -120,7 +161,6 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
       onOk={onOk}
       onCancel={() => {
         onCancel();
-        dispatch(resetSpacing([]));
       }}
       width={1000}
       alignHeader="left"
@@ -178,47 +218,54 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
 
           <div className={styles.selectShavingArea}>
             {/* Drop chọn khu */}
-            <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
-              <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
-                <span> {selectAreaScaping ? selectAreaScaping?.name : 'Chọn khu'} </span>
-                <img src={isDropZone ? iconDown : iconUp} />
-              </Dropdown.Toggle>
-              <Dropdown.Menu className={styles.dropMenu}>
-                {/* map infoAreaScaping */}
-                {infoAreaScaping &&
-                  infoAreaScaping.map((item, index) => {
-                    return (
-                      <Dropdown.Item
-                        onClick={() => {
-                          setSelectAreaScaping(item);
-                          setSelectShaveScaping(null);
-                        }}
-                        className={styles.dropItem}
-                        key={index}
-                      >
-                        {item.name}
-                      </Dropdown.Item>
-                    );
-                  })}
-              </Dropdown.Menu>
-            </Dropdown>
+            <div>
+              <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
+                <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
+                  <span> {selectAreaScaping ? selectAreaScaping?.name : 'Chọn khu'} </span>
+                  <img src={isDropZone ? iconDown : iconUp} />
+                </Dropdown.Toggle>
+                <Dropdown.Menu className={styles.dropMenu}>
+                  {/* map infoAreaScaping */}
+                  {infoAreaScaping &&
+                    infoAreaScaping.map((item, index) => {
+                      return (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectAreaScaping(item);
+                            setSelectShaveScaping(null);
+                          }}
+                          className={styles.dropItem}
+                          key={index}
+                        >
+                          {item.name}
+                        </Dropdown.Item>
+                      );
+                    })}
+                </Dropdown.Menu>
+              </Dropdown>
+              {!selectAreaScaping && isConfirm == true ? <span className={styles.error}>Vui lòng chọn khu</span> : null}
+            </div>
+
             {/* Drop chọn Phần cạo */}
-            <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropArea(isOpen)}>
-              <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
-                <span>{selectShaveScaping ? selectShaveScaping?.name : 'Chọn phần cạo'}</span>
-                <img src={isDropArea ? iconDown : iconUp} />
-              </Dropdown.Toggle>
-              <Dropdown.Menu className={styles.dropMenu}>
-                {selectAreaScaping &&
-                  selectAreaScaping.infoScaping.map((item, index) => {
-                    return (
-                      <Dropdown.Item className={styles.dropItem} key={index} onClick={() => setSelectShaveScaping(item)}>
-                        {item.name}
-                      </Dropdown.Item>
-                    );
-                  })}
-              </Dropdown.Menu>
-            </Dropdown>
+            <div>
+              <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropArea(isOpen)}>
+                <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
+                  <span>{selectShaveScaping ? selectShaveScaping?.name : 'Chọn phần cạo'}</span>
+                  <img src={isDropArea ? iconDown : iconUp} />
+                </Dropdown.Toggle>
+                <Dropdown.Menu className={styles.dropMenu}>
+                  {selectAreaScaping &&
+                    selectAreaScaping.infoScaping.map((item, index) => {
+                      return (
+                        <Dropdown.Item className={styles.dropItem} key={index} onClick={() => setSelectShaveScaping(item)}>
+                          {item.name}
+                        </Dropdown.Item>
+                      );
+                    })}
+                </Dropdown.Menu>
+              </Dropdown>
+              {!selectShaveScaping && isConfirm == true ? <span className={styles.error}>Vui lòng chọn khu</span> : null}
+            </div>
           </div>
 
           {/* Nhập các loại mủ */}
@@ -227,11 +274,26 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ nước</span>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('temp', { required: true })} placeholder="00" className={styles.input} />
+                <input
+                  onInput={handleOnInput}
+                  min="0.01"
+                  step="0.01"
+                  type="text"
+                  {...register('temp', { required: true, pattern: /^[1-9]\d*$/ })} // pattern là số nguyên dương
+                  placeholder="00"
+                  className={styles.input}
+                />
                 <span className={styles.unit}>%</span>
               </div>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('latexWater', { required: true })} placeholder="00" className={styles.input} />
+                <input
+                  onInput={handleOnInput}
+                  step="0.01"
+                  type="text"
+                  {...register('latexWater', { required: true })}
+                  placeholder="00"
+                  className={styles.input}
+                />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
@@ -239,11 +301,27 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ chén</span>
               <div className={styles.inputConcentration}>
-                <input readOnly type="text" value={40} {...register('tempCup', { required: true })} className={styles.input} />
+                <input
+                  onInput={handleOnInput}
+                  readOnly
+                  min="0.01"
+                  step="0.01"
+                  type="text"
+                  value={40}
+                  {...register('tempCup', { required: true })}
+                  className={styles.input}
+                />
                 <span className={styles.unit}>%</span>
               </div>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('latexCup', { required: true })} placeholder="00" className={styles.input} />
+                <input
+                  onInput={handleOnInput}
+                  type="text"
+                  step="0.01"
+                  {...register('latexCup', { required: true })}
+                  placeholder="00"
+                  className={styles.input}
+                />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
@@ -251,11 +329,18 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ dây</span>
               <div className={styles.inputConcentration}>
-                <input readOnly type="text" value={50} className={styles.input} />
+                <input onInput={handleOnInput} readOnly min="0.01" type="text" step="0.01" value={50} className={styles.input} />
                 <span className={styles.unit}>%</span>
               </div>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('latexWire', { required: true })} placeholder="00" className={styles.input} />
+                <input
+                  onInput={handleOnInput}
+                  type="text"
+                  step="0.01"
+                  {...register('latexWire', { required: true })}
+                  placeholder="00"
+                  className={styles.input}
+                />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
@@ -263,17 +348,24 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ đông</span>
               <div className={styles.inputConcentration}>
-                <input readOnly type="text" value={40} className={styles.input} />
+                <input onInput={handleOnInput} readOnly min="0.01" type="text" step="0.01" value={40} className={styles.input} />
                 <span className={styles.unit}>%</span>
               </div>
               <div className={styles.inputConcentration}>
-                <input type="text" {...register('latexSolidified', { required: true })} placeholder="00" className={styles.input} />
+                <input
+                  onInput={handleOnInput}
+                  type="text"
+                  step="0.01"
+                  {...register('latexSolidified', { required: true })}
+                  placeholder="00"
+                  className={styles.input}
+                />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
 
             {/* nút dấu bằng */}
-            <div className={styles.itemEqual}>
+            <div className={styles.itemEqual} onClick={onCalculateLatex}>
               <span className={styles.labelLatex}>=</span>
             </div>
 
@@ -283,23 +375,25 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
                 Mủ chuẩn
               </span>
               <div className={styles.inputConcentration}>
-                <input readOnly type="text" className={styles.input} />
+                <input readOnly type="text" step="0.01" value={totalLatex} className={styles.input} />
                 <span className={styles.unit}>kg</span>
               </div>
             </div>
           </div>
+
+          {Object.keys(errors).length !== 0 && <p className={styles.error}>Chưa chọn phần cạo</p>}
 
           {/* footer */}
           <div className={styles.footer}>
             <button
               className={styles.btnCancel}
               onClick={() => {
-                console.log('Hủy');
+                onCancel();
               }}
             >
               Hủy
             </button>
-            <button className={styles.btnSubmit} type="submit">
+            <button className={styles.btnSubmit} type="submit" onClick={() => setIsConfirm(true)}>
               Xác nhận
             </button>
           </div>

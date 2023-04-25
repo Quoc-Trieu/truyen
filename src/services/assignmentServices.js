@@ -20,8 +20,8 @@ export const putLocationScaping = ({idScaping , data}) => {
   return AxiosClient.put("/scaping/setLocationScaping", {lsNameTree: data}, {params: { idScaping : idScaping }});
 };
 
-export const getInfoAllScaping = ({page =1, limit=10, oderBy, query}) => {
-  return AxiosClient.get("/scaping/getInfoAllScaping" , {params : { page: page, limit: limit, oderBy: oderBy, query: query }});
+export const getInfoAllScaping = ({page =1, limit=10, oderBy, query, idAreaScaping}) => {
+  return AxiosClient.get("/scaping/getInfoAllScaping" , {params : { page: page, limit: limit, oderBy: oderBy, query: query, idAreaScaping: idAreaScaping }});
 };
 
 export const deleteTreeInScaping = (idScaping) => {
@@ -48,3 +48,8 @@ export const postAddTreeInScaping = ({idScaping, data}) => {
 export const postAddTreeByName = ({idScaping, data}) => {
   return AxiosClient.post("/scaping/configScapingByName" , data, {params: {idScaping : idScaping  }} );
 };
+
+export const getInfoAreaScaping = () => {
+  return AxiosClient.get("/area-scaping/getInfoAreaScaping");
+};
+
