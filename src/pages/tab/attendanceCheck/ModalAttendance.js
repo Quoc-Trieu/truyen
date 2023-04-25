@@ -12,6 +12,7 @@ import iconClose from '../../../assets/images/close.png';
 import ButtonSimple from '../../../components/Button/ButtonSimple';
 import { getInfoAreaScaping, postAttendance, postAttendanceAllInOne, postCreateQuantity } from '../../../services/attendanceService';
 import Notiflix from 'notiflix';
+import { findIdUserByPhone } from '../../../utils/methods';
 
 const dataCheckAttendance = {
   co_di_lam: { value: 'co_di_lam', isWord: true, isPermission: null, color: '#272727', text: 'Xin nghỉ phép' },
@@ -19,11 +20,12 @@ const dataCheckAttendance = {
   nghi_khong_phep: { value: 'nghi_khong_phep', isWord: false, isPermission: false, color: '#F44336', text: 'Nghỉ không phép' },
 };
 
-const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
+const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }) => {
   const { register, handleSubmit, watch, errors } = useForm();
   const dispatch = useDispatch();
   const nameUser = name?.split('\n')[0] ?? '';
-  const idUser = name?.split('\n')[1] ?? ''; //id là sđt của nhân viên
+  const phoneUser = name?.split('\n')[1] ?? ''; //id là sđt của nhân viên
+  const idUser = findIdUserByPhone({phone: phoneUser, arrayResult: dataAttendance?.arrayResult})
 
   const [isDropLeave, setIsDropLeave] = useState(false);
   const [isDropZone, setIsDropZone] = useState(false);
@@ -65,7 +67,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
         try {
           //thêm sản lượng User
           const resQuantity = await postCreateQuantity({
-            phoneUser: idUser,
+            phoneUser: phoneUser,
+            idUser: idUser,
             date: isoDate,
             idScaping: selectShaveScaping?._id,
             latexWater: Number(data?.latexWater),
@@ -88,7 +91,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name }) => {
         try {
           //thêm sản lượng User
           const resQuantity = await postCreateQuantity({
-            phoneUser: idUser,
+            phoneUser: phoneUser,
+            idUser: idUser,
             date: isoDate,
             idScaping: selectShaveScaping?._id,
             latexWater: Number(data?.latexWater),

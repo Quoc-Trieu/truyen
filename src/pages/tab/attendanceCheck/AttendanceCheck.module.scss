@@ -21,7 +21,7 @@ $column-5-width: 50px;
     flex-direction: column;
     justify-content: space-between;
     align-self: start;
-    padding: 30px 0 0px 30px;
+    padding: 20px 0 0px 40px;
     gap: 10px;
 
     .toolbar {
@@ -30,7 +30,7 @@ $column-5-width: 50px;
       justify-content: flex-start;
       align-items: center;
       gap: 20px;
-      padding-bottom: 15px;
+      padding-bottom: 10px;
     }
 
     .datePicker {
@@ -39,6 +39,7 @@ $column-5-width: 50px;
       justify-content: flex-start;
       align-items: center;
       width: 220px;
+      height: 45px;
       gap: 15px;
       background-color: #ffffff;
       border-radius: 4px;
@@ -46,7 +47,6 @@ $column-5-width: 50px;
       padding: 8px 10px;
       position: relative;
       cursor: pointer;
-
 
       // cho img của datePicker cuối cùng nằm bên phải
       span {

@@ -19,12 +19,14 @@ const StatisticsProduction = () => {
 
   const [monthQuantity, setMonthQuantity] = useState(new Date());
   const [dataTable, setDataTable] = useState([]);
+  const [dataTotal, setDataTotal] = useState([]);
 
   useEffect(() => {
     const getQuantity = async () => {
       const res = await getQuantityByMonth({ date: monthQuantity, query: selectArea, isMonth: 1 });
       console.log(res.data);
       setDataTable(res.data.infoScaping);
+      setDataTotal(res.data)
     };
     getQuantity();
   }, [selectArea, monthQuantity]);
@@ -101,23 +103,23 @@ const StatisticsProduction = () => {
         <div className={styles.boxContainer}>
           <div className={styles.item}>
             <span className={styles.title}>Mủ chuẩn</span>
-            <span className={styles.value}>200kg</span>
+            <span className={styles.value}>{dataTotal?.totalLatex} kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ nước</span>
-            <span className={styles.value}>60kg</span>
+            <span className={styles.value}>{dataTotal?.totalWater}kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ chén</span>
-            <span className={styles.value}>100kg</span>
+            <span className={styles.value}>{dataTotal?.totalCup}kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ dây</span>
-            <span className={styles.value}>30kg</span>
+            <span className={styles.value}>{dataTotal?.totalWire}kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ đông</span>
-            <span className={styles.value}>20kg</span>
+            <span className={styles.value}>{dataTotal?.totalSolidified  }kg</span>
           </div>
         </div>
 

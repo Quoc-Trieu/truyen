@@ -262,6 +262,7 @@ const AttendanceCheck = () => {
           onCancel={() => setVisible(false)}
           date={propPassModal?.date}
           name={propPassModal?.name}
+          dataAttendance={dataAttendance}
         />
       )}
     </div>
