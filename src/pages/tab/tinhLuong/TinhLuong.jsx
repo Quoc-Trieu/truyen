@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "./../../../components/Header/Header";
 import "./tinhLuong.scss";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import TextField from '@mui/material/TextField';
 import iconExcel from "../../../assets/images/excel.png";
 import iconSetting from "../../../assets/images/setting.png";
+import icon_calendar from "../../../assets/ico/icon-calendar.png";
+import icon_down from "../../../assets/ico/icon-feather-chevron-down.png";
 import {
   excelExport,
   getUserSalary,
@@ -21,8 +17,16 @@ import { useForm } from "react-hook-form";
 import CurrencyInput from "react-currency-input-field";
 import Notiflix from "notiflix";
 
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import moment from "moment";
+import "moment/locale/vi";
+
 function TinhLuong() {
-  const [time, setTime] = useState(dayjs(new Date()));
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDateShow, setSelectedDateShow] = useState(
+    moment(new Date()).format("MM-YYYY")
+  );
   const [dataSalary, setDataSalary] = useState([]);
   const [dongiasanluong, setDongiasanluong] = useState("");
   const [dongiachedo, setDongiachedo] = useState("");
@@ -39,15 +43,16 @@ function TinhLuong() {
   const [totalLuongChedo, setTotalLuongChedo] = useState("");
   const [totalLuongKhac, setTotalLuongKhac] = useState("");
   const [total, setTotal] = useState("");
-
+  const refInputPicker = useRef(null);
+  // handle setting
   const handleOpenSetting = () => setOpenSetting(true);
   const handleCloseSetting = () => setOpenSetting(false);
-
+  // handle update salary other
   const handleOpenSalaryOther = () => setOpenSalaryOther(true);
   const handleCloseSalary = () => setOpenSalaryOther(false);
-
+  // lấy sanh sách lương của bộ phận nhân công
   const getsalary = () => {
-    getUserSalary(`${time.$y}-${time.$M + 1}-${time.$D}`)
+    getUserSalary(selectedDate)
       .then((res) => {
         setDataSalary(res.data.dataSalary);
         setTotalSanluong(() => {
@@ -85,26 +90,24 @@ function TinhLuong() {
         console.log(err);
       });
   };
-
+  // firstime get
   useEffect(() => {
     getsalary();
-  }, [time]);
-
+  }, [selectedDate]);
+  // xử dụng useform của react form để check validator
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  //   hàm này là hàm submit khi lưu cài đặt đơn giản
   const onSubmit = (data) => {
-    // console.log(data);
     updateSetting({
-      date: `${time.$y}-${time.$M + 1}-${time.$D}`,
+      date: selectedDate,
       basicSalary: parseInt(data.chedo.replace(",", "")),
       moneyQuantity: parseInt(data.sanluong.replace(",", "")),
     })
       .then((res) => {
-        console.log(res);
         Notiflix.Notify.success("cập nhật thành công");
         handleCloseSetting();
         getsalary();
@@ -113,17 +116,16 @@ function TinhLuong() {
         console.log(err);
       });
   };
-
+  // hàm này là hàm submit update lương khác của nhân công
   const handleSalaryOther = () => {
     if (salaryOther) {
       setErrOther(false);
       updateSalaryOther({
-        date: `${time.$y}-${time.$M + 1}-${time.$D}`,
+        date: selectedDate,
         idUser: phoneUser,
         salary: salaryOther,
       })
         .then((res) => {
-          console.log(res);
           Notiflix.Notify.success("cập nhật thành công");
           handleCloseSalary();
           getsalary();
@@ -135,11 +137,10 @@ function TinhLuong() {
       setErrOther(true);
     }
   };
-
+  // hàm này là hàm xuất excel
   const handleExportExcel = () => {
-    excelExport(`${time.$y}-${time.$M + 1}-${time.$D}`)
+    excelExport(selectedDate)
       .then((response) => {
-        // console.log(response.data);
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -155,34 +156,94 @@ function TinhLuong() {
         console.log(err);
       });
   };
-
+  // form này dùng để format tiền tệ
   const formatter = new Intl.NumberFormat("en-US", {
     style: "decimal",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+  // xử lý khi picker date có sự thay đổi
+  const handleDateChange = (date) => {
+    setSelectedDate(moment(date).format("YYYY-MM"));
+    setSelectedDateShow(moment(date).format("MM-YYYY"));
+  };
+  // xử lý custom input date picker để sử dụng tiếng việt
+  const monthLabels = {
+    vi: [
+      "Tháng 1",
+      "Tháng 2",
+      "Tháng 3",
+      "Tháng 4",
+      "Tháng 5",
+      "Tháng 6",
+      "Tháng 7",
+      "Tháng 8",
+      "Tháng 9",
+      "Tháng 10",
+      "Tháng 11",
+      "Tháng 12",
+    ],
+  };
+  const customInput = <input readOnly />;
+  // xử lý click input date picker giả thì date picker thật cũng được click
+  const handleOpenCalen = () => {
+    refInputPicker.current._openCalendar();
+  };
 
   return (
+    // main
     <div id="tinhluong">
+      {/* heading */}
       <div className="heading">
         <Header title="Thống kê sản lượng" />
       </div>
+      {/* body */}
       <div className="body-content">
+        {/* body top, gồm date picker và 2 button xuất excel vs cài đặt */}
         <div className="top-content">
           <div className="left-top">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer
-                components={["DatePicker", "DatePicker", "DatePicker"]}
-              >
-                <DatePicker
-                  label={'"tháng" và "năm"'}
-                  views={['day',"month", "year"]}
-                  value={time}
-                  onChange={(newValue) => setTime(newValue)}
+            {/* box date picker */}
+            <div className="datePickerBox" onClick={() => handleOpenCalen()}>
+              {/* block input date picker giả */}
+              <div className="datePickerInput">
+                <img src={icon_calendar} alt="" />
+                <span>tháng {selectedDateShow}</span>
+                <img src={icon_down} alt="" />
+              </div>
+              {/* còn đây là timedatepicker thật nhưng được ẩn đằng sau lớp giả */}
+              <div>
+                <Datetime
+                  ref={refInputPicker}
+                  dateFormat="MM/YYYY"
+                  timeFormat={false}
+                  onChange={handleDateChange}
+                  locale="vi"
+                  value={
+                    selectedDate ? moment(selectedDate).format("MM/YYYY") : ""
+                  }
+                  renderInput={(_, openCalendar, props) => {
+                    return (
+                      <input
+                        {...props}
+                        readOnly
+                        value={
+                          selectedDate
+                            ? moment(selectedDate).format("MMMM YYYY")
+                            : ""
+                        }
+                        onClick={openCalendar}
+                      />
+                    );
+                  }}
+                  renderMonth={(props, monthIndex) => {
+                    return <td {...props}>{monthLabels["vi"][monthIndex]}</td>;
+                  }}
+                  input={customInput}
                 />
-              </DemoContainer>
-            </LocalizationProvider>
+              </div>
+            </div>
           </div>
+          {/* 2 button xuất excel vs cài đặt */}
           <div className="right-top">
             <div
               className="exportExcel right-top--btn"
@@ -200,6 +261,7 @@ function TinhLuong() {
             </div>
           </div>
         </div>
+        {/* table danh sách bảng lương của nhân công */}
         <div style={{ height: "100%" }}>
           <div className="colum">
             <table>
@@ -232,14 +294,14 @@ function TinhLuong() {
               <tbody>
                 {dataSalary.map((item, index) => (
                   <tr key={index}>
-                    <td>1</td>
+                    <td>{index + 1}</td>
                     <td>{item.name}</td>
-                    <td>{formatter.format(item.quantity)}</td>
-                    <td>{item.dayWork}</td>
-                    <td>{formatter.format(item.priceQuantity)}</td>
-                    <td>{formatter.format(item.priceBase)}</td>
-                    <td>{formatter.format(item.salaryQuantity)}</td>
-                    <td>{formatter.format(item.salaryWork)}</td>
+                    <td>{item.quantity ? formatter.format(item.quantity) : 0}</td>
+                    <td>{item.dayWork ? item.dayWork : 0}</td>
+                    <td>{item.priceQuantity ? formatter.format(item.priceQuantity) : 0}</td>
+                    <td>{item.priceBase ? formatter.format(item.priceBase) : 0}</td>
+                    <td>{item.salaryQuantity ? formatter.format(item.salaryQuantity) : 0}</td>
+                    <td>{item.salaryWork ? formatter.format(item.salaryWork) : 0}</td>
                     <td>
                       <div
                         onClick={() => {
