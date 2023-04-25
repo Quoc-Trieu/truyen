@@ -1,0 +1,187 @@
+@use "../../../styles/scss/" as *;
+
+#tinhluong {
+  width: 100%;
+  height: 100%;
+
+  .heading {
+    width: 100%;
+    height: 60px;
+  }
+
+  .body-content {
+    padding: 20px 25px;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .top-content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      align-items: center;
+
+      .right-top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+
+        &--btn {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px;
+          border: 1px solid $border-color-btn;
+          border-radius: 5px;
+          font-size: 18px;
+          font-weight: 500;
+          height: 57px;
+          cursor: pointer;
+        }
+      }
+    }
+    .colum {
+      flex: 1;
+      overflow-y: scroll;
+      border: 3px solid #707070;
+    }
+    table {
+      border-radius: 3px;
+      background-color: #fff;
+      border-collapse: collapse;
+      border-spacing: 0;
+      min-width: max-content;
+
+      th,
+      td {
+        text-align: center;
+        font-size: 17px;
+        vertical-align: middle;
+      }
+      thead > tr {
+        *,
+        ::before,
+        ::after {
+          border: 0;
+        }
+      }
+      thead > tr:nth-child(2) {
+        font-weight: 600;
+        td {
+          background-color: #f6f9ff;
+          border-left: 1px solid #000;
+          border-right: 1px solid #000;
+        }
+      }
+      thead > tr:nth-child(1) {
+        font-weight: 600;
+        th {
+          background-color: #efedf7;
+          padding: 20px 20px;
+          border-left: 1px solid #000;
+          border-right: 1px solid #000;
+        }
+      }
+      tbody {
+        border: 0;
+
+        tr {
+          td {
+            border: 1px solid #000;
+          }
+        }
+      }
+      td {
+        padding: 15px 10px;
+      }
+    }
+    table th {
+      position: sticky;
+      top: 0px;
+    }
+  }
+}
+
+.modalSeetingWrap {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .modalSeetingBox {
+    padding: 30px 0 0 0;
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+
+    .heading {
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .body {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 30px;
+
+      .boxinput {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        label {
+          font-size: 18px;
+          font-weight: 600;
+        }
+
+        input {
+          width: 100%;
+          padding: 20px;
+          width: 360px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+      }
+    }
+
+    .bottom {
+      display: flex;
+      width: 100%;
+
+      .btn {
+        flex: 1;
+        padding: 15px;
+        text-align: center;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: 600;
+        border: 1px solid rgba($color: #ccc, $alpha: 0.5);
+        cursor: pointer;
+      }
+
+      .Close {
+        color: #676767;
+      }
+
+      .Save {
+        color: #61a300;
+      }
+    }
+  }
+
+  .error {
+    font-size: 16px;
+    color: red;
+  }
+}
