@@ -2,7 +2,7 @@ import axios from "axios";
 import { stringify } from "qs";
 import { getToken } from "../utils/localStorage";
 
-const API_ENDPOINT = "http://222.255.117.224:3023/";
+const API_ENDPOINT = "https://test.bunny2.thomi.com.vn/";
 
 const AxiosClient = axios.create({
   baseURL: API_ENDPOINT,

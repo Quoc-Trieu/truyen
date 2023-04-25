@@ -8,7 +8,8 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import iconCalendar from './../../../assets/ico/icon-calendar.png';
 import { useEffect } from 'react';
-import { getQuantityByMonth } from '../../../services/quantityServices';
+import { getExcelQuantity, getQuantityByMonth } from '../../../services/quantityServices';
+import iconExcel from "../../../assets/images/excel.png";
 
 const StatisticsProduction = () => {
   const [isDropZone, setIsDropZone] = useState(false);
@@ -26,7 +27,7 @@ const StatisticsProduction = () => {
       const res = await getQuantityByMonth({ date: monthQuantity, query: selectArea, isMonth: 1 });
       console.log(res.data);
       setDataTable(res.data.infoScaping);
-      setDataTotal(res.data)
+      setDataTotal(res.data);
     };
     getQuantity();
   }, [selectArea, monthQuantity]);
@@ -44,6 +45,27 @@ const StatisticsProduction = () => {
     setStartDate(date);
     setMonthQuantity(date);
   };
+
+  const onExportExcel = async () => {
+    try {
+      const res = await getExcelQuantity({ date: monthQuantity, query: selectArea, isMonth: 1 });
+      console.log(res);
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `sanluong.xlsx`);
+      // Append to html link element page
+      document.body.appendChild(link);
+      // Start download
+      link.click();
+      // Clean up and remove the link
+      link.parentNode.removeChild(link);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={styles.statisticsProduction}>
       <Header title="Thống kê sản lượng" />
@@ -93,7 +115,8 @@ const StatisticsProduction = () => {
             )}
           </div>
           <div className={styles.justifyEnd}>
-            <div className={styles.xuatExcelContainer}>
+            <div className={styles.xuatExcelContainer} onClick={onExportExcel}>
+              <img className={styles.imgExcel} src={iconExcel} alt="" />
               <span>Xuất file Excel</span>
             </div>
           </div>
@@ -103,7 +126,7 @@ const StatisticsProduction = () => {
         <div className={styles.boxContainer}>
           <div className={styles.item}>
             <span className={styles.title}>Mủ chuẩn</span>
-            <span className={styles.value}>{dataTotal?.totalLatex.toFixed(2)} kg</span>
+            <span className={styles.value}>{dataTotal?.totalLatex?.toFixed(2)} kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ nước</span>
@@ -119,7 +142,7 @@ const StatisticsProduction = () => {
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ đông</span>
-            <span className={styles.value}>{dataTotal?.totalSolidified  }kg</span>
+            <span className={styles.value}>{dataTotal?.totalSolidified}kg</span>
           </div>
         </div>
 
