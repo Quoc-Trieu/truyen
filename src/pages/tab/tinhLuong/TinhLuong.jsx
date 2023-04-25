@@ -30,9 +30,9 @@ function TinhLuong() {
   const [dataSalary, setDataSalary] = useState([]);
   const [dongiasanluong, setDongiasanluong] = useState("");
   const [dongiachedo, setDongiachedo] = useState("");
-  const [salaryOther, setSalaryOther] = useState("");
+  const [salaryOther, setSalaryOther] = useState(0);
   const [errOther, setErrOther] = useState(false);
-  const [phoneUser, setPhoneUser] = useState("");
+  const [idUser, setIdUser] = useState("");
 
   const [openSetting, setOpenSetting] = useState(false);
   const [openSalaryOther, setOpenSalaryOther] = useState(false);
@@ -44,6 +44,7 @@ function TinhLuong() {
   const [totalLuongKhac, setTotalLuongKhac] = useState("");
   const [total, setTotal] = useState("");
   const refInputPicker = useRef(null);
+
   // handle setting
   const handleOpenSetting = () => setOpenSetting(true);
   const handleCloseSetting = () => setOpenSetting(false);
@@ -102,19 +103,22 @@ function TinhLuong() {
   } = useForm();
   //   hàm này là hàm submit khi lưu cài đặt đơn giản
   const onSubmit = (data) => {
-    updateSetting({
-      date: selectedDate,
-      basicSalary: parseInt(data.chedo.replace(",", "")),
-      moneyQuantity: parseInt(data.sanluong.replace(",", "")),
-    })
-      .then((res) => {
-        Notiflix.Notify.success("cập nhật thành công");
-        handleCloseSetting();
-        getsalary();
+    // kiểm tra nếu 2 giá trị nhập vào nhỏ hơn 0 thì không cho cập nhật 
+    if (parseInt(dongiasanluong.replace(",", "")) > 0 && parseInt(dongiachedo.replace(",", ""))) {
+      updateSetting({
+        date: selectedDate,
+        basicSalary: parseInt(data.chedo.replace(",", "")),
+        moneyQuantity: parseInt(data.sanluong.replace(",", "")),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          Notiflix.Notify.success("cập nhật thành công");
+          handleCloseSetting();
+          getsalary();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
   // hàm này là hàm submit update lương khác của nhân công
   const handleSalaryOther = () => {
@@ -122,13 +126,14 @@ function TinhLuong() {
       setErrOther(false);
       updateSalaryOther({
         date: selectedDate,
-        idUser: phoneUser,
-        salary: salaryOther,
+        idUser: idUser,
+        salary: parseInt(salaryOther.replace(",", "")),
       })
         .then((res) => {
           Notiflix.Notify.success("cập nhật thành công");
           handleCloseSalary();
           getsalary();
+          setSalaryOther(0)
         })
         .catch((err) => {
           console.log(err);
@@ -305,7 +310,7 @@ function TinhLuong() {
                     <td>
                       <div
                         onClick={() => {
-                          setPhoneUser(item.phone);
+                          setIdUser(item.idUser);
                           handleOpenSalaryOther();
                         }}
                       >
@@ -337,9 +342,13 @@ function TinhLuong() {
                   defaultValue={dongiasanluong}
                   onChange={(e) => setDongiasanluong(e.target.value)}
                 />
+                {/* hiển thị lỗi validator */}
                 {errors?.sanluong?.type === "required" && (
                   <p className="error">vui lòng không bỏ trống</p>
                 )}
+                {
+                  parseInt(dongiasanluong.replace(",", "")) < 0 ? <p className="error"> trị nhập vào phải lớn hơn 0</p> : ''
+                }
               </div>
               <div className="boxinput">
                 <label htmlFor="">Đơn giá chế độ</label>
@@ -352,9 +361,13 @@ function TinhLuong() {
                   defaultValue={dongiachedo}
                   onChange={(e) => setDongiachedo(e.target.value)}
                 />
+                {/* hiển thị lỗi validator */}
                 {errors?.chedo?.type === "required" && (
                   <p className="error">vui lòng không bỏ trống</p>
                 )}
+                {
+                  parseInt(dongiachedo.replace(",", "")) < 0 ? <p className="error"> trị nhập vào phải lớn hơn 0</p> : ''
+                }
               </div>
             </div>
             <div className="bottom">
