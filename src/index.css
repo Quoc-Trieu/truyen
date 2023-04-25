@@ -12,7 +12,6 @@ html {
 }
 
 table {
-    /* border-collapse: unset !important; */
     border-collapse: separate;
     border-spacing: 0px 15px !important;
     background-color: #F5F6FA;
