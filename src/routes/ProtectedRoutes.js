@@ -7,6 +7,7 @@ import UserManage from "./../pages/tab/userManage/UserManage";
 import AttendanceCheck from "./../pages/tab/attendanceCheck/AttendanceCheck";
 import Divisions from "./../pages/tab/assignmentManage/Divisions";
 import StatisticsProduction from "./../pages/tab/statisticsProduction/StatisticsProduction";
+import TinhLuong from "./../pages/tab/tinhLuong/TinhLuong";
 
 const ProtectedRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const ProtectedRoutes = () => {
         <Route path="/treeManage" element={<TreeManage />} />
         <Route path="/AttendanceCheck" element={<AttendanceCheck />} />
         <Route path="/statisticsProduction" element={<StatisticsProduction />} />
+        <Route path="/tinhLuong" element={<TinhLuong />} />
       </Route>
     </Routes>
   );
