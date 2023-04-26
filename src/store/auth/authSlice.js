@@ -34,6 +34,7 @@ const authSlice = createSlice({
       state.loading = false;
       // Add user to the state array
       state.userInfo = action.payload;
+      // set role từ api
       state.role = action.payload?.role.join();
       console.log('ROLE: ', action.payload?.role.join());
     });
