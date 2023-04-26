@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from "react";
-import styles from "./ModalCreateUser.module.scss";
-import { Modal } from "antd";
+import React, { useState, useEffect } from 'react';
+import styles from './ModalCreateUser.module.scss';
+import { Modal } from 'antd';
 // import iconClose from "../../../../../assets/images/iconClose.png";
-import { useForm } from "react-hook-form";
-import ModalComponent from "../../../../../components/ModalComponent/ModalComponent";
-import { getALLUser, postCreateUser, putChangePass } from "../../../../../services/userServies";
-import { useSelector } from "react-redux";
-import RadioButton from "./../../../../../components/RadioButton/RadioButton";
-import  Notiflix  from "notiflix";
-import { useDispatch } from "react-redux";
-import {
-  getALLInfoUser,
-} from "../../../../../store/user/UserSlice";
-import {
-  roleUserSelector,
-} from "../../../../../store/auth/authSlice";
-import { Loading } from "notiflix";
-import { putUpdateUser, getPassNoHas } from "./../../../../../services/userServies";
+import { useForm } from 'react-hook-form';
+import ModalComponent from '../../../../../components/ModalComponent/ModalComponent';
+import { getALLUser, postCreateUser, putChangePass } from '../../../../../services/userServies';
+import { useSelector } from 'react-redux';
+import RadioButton from './../../../../../components/RadioButton/RadioButton';
+import Notiflix from 'notiflix';
+import { useDispatch } from 'react-redux';
+import { getALLInfoUser } from '../../../../../store/user/UserSlice';
+import { roleUserSelector } from '../../../../../store/auth/authSlice';
+import { Loading } from 'notiflix';
+import { putUpdateUser, getPassNoHas } from './../../../../../services/userServies';
 import Dropdown from 'react-bootstrap/Dropdown';
 import iconUp from './../../../../../assets/ico/icon-feather-chevron-up.png';
 import iconDown from './../../../../../assets/ico/icon-feather-chevron-down.png';
@@ -24,7 +20,6 @@ import ROLES from './../../../../../constants/roles';
 
 const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   // console.log('itemSelect----------' + JSON.stringify(item));
-  const permisson = useSelector(state => state.user.role)
   const {
     register,
     setValue,
@@ -34,7 +29,10 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const [selectedRole, setSelectedRole] = useState();
+
+  // tìm giá trị role tương ứng trong mảng ROLES để hiển thị trong dropdown
+  const [selectedRole, setSelectedRole] = useState(Object.values(ROLES).find((role) => role.value === item.role[0]));
+  console.log(Object.values(ROLES).find((role) => role.value === item.role[0]));
   const [passOld, setPassOld] = useState();
   const [isDrop, setIsDrop] = useState(false);
   const roleLogin = useSelector(roleUserSelector);
@@ -52,33 +50,35 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
           userRole: 'MANAGER',
         });
         setListManager(response.data?.users);
+
+        // tìm giá trị quản lý tương ứng trong mảng listManager để hiển thị trong dropdown
+        setSelectedManager(response.data?.users.find((manager) => manager._id === item?.userManager));
+
+        // tìm giá trị role tương ứng trong mảng ROLES để hiển thị trong dropdown
+        setSelectedRole(Object.values(ROLES).find((role) => role.value === item.role[0]));
       } catch (error) {
         console.log(error);
       }
     };
     getManager();
-  }, []);
 
-  useEffect(() => {
-    setValue("phone", item?.phone);
-    setValue("fullName", item?.fullName);
-    setSelectedRole(item?.role?.join());
-    // console.log(selectedRole);
+    //set giá trị cho các input
+    setValue('phone', item?.phone);
+    setValue('fullName', item?.fullName);
 
     const getPass = async () => {
       try {
         const res = await getPassNoHas(item?.phone);
         // lưu pass cũ lại và khởi tạo giá trị pass mới vào hook form
         setPassOld(String(res?.data));
-        setValue("password", String(res?.data));
+        setValue('password', String(res?.data));
       } catch (error) {
-        console.log("getPassNoHas mật khẩu" + error);
+        console.log('getPassNoHas mật khẩu' + error);
       }
     };
     getPass();
 
   }, [visible]);
-
 
   // const onSelectRole = (roleName) => {
   //   // chỉ các tài khoản có quyền USER và MANAGER bị thay đổi
@@ -100,7 +100,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
     //cập nhật giá trị cho selectedRole để render lại RadioButton
     setSelectedManager(item);
     //setValue để lưu giá trị vào hook form
-    setValue('userManager', item?.phone);
+    // setValue('userManager', item?._id);
   };
 
   const onSubmit = async (data) => {
@@ -112,7 +112,8 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         data: {
           fullName: data?.fullName,
           phone: data?.phone,
-          role: selectedRole,
+          userManager: selectedManager?._id || null,
+          role: selectedRole.value,
           status: item?.status,
         },
       });
@@ -130,11 +131,13 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
       //reload lại danh sách user
       dispatch(getALLInfoUser());
       reset();
+      setSelectedRole(null);
+      setSelectedManager(null);
       onOk();
-      Notiflix.Notify.success("Cập nhật thành công");
+      Notiflix.Notify.success('Cập nhật thành công');
       Loading.remove();
     } catch (error) {
-      Notiflix.Notify.failure("Cập nhật thất bại");
+      Notiflix.Notify.failure('Cập nhật thất bại');
       Loading.remove();
       console.log(error);
     }
@@ -153,9 +156,15 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
       title={title}
       visible={visible}
       // onOk={onOk}
-      onCancel={onCancel}
+      //thêm reset() vào  onCancel để clear giá trị của input khi cancel
+      onCancel={() => {
+        reset();
+        setSelectedRole(null);
+        setSelectedManager(null);
+        onCancel();
+      }}
       width={500}
-      styleWrapper={{ backgroundColor: "#fff" }}
+      styleWrapper={{ backgroundColor: '#fff' }}
     >
       <form className={styles.modalWrapper} onSubmit={handleSubmit(onSubmit)}>
         <span className={styles.label}>Tài khoản</span>
@@ -164,48 +173,42 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
           type="text"
           placeholder="Nhập sđt người dùng"
           className={styles.input}
-          {...register("phone", {
-            required: "Vui lòng không bỏ trống ô này",
+          {...register('phone', {
+            required: 'Vui lòng không bỏ trống ô này',
             readOnly: true,
             minLength: {
               value: 6,
-              message: "Nhập dài hơn 6 ký tự",
+              message: 'Nhập dài hơn 6 ký tự',
             },
           })}
         />
-        {errors?.phone && (
-          <p className={styles.errorText}>{errors?.phone?.message}</p>
-        )}
+        {errors?.phone && <p className={styles.errorText}>{errors?.phone?.message}</p>}
 
         <span className={styles.label}>Mật khẩu</span>
         <input
           type="text"
           placeholder="Nhập mật khẩu"
           className={styles.input}
-          {...register("password", {
-            required: "Vui lòng không bỏ trống ô này",
+          {...register('password', {
+            required: 'Vui lòng không bỏ trống ô này',
             minLength: {
               value: 6,
-              message: "Nhập dài hơn 6 ký tự",
+              message: 'Nhập dài hơn 6 ký tự',
             },
           })}
         />
-        {errors?.password && (
-          <p className={styles.errorText}>{errors?.password?.message}</p>
-        )}
+        {errors?.password && <p className={styles.errorText}>{errors?.password?.message}</p>}
 
         <span className={styles.label}>Tên người dùng</span>
         <input
           type="text"
           placeholder="Nhập tên người dùng"
           className={styles.input}
-          {...register("fullName", {
-            required: "Vui lòng không bỏ trống ô này",
+          {...register('fullName', {
+            required: 'Vui lòng không bỏ trống ô này',
           })}
         />
-        {errors?.fullName && (
-          <p className={styles.errorText}>{errors?.fullName?.message}</p>
-        )}
+        {errors?.fullName && <p className={styles.errorText}>{errors?.fullName?.message}</p>}
         {/* {
           permisson == 'ADMIN' ? <>
             <span className={styles.label}>Phân quyền</span>
@@ -227,8 +230,8 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
             </div>
           </> : ''
         } */}
-          {/* Bộ phận */}
-          <span className={styles.label}>Bộ phận</span>
+        {/* Bộ phận */}
+        <span className={styles.label}>Bộ phận</span>
         <Dropdown className={styles.dropDown} onToggle={handToggle}>
           <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
             {selectedRole ? <span> {selectedRole.label} </span> : <span> Chọn bộ phận</span>}
@@ -271,7 +274,6 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         ) : (
           ''
         )}
-
 
         <button className={styles.btnSubmit} type="submit">
           Xác nhận

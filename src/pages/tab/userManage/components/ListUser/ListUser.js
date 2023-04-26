@@ -18,8 +18,7 @@ import Pagination from '../../../../../components/Pagination/Pagination';
 import { pageCurrentUserSelector, setPageCurrentUser } from './../../../../../store/user/UserSlice';
 import { roleUserSelector } from './../../../../../store/auth/authSlice';
 import { getPhoneLocalStorage } from './../../../../../utils/localStorage';
-
-const roleLabel = { ADMIN: 'Admin', MANAGER: 'Quản lý', USER: 'User' };
+import ROLES from './../../../../../constants/roles';
 
 const ListUser = ({ itemsHeaderRow, isReload }) => {
   const dispatch = useDispatch();
@@ -35,7 +34,6 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [showModalEditUser, setShowModalEditUser] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
   const [itemSelect, setItemSelect] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -137,7 +135,8 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
               <div key={index} className={styles.itemUI}>
                 <span>{item?.phone} </span>
                 <span>{item?.fullName} </span>
-                <span>{roleLabel[item?.role[0]]} </span>
+                {/* tìm label trong object ROLES dựa vào item?.role[0] == value  */}
+                {Object.values(ROLES).find(role => role.value === item?.role[0])?.label}
                 <div className={styles.actionItem}>
                   <img src={iconEdit} className={styles.edit} onClick={() => onEdit(item)} />
                   <img src={iconRemove} className={styles.remove} onClick={() => onRemove(item)} />
