@@ -62,7 +62,8 @@ $column-5-width: 50px;
       overflow: auto;
       position: relative;
       border: 1px solid #ffffff;
-      // chỉnh kích thước của thanh scroll
+      background-color: #ffffff;
+        // chỉnh kích thước của thanh scroll
       &::-webkit-scrollbar-track {
         background-color: #e2e2e2;
       }
@@ -96,6 +97,7 @@ $column-5-width: 50px;
           width: $column-1-width;
           position: sticky;
           left: 0;
+          top: 0;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
         }
