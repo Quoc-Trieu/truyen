@@ -26,7 +26,7 @@ import {
 import Notiflix from "notiflix";
 import { Loading } from "notiflix";
 
-const EditFooterAssignment = ({ onCancel, data }) => {
+const EditFooterAssignment = ({ onCancel, data, subDivision}) => {
   const dispatch = useDispatch();
   const listScaping = useSelector(listScapingSelector);
   const listScapingFocusEdit = useSelector(listScapingFocusEditSelector);
@@ -80,7 +80,7 @@ const EditFooterAssignment = ({ onCancel, data }) => {
       //Xóa vùng cạo cũ trước khi cập nhập lại
       const resDelete = await deleteScaping(idScapingScaping);
       //tạo ra vùng cạo, lấy id vùng cạo để thêm cây vào vùng cạo
-      const resCreateScaping = await postCreateScaping({ idUserPartition: idUserPartition, name: namePartition });
+      const resCreateScaping = await postCreateScaping({ idUserPartition: idUserPartition, name: namePartition, belongAreaScaping: subDivision?._id });
       idScaping = resCreateScaping.data?._id; //id vùng cạo
       console.log("create  idScaping: ", idScaping);
       /////////////////////

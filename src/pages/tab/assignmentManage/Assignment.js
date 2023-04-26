@@ -72,7 +72,7 @@ const Assignment = () => {
           reload={showModal}
         />
 
-        { showModal && <ModalCreatePartition visible={showModal} onCancel={() => setShowModal(false)}/>}
+        { showModal && <ModalCreatePartition subDivision={subDivision} visible={showModal} onCancel={() => setShowModal(false)}/>}
       </div>
     </div>
   );

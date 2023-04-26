@@ -11,6 +11,7 @@ export const postCreateScaping = (data) => {
     name: data?.name,
     status: "UNSHAVED",
     idUserPartition: data?.idUserPartition,
+    belongAreaScaping: data?.belongAreaScaping,
     location: []
   });
 };

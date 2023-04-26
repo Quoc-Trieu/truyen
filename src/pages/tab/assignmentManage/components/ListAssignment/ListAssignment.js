@@ -174,7 +174,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload, subDivision }) 
         />
       }
 
-      {showEditDetail && <ModalEditCreatePartition visible={showEditDetail} onCancel={() => setShowEditDetail(false)} data={itemDetail} />}
+      {showEditDetail && <ModalEditCreatePartition subDivision={subDivision} visible={showEditDetail} onCancel={() => setShowEditDetail(false)} data={itemDetail} />}
     </div>
   );
 };

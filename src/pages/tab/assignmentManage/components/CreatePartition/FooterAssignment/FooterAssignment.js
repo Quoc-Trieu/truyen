@@ -23,7 +23,7 @@ import Notiflix from "notiflix";
 import { Loading } from "notiflix";
 import { useLayoutEffect } from "react";
 
-const FooterAssignment = ({ onCancel }) => {
+const FooterAssignment = ({ onCancel, subDivision }) => {
   const dispatch = useDispatch();
   const listScaping = useSelector(listScapingSelector);
   const idUserPartition = useSelector(idUserPartitionSelector);
@@ -52,7 +52,7 @@ const FooterAssignment = ({ onCancel }) => {
       if (resCheckTree.data == true) {
         try {
           // tạo ra vùng cạo, lấy id vùng cạo để thêm cây vào vùng cạo
-          const resCreateScaping = await postCreateScaping({ idUserPartition: idUserPartition, name: namePartition });
+          const resCreateScaping = await postCreateScaping({ idUserPartition: idUserPartition, name: namePartition, belongAreaScaping: subDivision?._id });
           idScaping = resCreateScaping.data?._id;
           console.log("create idScaping Success: ", idScaping);
 

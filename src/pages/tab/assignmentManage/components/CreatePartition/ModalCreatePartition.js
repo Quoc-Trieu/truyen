@@ -9,7 +9,7 @@ import FooterAssignment from './FooterAssignment/FooterAssignment';
 import { resetSpacing } from "../../../../../store/assignment/AssignmentSlice";
 import { useDispatch } from 'react-redux';
 
-const ModalCreatePartition = ({ visible, onCancel, onOk }) => {
+const ModalCreatePartition = ({ visible, onCancel, onOk, subDivision }) => {
   const dispatch = useDispatch();
   const {
     register,
@@ -33,7 +33,7 @@ const ModalCreatePartition = ({ visible, onCancel, onOk }) => {
     >
         <HeaderFilter />
         <BodyAssignmentList />
-        <FooterAssignment onCancel={() => {onCancel(); dispatch(resetSpacing([]))}}/>
+        <FooterAssignment subDivision={subDivision} onCancel={() => {onCancel(); dispatch(resetSpacing([]))}}/>
     </ModalComponent>
   );
 };
