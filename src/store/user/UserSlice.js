@@ -9,7 +9,7 @@ const initialState = {
   pageCurrent: 1,
   pageTotal: null,
   listUser: {},
-  filterUser: 'ADMIN',
+  filterUser: 'ROOT',
   loading: false,
   error: null,
 };
@@ -36,7 +36,7 @@ export const getALLInfoUser = createAsyncThunk('user/getALLInfoUser', async (pag
 
   let paramUserRole; //tham khảo cách trả về của BE để hiểu cách xử lý này
   if (role === 'ADMIN') {
-    paramUserRole = fifter; //chỉ có ADMIN mới đc lọc USER
+    paramUserRole = 'ROOT'; //chỉ có ADMIN mới đc lọc USER
   } else {
     if (role === 'MANAGER') {
       paramUserRole = 'MANAGER'; //quản lý lấy tất cả USER
@@ -107,6 +107,7 @@ export const pageCurrentUserSelector = (state) => state.user.pageCurrent;
 export const searchUserSelector = (state) => state.user.searching;
 
 export const listUserSelector = (state) => state.user.listUser;
+export const filterUserUserSelector = (state) => state.user.filterUser;
 
 export const { setPageCurrentUser, setSearching, setFilterUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -6,7 +6,6 @@ import { postCreateUser, putChangePass } from "../../../../../services/userServi
 import Notiflix from "notiflix";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoSelector } from "../../../../../store/auth/authSlice";
-import { getALLInfoUser } from "../../../../../store/user/UserSlice";
 import { Loading } from "notiflix";
 
 const ModalChangePassword = ({ visible, onCancel, onOk }) => {

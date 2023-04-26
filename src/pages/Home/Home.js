@@ -12,7 +12,7 @@ import { getALLTrees } from './../../store/tree/TreeSlice';
 function Home() {
   const dispatch = useDispatch();
   dispatch(getInfoUser())
-  dispatch(getALLInfoUser())
+  // dispatch(getALLInfoUser())
   dispatch(getALLTrees())
   
   return (

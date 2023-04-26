@@ -25,7 +25,7 @@ export const getALLUserAutoComplete = createAsyncThunk("assignment/getALLUserAut
     const response = await getALLUser({
       page: 1,
       limit: 1000,
-      userRole: getState().user.role,
+      userRole: "ROOT",
       userStatus: "ACTIVE",
     });
     console.log(response?.data);
