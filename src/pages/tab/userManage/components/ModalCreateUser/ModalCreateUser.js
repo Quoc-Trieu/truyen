@@ -74,7 +74,7 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
     //cập nhật giá trị cho selectedRole để render lại RadioButton
     setSelectedManager(item);
     //setValue để lưu giá trị vào hook form
-    setValue('userManager', item?.phone);
+    setValue('userManager', item?._id);
   };
 
   const onSubmit = async (data) => {

@@ -31,7 +31,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   const dispatch = useDispatch();
   const nameUser = name?.split('\n')[0] ?? '';
   const phoneUser = name?.split('\n')[1] ?? ''; //id là sđt của nhân viên
-  const idUser = findIdUserByPhone({ phone: phoneUser, arrayResult: dataAttendance?.arrayResult });
+  const idUser = findIdUserByPhone({ phone: phoneUser, arrayUser: dataAttendance?.arrayUser });
 
   //tính mủ chuẩn
   const [totalLatex, setTotalLatex] = useState();
@@ -151,6 +151,33 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
     const regex = /^[0-9]*\.?[0-9]*$/; // chỉ cho phép nhập số và dấu chấm
     if (!regex.test(value)) {
       event.target.value = value.slice(0, -1); // loại bỏ ký tự cuối cùng nếu không hợp lệ
+    }
+  };
+
+  const onSubmitException = async () => {
+    // nếu không đi làm thì không cần nhập sản lượng
+    if (checkAttendance !== dataCheckAttendance.co_di_lam) {
+      try {
+        const res = await postAttendance({
+          idUser: idUser,
+          isWork: checkAttendance?.isWord,
+          isDelay: false,
+          isPermission: checkAttendance?.isPermission,
+          note: '',
+          date: isoDate,
+        });
+        if (res?.data?.messenger === 'USER_IS_ATTENDANCE') {
+          Notiflix.Notify.failure('Đã điểm danh rồi');
+        } else {
+          onOk();
+          reset();
+          Notiflix.Notify.success('Điểm danh thành công');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setIsConfirm(true);
     }
   };
 
@@ -393,7 +420,11 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             >
               Hủy
             </button>
-            <button className={styles.btnSubmit} type="submit" onClick={() => setIsConfirm(true)}>
+            <button
+              className={styles.btnSubmit}
+              type={checkAttendance == dataCheckAttendance.co_di_lam ? 'submit' : ''}
+              onClick={onSubmitException}
+            >
               Xác nhận
             </button>
           </div>

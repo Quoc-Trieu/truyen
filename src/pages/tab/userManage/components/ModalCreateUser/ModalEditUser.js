@@ -4,7 +4,7 @@ import { Modal } from "antd";
 // import iconClose from "../../../../../assets/images/iconClose.png";
 import { useForm } from "react-hook-form";
 import ModalComponent from "../../../../../components/ModalComponent/ModalComponent";
-import { postCreateUser, putChangePass } from "../../../../../services/userServies";
+import { getALLUser, postCreateUser, putChangePass } from "../../../../../services/userServies";
 import { useSelector } from "react-redux";
 import RadioButton from "./../../../../../components/RadioButton/RadioButton";
 import  Notiflix  from "notiflix";
@@ -17,6 +17,10 @@ import {
 } from "../../../../../store/auth/authSlice";
 import { Loading } from "notiflix";
 import { putUpdateUser, getPassNoHas } from "./../../../../../services/userServies";
+import Dropdown from 'react-bootstrap/Dropdown';
+import iconUp from './../../../../../assets/ico/icon-feather-chevron-up.png';
+import iconDown from './../../../../../assets/ico/icon-feather-chevron-down.png';
+import ROLES from './../../../../../constants/roles';
 
 const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   // console.log('itemSelect----------' + JSON.stringify(item));
@@ -30,11 +34,30 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const ROLE = { USER: "USER", MANAGER: "MANAGER" };
   const [selectedRole, setSelectedRole] = useState();
   const [passOld, setPassOld] = useState();
+  const [isDrop, setIsDrop] = useState(false);
   const roleLogin = useSelector(roleUserSelector);
 
+  const [listManager, setListManager] = useState([]);
+  const [selectedManager, setSelectedManager] = useState(null);
+
+  useEffect(() => {
+    // lấy danh sách các tổ trưởng (quản lý) để hiển thị trong dropdown
+    const getManager = async () => {
+      try {
+        const response = await getALLUser({
+          page: 1,
+          limit: 1000,
+          userRole: 'MANAGER',
+        });
+        setListManager(response.data?.users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getManager();
+  }, []);
 
   useEffect(() => {
     setValue("phone", item?.phone);
@@ -56,11 +79,28 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
 
   }, [visible]);
 
-  const onSelectRole = (roleName) => {
-    // chỉ các tài khoản có quyền USER và MANAGER bị thay đổi
-    if (selectedRole == ROLE.MANAGER || selectedRole == ROLE.USER) {
-      setSelectedRole(roleName);
-    }
+
+  // const onSelectRole = (roleName) => {
+  //   // chỉ các tài khoản có quyền USER và MANAGER bị thay đổi
+  //   if (selectedRole == ROLE.MANAGER || selectedRole == ROLE.USER) {
+  //     setSelectedRole(roleName);
+  //   }
+  // };
+
+  const onSelectRole = (role) => {
+    //cập nhật giá trị cho selectedRole để render lại RadioButton
+    setSelectedRole(role);
+    //setValue để lưu giá trị vào hook form
+    setValue('role', role?.value);
+    // clear chọn quản lý
+    onSelectManager({ phone: null });
+  };
+
+  const onSelectManager = (item) => {
+    //cập nhật giá trị cho selectedRole để render lại RadioButton
+    setSelectedManager(item);
+    //setValue để lưu giá trị vào hook form
+    setValue('userManager', item?.phone);
   };
 
   const onSubmit = async (data) => {
@@ -97,6 +137,14 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
       Notiflix.Notify.failure("Cập nhật thất bại");
       Loading.remove();
       console.log(error);
+    }
+  };
+
+  const handToggle = (isOpen) => {
+    if (isOpen) {
+      setIsDrop(true);
+    } else {
+      setIsDrop(false);
     }
   };
 
@@ -158,7 +206,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         {errors?.fullName && (
           <p className={styles.errorText}>{errors?.fullName?.message}</p>
         )}
-        {
+        {/* {
           permisson == 'ADMIN' ? <>
             <span className={styles.label}>Phân quyền</span>
             <div className={styles.groupAuthorizationUser}>
@@ -178,7 +226,51 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
               </div>
             </div>
           </> : ''
-        }
+        } */}
+          {/* Bộ phận */}
+          <span className={styles.label}>Bộ phận</span>
+        <Dropdown className={styles.dropDown} onToggle={handToggle}>
+          <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
+            {selectedRole ? <span> {selectedRole.label} </span> : <span> Chọn bộ phận</span>}
+            <img src={isDrop ? iconDown : iconUp} />
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu style={{ padding: 0 }} className={styles.dropMenu}>
+            {/* map object ROLES */}
+            {Object.values(ROLES).map((item, index) =>
+              item.value !== 'ROOT' ? (
+                <Dropdown.Item key={index} className={styles.dropItem} onClick={() => onSelectRole(item)}>
+                  {item.label}
+                </Dropdown.Item>
+              ) : (
+                ''
+              )
+            )}
+          </Dropdown.Menu>
+        </Dropdown>
+
+        {/* Tổ Trưởng */}
+        {selectedRole?.value === 'USER' ? <span className={styles.label}>Tổ trưởng</span> : ''}
+        {selectedRole?.value === 'USER' ? (
+          <Dropdown className={styles.dropDown} onToggle={handToggle}>
+            <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
+              {selectedManager?.fullName ? <span> {selectedManager?.fullName} </span> : <span> Chọn tổ trưởng</span>}
+              <img src={isDrop ? iconDown : iconUp} />
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu style={{ padding: 0 }} className={styles.dropMenu}>
+              {/* map listManager */}
+              {listManager &&
+                listManager.map((item, index) => (
+                  <Dropdown.Item key={index} className={styles.dropItem} onClick={() => onSelectManager(item)}>
+                    {item?.fullName}
+                  </Dropdown.Item>
+                ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        ) : (
+          ''
+        )}
 
 
         <button className={styles.btnSubmit} type="submit">
