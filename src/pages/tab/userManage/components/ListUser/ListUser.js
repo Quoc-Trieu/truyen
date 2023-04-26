@@ -21,7 +21,7 @@ import { getPhoneLocalStorage } from './../../../../../utils/localStorage';
 
 const roleLabel = { ADMIN: 'Admin', MANAGER: 'Quản lý', USER: 'User' };
 
-const ListUser = ({ itemsHeaderRow }) => {
+const ListUser = ({ itemsHeaderRow, isReload }) => {
   const dispatch = useDispatch();
   // const listUser = useSelector(listUserSelector);
   const [listUser, setListUser] = useState([]);
@@ -55,7 +55,7 @@ const ListUser = ({ itemsHeaderRow }) => {
       }
     };
     fetchListUser();
-  }, [pageCurrentUser, filterUser, isLoading, showModalEditUser, showModalRemove]);
+  }, [pageCurrentUser, filterUser, isLoading, showModalEditUser, showModalRemove, isReload, searchText]);
 
   // useEffect(() => {
   //   setItemSelect(itemSelect);
