@@ -48,10 +48,18 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   console.log(isoDate);
 
   const [checkAttendance, setCheckAttendance] = useState(dataCheckAttendance.co_di_lam); //lưu trạng thái điểm danh
+  const [isHaveWork, setIsHaveWork] = useState(true); //lưu trạng thái điểm danh
 
   const [infoAreaScaping, setInfoAreaScaping] = useState([]); //thông tin khu cạo lấy từ api
   const [selectAreaScaping, setSelectAreaScaping] = useState(null); //lưu khu cạo được chọn
   const [selectShaveScaping, setSelectShaveScaping] = useState(null); //lưu phần cạo được chọn
+
+
+  useEffect(() => {
+    // user có làm việc hay không, để xử lý không cho nhập sản lượng
+    setIsHaveWork(checkAttendance == dataCheckAttendance.co_di_lam)
+  }, [checkAttendance])
+
 
   useEffect(() => {
     const getInfo = async () => {
@@ -243,7 +251,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
 
           <span className={styles.labelQuantity}>Sản Lượng Ngày Cạo</span>
 
-          <div className={styles.selectShavingArea}>
+          <div className={styles.selectShavingArea} style={{pointerEvents: isHaveWork ? 'auto' : 'none' }}>
             {/* Drop chọn khu */}
             <div>
               <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
@@ -296,7 +304,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
           </div>
 
           {/* Nhập các loại mủ */}
-          <div className={styles.latex}>
+          <div className={styles.latex} style={{pointerEvents: isHaveWork ? 'auto' : 'none' }}>
             {/* Mủ nước */}
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ nước</span>
@@ -422,7 +430,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             </button>
             <button
               className={styles.btnSubmit}
-              type={checkAttendance == dataCheckAttendance.co_di_lam ? 'submit' : ''}
+              type={isHaveWork ? 'submit' : ''}
               onClick={onSubmitException}
             >
               Xác nhận
