@@ -54,12 +54,10 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   const [selectAreaScaping, setSelectAreaScaping] = useState(null); //lưu khu cạo được chọn
   const [selectShaveScaping, setSelectShaveScaping] = useState(null); //lưu phần cạo được chọn
 
-
   useEffect(() => {
     // user có làm việc hay không, để xử lý không cho nhập sản lượng
-    setIsHaveWork(checkAttendance == dataCheckAttendance.co_di_lam)
-  }, [checkAttendance])
-
+    setIsHaveWork(checkAttendance == dataCheckAttendance.co_di_lam);
+  }, [checkAttendance]);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -70,6 +68,10 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   }, []);
 
   const onSubmit = async (data) => {
+    if (selectAreaScaping == null || selectShaveScaping == null )
+    {
+      return
+    }
     //  console.log(data); //data lấy từ form
     try {
       //điểm danh User
@@ -137,6 +139,18 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
       }
     } catch (err) {
       console.log(err);
+      switch (err?.response?.data?.code) {
+        case 'INVALID_ROLE':
+          Notiflix.Notify.failure('Không có quyền điểm danh');
+          break;
+        case 'MANAGER_DON_HAVE_USER':
+          Notiflix.Notify.failure('Nhân công không thuộc quản lý này');
+          break;
+
+        default:
+          Notiflix.Notify.failure('Điểm danh thất bại' + err?.response?.data?.code);
+          break;
+      }
     }
   };
 
@@ -183,8 +197,17 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
         }
       } catch (err) {
         console.log(err);
-        if (err?.response?.data?.code === 'INVALID_ROLE') {
-          Notiflix.Notify.failure('Không có quyền điểm danh');
+        switch (err?.response?.data?.code) {
+          case 'INVALID_ROLE':
+            Notiflix.Notify.failure('Không có quyền điểm danh');
+            break;
+          case 'MANAGER_DON_HAVE_USER':
+            Notiflix.Notify.failure('Nhân công không thuộc quản lý này');
+            break;
+
+          default:
+            Notiflix.Notify.failure('Điểm danh thất bại' + err?.response?.data?.code);
+            break;
         }
       }
     } else {
@@ -254,7 +277,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
 
           <span className={styles.labelQuantity}>Sản Lượng Ngày Cạo</span>
 
-          <div className={styles.selectShavingArea} style={{pointerEvents: isHaveWork ? 'auto' : 'none' }}>
+          <div className={styles.selectShavingArea} style={{ pointerEvents: isHaveWork ? 'auto' : 'none' }}>
             {/* Drop chọn khu */}
             <div>
               <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
@@ -307,7 +330,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
           </div>
 
           {/* Nhập các loại mủ */}
-          <div className={styles.latex} style={{pointerEvents: isHaveWork ? 'auto' : 'none' }}>
+          <div className={styles.latex} style={{ pointerEvents: isHaveWork ? 'auto' : 'none' }}>
             {/* Mủ nước */}
             <div className={styles.latexItem}>
               <span className={styles.labelLatex}>Mủ nước</span>
@@ -431,11 +454,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             >
               Hủy
             </button>
-            <button
-              className={styles.btnSubmit}
-              type={isHaveWork ? 'submit' : ''}
-              onClick={onSubmitException}
-            >
+            <button className={styles.btnSubmit} type={isHaveWork ? 'submit' : ''} onClick={onSubmitException}>
               Xác nhận
             </button>
           </div>

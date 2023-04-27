@@ -28,12 +28,13 @@ const vietnameseMonths = {
   11: 'Tháng 12',
 };
 
-registerLocale('vi', { ...vi, localize: { month: n => vietnameseMonths[n] } });
+registerLocale('vi', { ...vi, localize: { month: (n) => vietnameseMonths[n] } });
 
 const AttendanceCheck = () => {
   const [monthOfTable, setMonthOfTable] = useState(new Date());
-  console.log('today', monthOfTable);
+  // console.log('today', monthOfTable);
   const dates = useMemo(() => getDaysInMonth(monthOfTable), [monthOfTable]);
+  // console.log('dates', dates);
   const dayNow = getCurrentDay();
   const dayRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -44,11 +45,11 @@ const AttendanceCheck = () => {
 
   useEffect(() => {
     fetchData();
-  }, [visible]);
+  }, [visible, monthOfTable]);
 
   const fetchData = async () => {
-    const now = new Date().toISOString();
-    const response = await getAttendanceInMonth({ date: now });
+    const timeTable = new Date( monthOfTable.toISOString());
+    const response = await getAttendanceInMonth({ date: timeTable });
     setDataAttendance(response?.data);
   };
 
@@ -111,7 +112,7 @@ const AttendanceCheck = () => {
         accessor: 'vungCao',
       },
       {
-        Header: 'Tên',
+        Header: 'Tên & Sđt',
         accessor: 'ten',
       },
       {
@@ -172,6 +173,7 @@ const AttendanceCheck = () => {
     }, 100);
     console.log(e.toISOString());
     const date = new Date(e.toISOString());
+    // console.log('date', e.toISOString());
     const month = date.getMonth();
     const year = date.getFullYear();
     const textDatePicker = `tháng ${month + 1}-${year}`;
@@ -198,7 +200,14 @@ const AttendanceCheck = () => {
             <img style={{ marginLeft: 'auto' }} src={iconDown} alt="iconDown" width="10px" height="6px" />
             {isOpenDatePicker && (
               <div style={{ width: '800px', position: 'absolute', top: '100%', left: 0, zIndex: 10 }}>
-                <DatePicker selected={monthOfTable} locale="vi" onChange={handleChange} inline showMonthYearPicker showFullMonthYearPicker />
+                <DatePicker
+                  selected={monthOfTable}
+                  locale="vi"
+                  onChange={handleChange}
+                  inline
+                  showMonthYearPicker
+                  showFullMonthYearPicker
+                />
               </div>
             )}
           </div>

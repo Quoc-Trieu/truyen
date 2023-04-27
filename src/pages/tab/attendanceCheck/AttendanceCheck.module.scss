@@ -1,9 +1,9 @@
 @use '../../../styles/scss/' as *;
 
 $column-1-width: 60px;
-$column-2-width: 100px;
+$column-2-width: 120px;
 $column-3-width: 200px;
-$column-4-width: 100px;
+$column-4-width: 120px;
 $column-5-width: 50px;
 
 .attendanceCheck {
@@ -100,6 +100,7 @@ $column-5-width: 50px;
           top: 0;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
+          pointer-events: none;
         }
 
         // cột Vùng cạo
@@ -110,16 +111,23 @@ $column-5-width: 50px;
           left: $column-1-width;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
+          pointer-events: none;
         }
 
         // cột Tên và sđt
         th:nth-child(3),
         td:nth-child(3) {
           width: $column-3-width;
+          text-align: left;
           position: sticky;
           left: $column-1-width + $column-2-width;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
+          pointer-events: none;
+        }
+
+        th:nth-child(3) {
+          text-align: center;
         }
 
         // cột Tổng ngày công
@@ -130,6 +138,7 @@ $column-5-width: 50px;
           left: $column-1-width + $column-2-width + $column-3-width;
           border: 1px solid #c7c7c7;
           background-color: #ecf0f9;
+          pointer-events: none;
         }
 
         th:nth-child(4) {

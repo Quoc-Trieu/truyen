@@ -25,7 +25,7 @@ const StatisticsProduction = () => {
 
   useEffect(() => {
     const getQuantity = async () => {
-      const res = await getQuantityByMonth({ date: monthQuantity, query: selectArea, isMonth: 1 });
+      const res = await getQuantityByMonth({ date: monthQuantity, query: selectArea, isMonth: 0 });
       console.table(res.data.infoScaping);
       console.table(res.data.dataScaping);
       // format lại dữ liệu từ api để hiển thị ra bảng, nếu không có dữ liệu thì thêm 0 vào vào các trường
@@ -134,19 +134,19 @@ const StatisticsProduction = () => {
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ nước</span>
-            <span className={styles.value}>{dataTotal?.totalWater}kg</span>
+            <span className={styles.value}>{dataTotal?.totalWater} kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ chén</span>
-            <span className={styles.value}>{dataTotal?.totalCup}kg</span>
+            <span className={styles.value}>{dataTotal?.totalCup} kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ dây</span>
-            <span className={styles.value}>{dataTotal?.totalWire}kg</span>
+            <span className={styles.value}>{dataTotal?.totalWire} kg</span>
           </div>
           <div className={styles.item}>
             <span className={styles.title}>Mủ đông</span>
-            <span className={styles.value}>{dataTotal?.totalSolidified}kg</span>
+            <span className={styles.value}>{dataTotal?.totalSolidified} kg</span>
           </div>
         </div>
 

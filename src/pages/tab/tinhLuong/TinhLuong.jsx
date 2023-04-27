@@ -16,13 +16,16 @@ import Modal from "@mui/material/Modal";
 import { useForm } from "react-hook-form";
 import CurrencyInput from "react-currency-input-field";
 import Notiflix from "notiflix";
+import { permissionEdiSelector } from "./../../../store/auth/authSlice";
 
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import moment from "moment";
 import "moment/locale/vi";
+import { useSelector } from "react-redux";
 
 function TinhLuong() {
+  const permissionEditUser = useSelector(permissionEdiSelector);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDateShow, setSelectedDateShow] = useState(
     moment(new Date()).format("MM-YYYY")
@@ -260,6 +263,7 @@ function TinhLuong() {
             <div
               className="setting right-top--btn"
               onClick={() => handleOpenSetting()}
+              style={{ pointerEvents: permissionEditUser ? 'auto' : 'none' }}
             >
               <img src={iconSetting} alt="" />
               <span>Cài đặt đơn giản</span>
