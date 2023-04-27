@@ -25,21 +25,24 @@ import {
 } from "./../../../../../../services/assignmentServices";
 import Notiflix from "notiflix";
 import { Loading } from "notiflix";
+import { permissionEdiSelector } from "./../../../../../../store/auth/authSlice";
 
 const EditFooterAssignment = ({ onCancel, data, subDivision}) => {
   const dispatch = useDispatch();
   const listScaping = useSelector(listScapingSelector);
   const listScapingFocusEdit = useSelector(listScapingFocusEditSelector);
+
   const idUserPartition = useSelector(idUserPartitionSelector);
   const namePartition = useSelector(namePartitionSelector);
   const idScapingScaping = useSelector(idScapingEditSelector);
   const idEdit = useSelector(isEditSelector);
+  const permissionEditUser = useSelector(permissionEdiSelector);
 
   const onSummit = async () => {
-    console.log("listAssignment: ");
     console.table(listScaping);
-    console.log("idScapingScaping: ", idScapingScaping);
-    console.log("namePartition: ", namePartition);
+    // console.log("listAssignment: ");
+    // console.log("idScapingScaping: ", idScapingScaping);
+    // console.log("namePartition: ", namePartition);
 
     if (!checkErrorEditDetail()) {
       CreatePartition(listScaping);
@@ -262,7 +265,7 @@ const EditFooterAssignment = ({ onCancel, data, subDivision}) => {
             text="Chỉnh sửa"
             icon={iconEdit}
             onSummit={() => dispatch(setIsEdit(true))}
-            styleCustom={{ background: "linear-gradient(90deg, #00A2FF 0%, #00A2FF 100%)" }}
+            styleCustom={{ background: "linear-gradient(90deg, #00A2FF 0%, #00A2FF 100%)", pointerEvents: permissionEditUser ? 'auto' : 'none' }}
           />
         </div>
       )}

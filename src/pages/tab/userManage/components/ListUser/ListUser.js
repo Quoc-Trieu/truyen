@@ -16,7 +16,7 @@ import Notiflix from 'notiflix';
 import ModalEditUser from '../ModalCreateUser/ModalEditUser';
 import Pagination from '../../../../../components/Pagination/Pagination';
 import { pageCurrentUserSelector, setPageCurrentUser } from './../../../../../store/user/UserSlice';
-import { roleUserSelector } from './../../../../../store/auth/authSlice';
+import { permissionEdiSelector, roleUserSelector } from './../../../../../store/auth/authSlice';
 import { getPhoneLocalStorage } from './../../../../../utils/localStorage';
 import ROLES from './../../../../../constants/roles';
 
@@ -28,7 +28,8 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
   const roleAuth = useSelector(roleUserSelector);
   const searchText = useSelector(searchUserSelector);
   const filterUser = useSelector(filterUserUserSelector);
-
+  const permissionEditUser = useSelector(permissionEdiSelector); // dựa vào quyền đang đăng nhập để xác định có được phép edit user hay không
+ 
   const phoneLocalStorage = getPhoneLocalStorage();
 
   const [listUser, setListUser] = useState([]);
@@ -38,6 +39,7 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
 
   const [itemSelect, setItemSelect] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     const fetchListUser = async () => {
@@ -145,7 +147,9 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
                 <span>{item?.fullName} </span>
                 {/* tìm label trong object ROLES dựa vào item?.role[0] == value  */}
                 {Object.values(ROLES).find((role) => role.value === item?.role[0])?.label}
-                <div className={styles.actionItem}>
+
+                {/* pointerEvents: không phép edit nếu đang nhập với quyền không cho phép chỉnh sửa, quy định trong ROLES (contants) */}
+                <div className={styles.actionItem} style={{pointerEvents: permissionEditUser ? 'auto' : 'none' }}>
                   <img src={iconEdit} className={styles.edit} onClick={() => onEdit(item)} />
                   <img src={iconRemove} className={styles.remove} onClick={() => onRemove(item)} />
 

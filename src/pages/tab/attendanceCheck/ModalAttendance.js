@@ -183,6 +183,9 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
         }
       } catch (err) {
         console.log(err);
+        if (err?.response?.data?.code === 'INVALID_ROLE') {
+          Notiflix.Notify.failure('Không có quyền điểm danh');
+        }
       }
     } else {
       setIsConfirm(true);

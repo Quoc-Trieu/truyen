@@ -13,10 +13,13 @@ import { getALLUserAutoComplete, setSearchingAssignment } from './../../../store
 import ModalEditCreatePartition from './components/EditPartition/ModalEditCreatePartition';
 import { useSelector } from 'react-redux';
 import { useLocation } from "react-router-dom";
+import { permissionEdiSelector } from "./../../../store/auth/authSlice";
 
 
 const Assignment = () => {
   const dispatch = useDispatch();
+  const permissionEditUser = useSelector(permissionEdiSelector);
+
   const location = useLocation();
   const subDivision = location.state?.subDivision;
 
@@ -51,6 +54,7 @@ const Assignment = () => {
             onChangeText={onChangeText}
           />
           <Button
+            styleCustom={{ pointerEvents: permissionEditUser ? 'auto' : 'none' }}
             icon={IconAdd}
             text="Tạo phân vùng mới"
             onSubmit={() => {

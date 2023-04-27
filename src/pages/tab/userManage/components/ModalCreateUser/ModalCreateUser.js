@@ -18,9 +18,6 @@ import ROLES from '../../../../../constants/roles';
 import { getALLUser } from '../../../../../services/userServies';
 
 const ModalCreateUser = ({ visible, onCancel, onOk }) => {
-  const ROLE = { USER: 'USER', MANAGER: 'MANAGER' };
-  const permisson = useSelector((state) => state.auth.role);
-  const STATUS = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' };
   const {
     register,
     setValue,
@@ -34,11 +31,12 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
       password: '',
       userManager: null,
       fullName: '',
-      role: ROLE.USER,
-      status: STATUS.ACTIVE,
+      role: '',
+      status: 'ACTIVE',
     },
   });
   const dispatch = useDispatch();
+
   const [selectedRole, setSelectedRole] = useState();
   const [isDrop, setIsDrop] = useState(false);
   const [listManager, setListManager] = useState([]);

@@ -24,7 +24,7 @@ const UserManage = () => {
   const dispatch = useDispatch();
   const permisson = useSelector((state) => state.auth.role);
   const filterUser = useSelector((state) => state.user.filterUser);
-  const searchText = useSelector((state) => state.user.searching);
+  const permissionEditUser = useSelector((state) => state.auth.permissionEdit);
 
   useEffect(() => {
     // set label từ giá trj redux
@@ -68,7 +68,12 @@ const UserManage = () => {
       <div className={styles.userBody}>
         <div className={styles.toolbar}>
           <SearchInput placeholder="Nhập tên, số điện thoại" onSubmit={onSubmit} onChangeText={onChangeText} />
-          <Button text="Tạo tài khoản" onSubmit={() => setShowModal(true)} icon={iconAddUser} />
+          <Button
+            styleCustom={{ pointerEvents: permissionEditUser ? 'auto' : 'none' }}
+            text="Tạo tài khoản"
+            onSubmit={() => setShowModal(true)}
+            icon={iconAddUser}
+          />
         </div>
 
         {

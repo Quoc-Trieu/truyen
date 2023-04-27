@@ -13,16 +13,20 @@ import Notiflix from 'notiflix';
 import { Loading } from 'notiflix';
 import ModalEditCreatePartition from './../EditPartition/ModalEditCreatePartition';
 import { format } from "date-fns";
+import { permissionEdiSelector } from "./../../../../../store/auth/authSlice";
 
 const ListAssginment = ({ itemsHeaderRow, assignmenList, reload, subDivision }) => {
-  const [showRemove, setShowRemove] = useState(false);
-  const [showEditDetail, setShowEditDetail] = useState(false);
-  const [itemDelete, setItemDelete] = useState();
-  const [itemDetail, setItemDetail] = useState();
-  const [list, setList] = useState([]);
   const search = useSelector(searchingAssignmentSelector);
   const listScaping = useSelector(listScapingSelector);
+  const permissionEditUser = useSelector(permissionEdiSelector);
+
+  const [list, setList] = useState([]);
+  const [itemDelete, setItemDelete] = useState();
+  const [itemDetail, setItemDetail] = useState();
+  
   const [page, setPage] = useState(1);
+   const [showRemove, setShowRemove] = useState(false);
+  const [showEditDetail, setShowEditDetail] = useState(false);
 
   useEffect(() => {
     const getList = async () => {
@@ -143,6 +147,7 @@ const ListAssginment = ({ itemsHeaderRow, assignmenList, reload, subDivision }) 
               {/* Action */}
               <div className={styles.actionItem}>
                 <img
+                  style={{ pointerEvents: permissionEditUser ? 'auto' : 'none' }}
                   src={iconRemove}
                   className={styles.remove}
                   onClick={() => onRemove(item)}
