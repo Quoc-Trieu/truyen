@@ -8,7 +8,7 @@ import { postCreateUser } from '../../../../../services/userServies';
 import RadioButton from './../../../../../components/RadioButton/RadioButton';
 import Notiflix from 'notiflix';
 import { useDispatch } from 'react-redux';
-import { getALLInfoUser } from '../../../../../store/user/UserSlice';
+import { getALLInfoUser, setPageCurrentUser } from '../../../../../store/user/UserSlice';
 import { Loading } from 'notiflix';
 import { useSelector } from 'react-redux';
 import iconUp from '../../../../../assets/ico/icon-feather-chevron-up.png';
@@ -83,11 +83,12 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
       Loading.pulse();
       const res = await postCreateUser(data);
       //reload lại danh sách user
-      dispatch(getALLInfoUser());
+      // dispatch(getALLInfoUser());
       reset();
       onOk();
       Loading.remove();
       Notiflix.Notify.success('Tạo tài khoản thành công');
+      dispatch(setPageCurrentUser(1));
     } catch (error) {
       Loading.remove();
       console.log(error);

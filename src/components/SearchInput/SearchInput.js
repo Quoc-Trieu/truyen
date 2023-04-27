@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./SearchInput.module.scss";
 import iconSearch from "../../assets/ico/icon-feather-search.png";
 import { useDispatch, useSelector } from 'react-redux';
-import { getInfoUserBySearch, setSearching } from './../../store/user/UserSlice';
+import { setSearching } from './../../store/user/UserSlice';
 
 const SearchInput = ({
   initValue,

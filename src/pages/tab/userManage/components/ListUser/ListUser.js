@@ -23,13 +23,15 @@ import ROLES from './../../../../../constants/roles';
 const ListUser = ({ itemsHeaderRow, isReload }) => {
   const dispatch = useDispatch();
   // const listUser = useSelector(listUserSelector);
-  const [listUser, setListUser] = useState([]);
   const pageCurrentUser = useSelector(pageCurrentUserSelector);
+  //quyền của user đang đăng nhập
+  const roleAuth = useSelector(roleUserSelector);
   const searchText = useSelector(searchUserSelector);
-  const role = useSelector(roleUserSelector);
   const filterUser = useSelector(filterUserUserSelector);
+
   const phoneLocalStorage = getPhoneLocalStorage();
-  console.log(phoneLocalStorage);
+
+  const [listUser, setListUser] = useState([]);
 
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [showModalEditUser, setShowModalEditUser] = useState(false);
@@ -40,20 +42,26 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
   useEffect(() => {
     const fetchListUser = async () => {
       try {
-        const response = await getALLUser({
-          page: pageCurrentUser ?? 1,
-          limit: 10,
-          userRole: filterUser,
-          query: searchText,
-        });
-        console.log(response.data);
-        setListUser(response.data);
+        if(roleAuth){
+          // tìm userRole của roleAuth de truyen vao api
+          const userRole = Object.values(ROLES).find((role) => role.value === roleAuth)?.userRole;
+
+          const response = await getALLUser({
+            page: pageCurrentUser ?? 1,
+            limit: 10,
+            userRole: filterUser ?? userRole,
+            query: searchText,
+          });
+          console.log(response.data);
+          setListUser(response.data);
+        }
+        
       } catch (error) {
         console.log('Failed to fetch list: User ', error);
       }
     };
     fetchListUser();
-  }, [pageCurrentUser, filterUser, isLoading, showModalEditUser, showModalRemove, isReload, searchText]);
+  }, [pageCurrentUser, filterUser, isLoading, showModalEditUser, showModalRemove, isReload, searchText, roleAuth]);
 
   // useEffect(() => {
   //   setItemSelect(itemSelect);
@@ -136,7 +144,7 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
                 <span>{item?.phone} </span>
                 <span>{item?.fullName} </span>
                 {/* tìm label trong object ROLES dựa vào item?.role[0] == value  */}
-                {Object.values(ROLES).find(role => role.value === item?.role[0])?.label}
+                {Object.values(ROLES).find((role) => role.value === item?.role[0])?.label}
                 <div className={styles.actionItem}>
                   <img src={iconEdit} className={styles.edit} onClick={() => onEdit(item)} />
                   <img src={iconRemove} className={styles.remove} onClick={() => onRemove(item)} />

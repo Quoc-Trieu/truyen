@@ -29,19 +29,22 @@ const UserManage = () => {
   useEffect(() => {
     // set label từ giá trj redux
     const filteredRoles = Object.values(ROLES).filter((role) => role.value == filterUser);
-    setLabelMenu(filteredRoles[0].label);
+    setLabelMenu(filteredRoles[0]?.label ?? 'Tất cả');
   }, [filterUser]);
 
   useEffect(() => {
     dispatch(setSearching(''));
+    dispatch(setPageCurrentUser(1));
   }, []);
 
   const onSubmit = async (text) => {
     dispatch(setSearching(text));
+    dispatch(setPageCurrentUser(1));
   };
   const onChangeText = (text) => {
     if (text === '') {
       dispatch(setSearching(''));
+      dispatch(setPageCurrentUser(1));
     }
   };
 

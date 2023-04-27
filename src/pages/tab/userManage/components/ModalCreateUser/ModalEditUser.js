@@ -129,7 +129,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
         });
       }
       //reload lại danh sách user
-      dispatch(getALLInfoUser());
+      // dispatch(getALLInfoUser());
       reset();
       setSelectedRole(null);
       setSelectedManager(null);

@@ -5,7 +5,7 @@ export const getALLUser = ({
   limit = 10,
   oderBy,
   query,
-  userRole,
+  userRole = 'ROOT',
   userStatus,
 }) => {
   return AxiosClient.get("/user/getAllUsers", {
