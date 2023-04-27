@@ -10,6 +10,7 @@ import iconCalendar from './../../../assets/ico/icon-calendar.png';
 import { useEffect } from 'react';
 import { getExcelQuantity, getQuantityByMonth } from '../../../services/quantityServices';
 import iconExcel from "../../../assets/images/excel.png";
+import { getInfoScaping } from './../../../utils/methods';
 
 const StatisticsProduction = () => {
   const [isDropZone, setIsDropZone] = useState(false);
@@ -25,8 +26,11 @@ const StatisticsProduction = () => {
   useEffect(() => {
     const getQuantity = async () => {
       const res = await getQuantityByMonth({ date: monthQuantity, query: selectArea, isMonth: 1 });
-      console.log(res.data);
-      setDataTable(res.data.infoScaping);
+      console.table(res.data.infoScaping);
+      console.table(res.data.dataScaping);
+      // format lại dữ liệu từ api để hiển thị ra bảng, nếu không có dữ liệu thì thêm 0 vào vào các trường
+      const formatData = getInfoScaping({infoScaping: res.data.infoScaping, dataScaping: res.data.dataScaping});
+      setDataTable(formatData);
       setDataTotal(res.data);
     };
     getQuantity();

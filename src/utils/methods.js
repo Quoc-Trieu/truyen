@@ -1,7 +1,7 @@
 export const getDaysInCurrentMonth = () => {
   const now = new Date();
   // return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  return now
+  return now;
 };
 
 export const getCurrentDay = () => {
@@ -33,14 +33,50 @@ export const getDaysInMonth = (dateString) => {
   }
 
   return daysArray;
-}
+};
 
-export const findIdUserByPhone = ({phone, arrayUser}) => {
+export const findIdUserByPhone = ({ phone, arrayUser }) => {
   //tìm _id của user theo số điện thoại trong mảng arrayUser
   for (let i = 0; i < arrayUser?.length; i++) {
     if (arrayUser[i].idUserPartition === phone) {
       return arrayUser[i].infoUser._id;
     }
   }
-  return null; 
-}
+  return null;
+};
+
+export const getInfoScaping = ({ infoScaping, dataScaping }) => {
+  const result = [];
+
+  for (let i = 0; i < dataScaping?.length; i++) {
+    // khu cạo lớn A B C của dataScaping
+    const area = dataScaping[i].infoScaping;
+
+    // lấy ra các phần cạo trong khu cạo lớn A B C
+    for (let j = 0; j < area?.length; j++) {
+
+      // tên phần cạo
+      const name = dataScaping[i].infoScaping[j].name;
+
+      // tìm phần cạo trong infoScaping.lsScaping.scapingName
+      let info = infoScaping.find((info) => info?.lsScaping[0]?.scapingName === name);
+
+      // nếu không tìm thấy thì tạo mới info với tên phần cạo và các trường khác bằng 0
+      if (!info) {
+        info = {
+          waterScaping: 0,
+          cupScaping: 0,
+          solidifiedScaping: 0,
+          wireScaping: 0,
+          total: 0,
+          lsScaping: [{ scapingName: name }],
+        };
+      }
+
+      // thêm vào mảng result
+      result.push(info);
+    }
+  }
+
+  return result;
+};
