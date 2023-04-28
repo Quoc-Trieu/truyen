@@ -68,8 +68,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   }, []);
 
   const onSubmit = async (data) => {
-    if (selectAreaScaping == null || selectShaveScaping == null )
-    {
+    if (selectAreaScaping == null || selectShaveScaping == null) {
       return
     }
     //  console.log(data); //data lấy từ form
@@ -85,31 +84,34 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
       });
       // check User đã điểm danh
       if (res?.data?.messenger === 'USER_IS_ATTENDANCE') {
-        try {
-          //thêm sản lượng User
-          const resQuantity = await postCreateQuantity({
-            phoneUser: phoneUser,
-            idUser: idUser,
-            date: isoDate,
-            idScaping: selectShaveScaping?._id,
-            latexWater: Number(data?.latexWater),
-            temp: Number(data?.temp),
-            latexCup: Number(data?.latexCup),
-            tempCup: Number(data?.tempCup),
-            latexSolidified: Number(data?.latexSolidified),
-            latexWire: Number(data?.latexWire),
-          });
-          onOk();
-          reset();
-          Notiflix.Notify.success('Điểm danh thành công');
-        } catch (err) {
-          console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
-          if (err?.response?.data?.code === 'SCAPING_NOT_FOUND') {
-            Notiflix.Notify.failure('User không thuộc khu cạo');
-          } else {
-            Notiflix.Notify.failure('Thêm sản lượng thất bại');
+        if (checkAttendance.value === 'co_di_lam') {
+          try {
+            //thêm sản lượng User
+            const resQuantity = await postCreateQuantity({
+              phoneUser: phoneUser,
+              idUser: idUser,
+              date: isoDate,
+              idScaping: selectShaveScaping?._id,
+              latexWater: Number(data?.latexWater),
+              temp: Number(data?.temp),
+              latexCup: Number(data?.latexCup),
+              tempCup: Number(data?.tempCup),
+              latexSolidified: Number(data?.latexSolidified),
+              latexWire: Number(data?.latexWire),
+            });
+            onOk();
+            reset();
+            Notiflix.Notify.success('Điểm danh thành công');
+          } catch (err) {
+            console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
+            if (err?.response?.data?.code === 'SCAPING_NOT_FOUND') {
+              Notiflix.Notify.failure('User không thuộc khu cạo');
+            } else {
+              Notiflix.Notify.failure('Thêm sản lượng thất bại');
+            }
           }
         }
+
       } else {
         try {
           //thêm sản lượng User
@@ -215,6 +217,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
     }
   };
 
+  console.log(checkAttendance.value);
+
   return (
     <ModalComponent
       title="THÔNG TIN ĐIỂM DANH"
@@ -229,7 +233,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
       styleWrapper={{ backgroundColor: '#FFF' }}
     >
       <div className={styles.wrapperModalAttendance}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
           <div className={styles.infoUser}>
             <div className={styles.date}>
               <span className={styles.dateText}>Ngày cạo: </span>
@@ -273,176 +277,181 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             </Dropdown>
           </div>
 
-          <div className={styles.lineBreak}></div>
+          {
+            checkAttendance.value === 'co_di_lam' &&
+            <>
+              <div className={styles.lineBreak}></div>
 
-          <span className={styles.labelQuantity}>Sản Lượng Ngày Cạo</span>
+              <span className={styles.labelQuantity}>Sản Lượng Ngày Cạo</span>
 
-          <div className={styles.selectShavingArea} style={{ pointerEvents: isHaveWork ? 'auto' : 'none' }}>
-            {/* Drop chọn khu */}
-            <div>
-              <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
-                <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
-                  <span> {selectAreaScaping ? selectAreaScaping?.name : 'Chọn khu'} </span>
-                  <img src={isDropZone ? iconDown : iconUp} />
-                </Dropdown.Toggle>
-                <Dropdown.Menu className={styles.dropMenu}>
-                  {/* map infoAreaScaping */}
-                  {infoAreaScaping &&
-                    infoAreaScaping.map((item, index) => {
-                      return (
-                        <Dropdown.Item
-                          onClick={() => {
-                            setSelectAreaScaping(item);
-                            setSelectShaveScaping(null);
-                          }}
-                          className={styles.dropItem}
-                          key={index}
-                        >
-                          {item.name}
-                        </Dropdown.Item>
-                      );
-                    })}
-                </Dropdown.Menu>
-              </Dropdown>
-              {!selectAreaScaping && isConfirm == true ? <span className={styles.error}>Vui lòng chọn khu</span> : null}
-            </div>
+              <div className={styles.selectShavingArea} style={{ pointerEvents: isHaveWork ? 'auto' : 'none' }}>
+                {/* Drop chọn khu */}
+                <div>
+                  <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
+                    <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
+                      <span> {selectAreaScaping ? selectAreaScaping?.name : 'Chọn khu'} </span>
+                      <img src={isDropZone ? iconDown : iconUp} />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className={styles.dropMenu}>
+                      {/* map infoAreaScaping */}
+                      {infoAreaScaping &&
+                        infoAreaScaping.map((item, index) => {
+                          return (
+                            <Dropdown.Item
+                              onClick={() => {
+                                setSelectAreaScaping(item);
+                                setSelectShaveScaping(null);
+                              }}
+                              className={styles.dropItem}
+                              key={index}
+                            >
+                              {item.name}
+                            </Dropdown.Item>
+                          );
+                        })}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  {!selectAreaScaping && isConfirm == true ? <span className={styles.error}>Vui lòng chọn khu</span> : null}
+                </div>
 
-            {/* Drop chọn Phần cạo */}
-            <div>
-              <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropArea(isOpen)}>
-                <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
-                  <span>{selectShaveScaping ? selectShaveScaping?.name : 'Chọn phần cạo'}</span>
-                  <img src={isDropArea ? iconDown : iconUp} />
-                </Dropdown.Toggle>
-                <Dropdown.Menu className={styles.dropMenu}>
-                  {selectAreaScaping &&
-                    selectAreaScaping.infoScaping.map((item, index) => {
-                      return (
-                        <Dropdown.Item className={styles.dropItem} key={index} onClick={() => setSelectShaveScaping(item)}>
-                          {item.name}
-                        </Dropdown.Item>
-                      );
-                    })}
-                </Dropdown.Menu>
-              </Dropdown>
-              {!selectShaveScaping && isConfirm == true ? <span className={styles.error}>Vui lòng chọn khu</span> : null}
-            </div>
-          </div>
+                {/* Drop chọn Phần cạo */}
+                <div>
+                  <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropArea(isOpen)}>
+                    <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
+                      <span>{selectShaveScaping ? selectShaveScaping?.name : 'Chọn phần cạo'}</span>
+                      <img src={isDropArea ? iconDown : iconUp} />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className={styles.dropMenu}>
+                      {selectAreaScaping &&
+                        selectAreaScaping.infoScaping.map((item, index) => {
+                          return (
+                            <Dropdown.Item className={styles.dropItem} key={index} onClick={() => setSelectShaveScaping(item)}>
+                              {item.name}
+                            </Dropdown.Item>
+                          );
+                        })}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  {!selectShaveScaping && isConfirm == true ? <span className={styles.error}>Vui lòng chọn khu</span> : null}
+                </div>
+              </div>
 
-          {/* Nhập các loại mủ */}
-          <div className={styles.latex} style={{ pointerEvents: isHaveWork ? 'auto' : 'none' }}>
-            {/* Mủ nước */}
-            <div className={styles.latexItem}>
-              <span className={styles.labelLatex}>Mủ nước</span>
-              <div className={styles.inputConcentration}>
-                <input
-                  onInput={handleOnInput}
-                  min="0.01"
-                  step="0.01"
-                  type="text"
-                  {...register('temp', { required: true, pattern: /^[1-9]\d*$/ })} // pattern là số nguyên dương
-                  placeholder="00"
-                  className={styles.input}
-                />
-                <span className={styles.unit}>%</span>
-              </div>
-              <div className={styles.inputConcentration}>
-                <input
-                  onInput={handleOnInput}
-                  step="0.01"
-                  type="text"
-                  {...register('latexWater', { required: true })}
-                  placeholder="00"
-                  className={styles.input}
-                />
-                <span className={styles.unit}>kg</span>
-              </div>
-            </div>
-            {/* Mủ chén */}
-            <div className={styles.latexItem}>
-              <span className={styles.labelLatex}>Mủ chén</span>
-              <div className={styles.inputConcentration}>
-                <input
-                  onInput={handleOnInput}
-                  readOnly
-                  min="0.01"
-                  step="0.01"
-                  type="text"
-                  value={40}
-                  {...register('tempCup', { required: true })}
-                  className={styles.input}
-                />
-                <span className={styles.unit}>%</span>
-              </div>
-              <div className={styles.inputConcentration}>
-                <input
-                  onInput={handleOnInput}
-                  type="text"
-                  step="0.01"
-                  {...register('latexCup', { required: true })}
-                  placeholder="00"
-                  className={styles.input}
-                />
-                <span className={styles.unit}>kg</span>
-              </div>
-            </div>
-            {/* Mủ dây */}
-            <div className={styles.latexItem}>
-              <span className={styles.labelLatex}>Mủ dây</span>
-              <div className={styles.inputConcentration}>
-                <input onInput={handleOnInput} readOnly min="0.01" type="text" step="0.01" value={50} className={styles.input} />
-                <span className={styles.unit}>%</span>
-              </div>
-              <div className={styles.inputConcentration}>
-                <input
-                  onInput={handleOnInput}
-                  type="text"
-                  step="0.01"
-                  {...register('latexWire', { required: true })}
-                  placeholder="00"
-                  className={styles.input}
-                />
-                <span className={styles.unit}>kg</span>
-              </div>
-            </div>
-            {/* Mủ đông */}
-            <div className={styles.latexItem}>
-              <span className={styles.labelLatex}>Mủ đông</span>
-              <div className={styles.inputConcentration}>
-                <input onInput={handleOnInput} readOnly min="0.01" type="text" step="0.01" value={40} className={styles.input} />
-                <span className={styles.unit}>%</span>
-              </div>
-              <div className={styles.inputConcentration}>
-                <input
-                  onInput={handleOnInput}
-                  type="text"
-                  step="0.01"
-                  {...register('latexSolidified', { required: true })}
-                  placeholder="00"
-                  className={styles.input}
-                />
-                <span className={styles.unit}>kg</span>
-              </div>
-            </div>
+              {/* Nhập các loại mủ */}
+              <div className={styles.latex} style={{ pointerEvents: isHaveWork ? 'auto' : 'none' }}>
+                {/* Mủ nước */}
+                <div className={styles.latexItem}>
+                  <span className={styles.labelLatex}>Mủ nước</span>
+                  <div className={styles.inputConcentration}>
+                    <input
+                      onInput={handleOnInput}
+                      min="0.01"
+                      step="0.01"
+                      type="text"
+                      {...register('temp', { required: true, pattern: /^[1-9]\d*$/ })} // pattern là số nguyên dương
+                      placeholder="00"
+                      className={styles.input}
+                    />
+                    <span className={styles.unit}>%</span>
+                  </div>
+                  <div className={styles.inputConcentration}>
+                    <input
+                      onInput={handleOnInput}
+                      step="0.01"
+                      type="text"
+                      {...register('latexWater', { required: true })}
+                      placeholder="00"
+                      className={styles.input}
+                    />
+                    <span className={styles.unit}>kg</span>
+                  </div>
+                </div>
+                {/* Mủ chén */}
+                <div className={styles.latexItem}>
+                  <span className={styles.labelLatex}>Mủ chén</span>
+                  <div className={styles.inputConcentration}>
+                    <input
+                      onInput={handleOnInput}
+                      readOnly
+                      min="0.01"
+                      step="0.01"
+                      type="text"
+                      value={40}
+                      {...register('tempCup', { required: true })}
+                      className={styles.input}
+                    />
+                    <span className={styles.unit}>%</span>
+                  </div>
+                  <div className={styles.inputConcentration}>
+                    <input
+                      onInput={handleOnInput}
+                      type="text"
+                      step="0.01"
+                      {...register('latexCup', { required: true })}
+                      placeholder="00"
+                      className={styles.input}
+                    />
+                    <span className={styles.unit}>kg</span>
+                  </div>
+                </div>
+                {/* Mủ dây */}
+                <div className={styles.latexItem}>
+                  <span className={styles.labelLatex}>Mủ dây</span>
+                  <div className={styles.inputConcentration}>
+                    <input onInput={handleOnInput} readOnly min="0.01" type="text" step="0.01" value={50} className={styles.input} />
+                    <span className={styles.unit}>%</span>
+                  </div>
+                  <div className={styles.inputConcentration}>
+                    <input
+                      onInput={handleOnInput}
+                      type="text"
+                      step="0.01"
+                      {...register('latexWire', { required: true })}
+                      placeholder="00"
+                      className={styles.input}
+                    />
+                    <span className={styles.unit}>kg</span>
+                  </div>
+                </div>
+                {/* Mủ đông */}
+                <div className={styles.latexItem}>
+                  <span className={styles.labelLatex}>Mủ đông</span>
+                  <div className={styles.inputConcentration}>
+                    <input onInput={handleOnInput} readOnly min="0.01" type="text" step="0.01" value={40} className={styles.input} />
+                    <span className={styles.unit}>%</span>
+                  </div>
+                  <div className={styles.inputConcentration}>
+                    <input
+                      onInput={handleOnInput}
+                      type="text"
+                      step="0.01"
+                      {...register('latexSolidified', { required: true })}
+                      placeholder="00"
+                      className={styles.input}
+                    />
+                    <span className={styles.unit}>kg</span>
+                  </div>
+                </div>
 
-            {/* nút dấu bằng */}
-            <div className={styles.itemEqual} onClick={onCalculateLatex}>
-              <span className={styles.labelLatex}>=</span>
-            </div>
+                {/* nút dấu bằng */}
+                <div className={styles.itemEqual} onClick={onCalculateLatex}>
+                  <span className={styles.labelLatex}>=</span>
+                </div>
 
-            {/* Mủ đông */}
-            <div className={styles.latexItem}>
-              <span className={styles.labelLatex} style={{ backgroundColor: '#61A300' }}>
-                Mủ chuẩn
-              </span>
-              <div className={styles.inputConcentration}>
-                <input readOnly type="text" step="0.01" value={totalLatex} className={styles.input} />
-                <span className={styles.unit}>kg</span>
+                {/* Mủ đông */}
+                <div className={styles.latexItem}>
+                  <span className={styles.labelLatex} style={{ backgroundColor: '#61A300' }}>
+                    Mủ chuẩn
+                  </span>
+                  <div className={styles.inputConcentration}>
+                    <input readOnly type="text" step="0.01" value={totalLatex} className={styles.input} />
+                    <span className={styles.unit}>kg</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          {Object.keys(errors).length !== 0 && <p className={styles.error}>Chưa chọn phần cạo</p>}
+              {Object.keys(errors).length !== 0 && <p className={styles.error}>Chưa chọn phần cạo</p>}
+            </>
+          }
 
           {/* footer */}
           <div className={styles.footer}>

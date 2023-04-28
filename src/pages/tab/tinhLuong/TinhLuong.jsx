@@ -275,7 +275,7 @@ function TinhLuong() {
           </div>
         </div>
         {/* table danh sách bảng lương của nhân công */}
-        <div style={{ height: "100%" }}>
+        <div style={{ flex: 1, overflowY: 'scroll' }}>
           <div className="colum">
             <table>
               <thead>
