@@ -44,6 +44,7 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
   const [isDrop, setIsDrop] = useState(false);
   const [listManager, setListManager] = useState([]);
   const [selectedManager, setSelectedManager] = useState(null);
+  const [errManager, setErrManager] = useState(false);
 
   useEffect(() => {
     // lấy danh sách các tổ trưởng (quản lý) để hiển thị trong dropdown
@@ -80,28 +81,34 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
 
   const onSubmit = async (data) => {
     // console.log(data);
-    try {
-      Loading.pulse();
-      const res = await postCreateUser(data);
-      //reload lại danh sách user
-      // dispatch(getALLInfoUser());
-      reset();
-      onOk();
-      Loading.remove();
-      Notiflix.Notify.success('Tạo tài khoản thành công');
-      dispatch(setPageCurrentUser(1));
-    } catch (error) {
-      Loading.remove();
-      console.log(error);
-      switch (error?.response?.data?.code) {
-        case 'PHONE_IS_EXIST':
-          Notiflix.Notify.failure('Số điện thoại đã tồn tại');
-          break;
-        default:
-          Notiflix.Notify.failure('Tạo tài khoản thất bại');
-          break;
+    if (selectedManager) {
+      setErrManager(false)
+      try {
+        Loading.pulse();
+        const res = await postCreateUser(data);
+        //reload lại danh sách user
+        // dispatch(getALLInfoUser());
+        reset();
+        onOk();
+        Loading.remove();
+        Notiflix.Notify.success('Tạo tài khoản thành công');
+        dispatch(setPageCurrentUser(1));
+      } catch (error) {
+        Loading.remove();
+        console.log(error);
+        switch (error?.response?.data?.code) {
+          case 'PHONE_IS_EXIST':
+            Notiflix.Notify.failure('Số điện thoại đã tồn tại');
+            break;
+          default:
+            Notiflix.Notify.failure('Tạo tài khoản thất bại');
+            break;
+        }
       }
+    } else {
+      setErrManager(true)
     }
+
   };
 
   const handToggle = (isOpen) => {
@@ -258,6 +265,9 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
         ) : (
           ''
         )}
+        {
+          errManager && <span style={{color:'red'}}>*vui lòng chọn tổ trưởng</span>
+        }
 
         <button className={styles.btnSubmit} type="submit">
           Xác nhận
