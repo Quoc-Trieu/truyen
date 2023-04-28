@@ -216,7 +216,7 @@ const AttendanceCheck = () => {
             <span>{startDate}</span>
             <img style={{ marginLeft: 'auto' }} src={iconDown} alt="iconDown" width="10px" height="6px" />
             {isOpenDatePicker && (
-              <div style={{ width: '800px', position: 'absolute', top: '100%', left: 0, zIndex: 10 }}>
+              <div style={{ width: '250px', position: 'absolute', top: '100%', left: 0, zIndex: 1000 }}>
                 <DatePicker
                   selected={monthOfTable}
                   locale="vi"

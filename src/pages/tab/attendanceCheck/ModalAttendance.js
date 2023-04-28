@@ -21,6 +21,7 @@ const dataCheckAttendance = {
 };
 
 const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }) => {
+  // console.log(date);
   const {
     register,
     handleSubmit,
@@ -42,7 +43,10 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
 
   const [isConfirm, setIsConfirm] = useState(false); // lưu trạng thái nhấn xác nhận điểm danh, false là chưa nhấn
 
-  const dates = new Date(date ?? '2022-04-22');
+  const dates = new Date(date ?? '22-04-2022');
+  let formattedDate = `${dates.getDate()}-${dates.getMonth()+1}-${dates.getFullYear()}`;
+  // console.log(formattedDate);
+
   const isoDate = dates.toISOString();
   const [timeISO, setTimeIOS] = useState(isoDate);
   console.log(isoDate);
@@ -237,7 +241,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
           <div className={styles.infoUser}>
             <div className={styles.date}>
               <span className={styles.dateText}>Ngày cạo: </span>
-              <span className={styles.dateValue}>{date}</span>
+              <span className={styles.dateValue}>{formattedDate}</span>
             </div>
             <div className={styles.date}>
               <span className={styles.dateText}>Người cạo: </span>
