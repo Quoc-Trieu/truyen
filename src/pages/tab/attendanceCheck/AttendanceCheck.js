@@ -12,6 +12,7 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import iconCalendar from './../../../assets/ico/icon-calendar.png';
 import iconDown from './../../../assets/ico/icon-feather-chevron-down.png';
 import vi from 'date-fns/locale/vi';
+import { useSelector } from 'react-redux';
 
 const vietnameseMonths = {
   0: 'Tháng 1',
@@ -31,6 +32,9 @@ const vietnameseMonths = {
 registerLocale('vi', { ...vi, localize: { month: (n) => vietnameseMonths[n] } });
 
 const AttendanceCheck = () => {
+  // role
+  const role = useSelector(state => state.auth)
+  console.log(role);
   const [monthOfTable, setMonthOfTable] = useState(new Date());
   // console.log('today', monthOfTable);
   const dates = useMemo(() => getDaysInMonth(monthOfTable), [monthOfTable]);
@@ -251,7 +255,9 @@ const AttendanceCheck = () => {
                       <td
                         key={index}
                         {...cell.getCellProps()}
-                        onClick={() => onOpenModal({ idColum: cell.column.id, valueCol2OfRow: cell.row.allCells[2].value })}
+                        onClick={() => {
+                          role.role !== 'VIEWER' && onOpenModal({ idColum: cell.column.id, valueCol2OfRow: cell.row.allCells[2].value })
+                        }}
                       >
                         {cell.render('Cell')}
                       </td>

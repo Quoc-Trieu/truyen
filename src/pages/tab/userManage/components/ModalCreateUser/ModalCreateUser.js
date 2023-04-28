@@ -95,10 +95,14 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
         dispatch(setPageCurrentUser(1));
       } catch (error) {
         Loading.remove();
-        console.log(error);
-        switch (error?.response?.data?.code) {
+        // console.log(error.response.data.response.message[0]);
+        // console.log(error?.response?.data?.code);
+        switch (error.response.data.response.message[0]) {
           case 'PHONE_IS_EXIST':
             Notiflix.Notify.failure('Số điện thoại đã tồn tại');
+            break;
+          case 'phone must be shorter than or equal to 10 characters':
+            Notiflix.Notify.failure('Số điện thoại không được nhiều hơn 10');
             break;
           default:
             Notiflix.Notify.failure('Tạo tài khoản thất bại');
@@ -266,7 +270,7 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
           ''
         )}
         {
-          errManager && <span style={{color:'red'}}>*vui lòng chọn tổ trưởng</span>
+          errManager && <span style={{ color: 'red' }}>*vui lòng chọn tổ trưởng</span>
         }
 
         <button className={styles.btnSubmit} type="submit">
