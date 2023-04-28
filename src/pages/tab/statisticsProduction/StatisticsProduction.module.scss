@@ -9,7 +9,7 @@
   .body1 {
     width: $full-screen;
     // chiều cao 100% trừ thanh header 70px
-    height: calc(100vh - 25%);
+    height: calc(100vh - 60px);
 
     display: flex;
     flex-direction: column;
@@ -188,6 +188,7 @@
       width: 100%;
       flex: 1;
       overflow: auto;
+      padding-bottom: 30px;
 
       table {
         border-collapse: collapse;

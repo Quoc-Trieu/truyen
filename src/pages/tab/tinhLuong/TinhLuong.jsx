@@ -275,7 +275,7 @@ function TinhLuong() {
           </div>
         </div>
         {/* table danh sách bảng lương của nhân công */}
-        <div style={{ flex: 1, overflowY: 'scroll' }}>
+        {/* <div style={{ flex: 1, overflowY: 'scroll' }}> */}
           <div className="colum">
             <table>
               <thead>
@@ -331,7 +331,7 @@ function TinhLuong() {
               </tbody>
             </table>
           </div>
-        </div>
+        {/* </div> */}
       </div>
       {/* modal setting */}
       <Modal open={openSetting} onClose={handleCloseSetting}>

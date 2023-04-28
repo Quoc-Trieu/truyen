@@ -34,21 +34,21 @@ const HeaderFilter = () => {
     const searchTerms = suggestSearchTerms(value, listUser);
     setListSuggest(searchTerms);
     //bắt lỗi và xóa lỗi khi nhập tên người thực hiện
-    if(!value){
-      dispatch(setCatchError({idUserPartitionError: "Vui lòng nhập tên vùng cạo"}));
+    if (!value) {
+      dispatch(setCatchError({ idUserPartitionError: "Vui lòng nhập tên vùng cạo" }));
     }
   };
 
-  
+
   const onChangeNameScaping = (value) => {
     // setNameScaping(value)
     console.log(value);
     dispatch(setNamePartition(value))
     // bắt lỗi và xóa lỗi khi nhập tên vùng cạo
-    if(value) {
-      dispatch(setCatchError({namePartitionError: ""}));
-    }else{
-      dispatch(setCatchError({namePartitionError: "Vui lòng nhập tên vùng cạo"}));
+    if (value) {
+      dispatch(setCatchError({ namePartitionError: "" }));
+    } else {
+      dispatch(setCatchError({ namePartitionError: "Vui lòng nhập tên vùng cạo" }));
     }
   };
 
@@ -56,9 +56,8 @@ const HeaderFilter = () => {
     const suggestions = [];
     for (let i = 0; i < dataArray?.length; i++) {
       // tìm kiếm theo tên và số điện thoại
-      if ( dataArray[i]?.fullName.toLowerCase().includes(inputValue.toLowerCase()) ||
-          dataArray[i]?.phone.toLowerCase().includes(inputValue.toLowerCase()) ) 
-      {
+      if (dataArray[i]?.fullName.toLowerCase().includes(inputValue.toLowerCase()) ||
+        dataArray[i]?.phone.toLowerCase().includes(inputValue.toLowerCase())) {
         suggestions.push(dataArray[i]);
       }
     }
@@ -75,10 +74,17 @@ const HeaderFilter = () => {
     dispatch(setIdUserPartition(item?.phone))
     dispatch(getALLUserAutoComplete());
     //xóa lỗi khi chọn người thực hiện
-    if(item) {
-      dispatch(setCatchError({idUserPartitionError: ""}));
+    if (item) {
+      dispatch(setCatchError({ idUserPartitionError: "" }));
     }
   };
+
+  const listUsers = () => {
+    const Users = listSuggest.filter(item => {
+      return item.role[0] === "USER"
+    })
+    return Users
+  }
 
   return (
     <form className={styles.HeaderFilter} onSubmit={handleSubmit(onSubmit)}>
@@ -88,7 +94,7 @@ const HeaderFilter = () => {
           <div className={styles.circle}></div>
           <span>Người giao</span>
         </div>
-        <input readOnly={true} placeholder={userInfo?.fullName} className={styles.inputDeliver}/>
+        <input readOnly={true} placeholder={userInfo?.fullName} className={styles.inputDeliver} />
       </div>
 
       <Dropdown className={styles.dropPerformer} show={showSuggest}>
@@ -104,7 +110,7 @@ const HeaderFilter = () => {
               className={styles.inputPerformer}
               value={value}
               onChange={(e) => onChangeSearch(e.target.value)}
-              // {...register("inputPerformer")}
+            // {...register("inputPerformer")}
             />
             <button className={styles.btnPerformer}>
               <img src={iconSearch} />
@@ -115,7 +121,7 @@ const HeaderFilter = () => {
 
         <Dropdown.Menu className={styles.performerMenu} style={{ padding: 0 }}>
           {listSuggest &&
-            listSuggest?.map((item, index) => {
+            listUsers().map((item, index) => {
               return (
                 <Dropdown.Item key={index} className={styles.itemDropdown} onClick={() => onSelectItem(item)}>
                   {item?.fullName + " - " + item?.phone}
@@ -131,7 +137,7 @@ const HeaderFilter = () => {
           <div className={styles.circle}></div>
           <span>Tên vùng cạo</span>
         </div>
-        <input value={nameScaping}  onChange={(e) => onChangeNameScaping(e.target.value)} placeholder="Nhập tên vùng cạo" className={styles.inputShavingArea} />
+        <input value={nameScaping} onChange={(e) => onChangeNameScaping(e.target.value)} placeholder="Nhập tên vùng cạo" className={styles.inputShavingArea} />
         <span className={styles.errorInput}>{catchError?.namePartitionError}</span>
       </div>
     </form>

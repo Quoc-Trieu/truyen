@@ -203,7 +203,9 @@ const AttendanceCheck = () => {
   }, []);
   return (
     <div className={styles.attendanceCheck}>
-      <Header title="Điểm danh nhân công" />
+      <div style={{ height: '60px' }}>
+        <Header title="Điểm danh nhân công" />
+      </div>
 
       <div className={styles.body}>
         <div className={styles.toolbar}>

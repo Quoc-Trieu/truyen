@@ -23,6 +23,7 @@ $column-5-width: 50px;
     align-self: start;
     padding: 20px 0 0px 40px;
     gap: 10px;
+    height: calc(100% - 60px);
 
     .toolbar {
       display: flex;
@@ -63,15 +64,32 @@ $column-5-width: 50px;
       position: relative;
       border: 1px solid #ffffff;
       background-color: #ffffff;
-        // chỉnh kích thước của thanh scroll
+      overflow-y: scroll;
+
+      // chỉnh kích thước của thanh scroll
       &::-webkit-scrollbar-track {
         background-color: #e2e2e2;
       }
+
       &::-webkit-scrollbar {
         height: 12px;
       }
 
       table {
+
+        thead>tr>th {
+          position: sticky;
+          top: 0;
+          z-index: 10;
+
+          &:nth-child(1),
+          &:nth-child(2),
+          &:nth-child(3),
+          &:nth-child(4) {
+            z-index: 11;
+          }
+        }
+
         width: max-content;
         flex: 1;
         min-width: 100%;
@@ -155,13 +173,16 @@ $column-5-width: 50px;
 
         // Các cột ngày trong tháng
         $column-count: 31;
+
         // Lặp qua tất cả các cột và thiết lập chiều rộng cho các cột từ cột số 5 trở đi
         @for $i from 1 through $column-count {
-          $columnItem: $i + 4;
+          $columnItem: $i +4;
+
           th:nth-child(#{$columnItem}) {
             width: $column-5-width;
             background-color: #dae5ff;
           }
+
           td:nth-child(#{$columnItem}) {
             width: $column-5-width;
             background-color: #ffffff;

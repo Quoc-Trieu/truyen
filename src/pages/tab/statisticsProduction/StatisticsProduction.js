@@ -84,7 +84,9 @@ const StatisticsProduction = () => {
 
   return (
     <div className={styles.statisticsProduction}>
-      <Header title="Thống kê sản lượng" />
+      <div style={{ height: '60px' }}>
+        <Header title="Thống kê sản lượng" />
+      </div>
       <div className={styles.body1}>
         <div className={styles.toolBar}>
           <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
