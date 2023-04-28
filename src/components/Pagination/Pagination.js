@@ -14,6 +14,8 @@ const Pagination = ({ pageTotalNum = 1, initValue = 1, OnChangePage, align }) =>
     setPageCurrent(initValue);
   }, [initValue])
 
+  console.log(pageTotalNum);
+
   useEffect(() => {
     // disable Prev trang khi trang hiện tại là 1
     if (pageCurrent == 1) {

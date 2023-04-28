@@ -64,7 +64,7 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
               // console.log(item.role[0]);
               return item.role[0] === "USER"
             })
-            setListUser({ users: value })
+            setListUser({ users: value, totalPages: response.data.totalPages })
           } else {
             setListUser(response.data);
           }
@@ -144,6 +144,7 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
   //     setListNhancong(value)
   //   }
   // }, [])
+
 
   return (
     <div className={styles.listUser}>
