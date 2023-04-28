@@ -48,7 +48,7 @@ const AttendanceCheck = () => {
   }, [visible, monthOfTable]);
 
   const fetchData = async () => {
-    const timeTable = new Date( monthOfTable.toISOString());
+    const timeTable = new Date(monthOfTable.toISOString());
     const response = await getAttendanceInMonth({ date: timeTable });
     setDataAttendance(response?.data);
   };
@@ -183,9 +183,20 @@ const AttendanceCheck = () => {
     setIsOpenDatePicker(!isOpenDatePicker);
   };
   const handleClick = (e) => {
-    e.preventDefault();
+    e.stopPropagation();
     setIsOpenDatePicker(true);
   };
+
+  useEffect(() => {
+    const handleClick = () => {
+      setIsOpenDatePicker(false);
+    };
+    document.body.addEventListener('click', handleClick);
+
+    return () => {
+      document.body.removeEventListener('click', handleClick);
+    };
+  }, []);
   return (
     <div className={styles.attendanceCheck}>
       <Header title="Điểm danh nhân công" />

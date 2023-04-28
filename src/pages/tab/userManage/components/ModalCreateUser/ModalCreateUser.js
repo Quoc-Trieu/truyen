@@ -18,6 +18,9 @@ import ROLES from '../../../../../constants/roles';
 import { getALLUser } from '../../../../../services/userServies';
 
 const ModalCreateUser = ({ visible, onCancel, onOk }) => {
+  // role
+  const role = useSelector(state => state.auth)
+  // console.log(role.role);   MANAGER
   const {
     register,
     setValue,
@@ -109,6 +112,28 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
     }
   };
 
+  const listRole = () => {
+    // console.log(role.role);
+    if (role.role === 'MANAGER' || role.role === "ACCOUNTANT") {
+      return Object.values(ROLES).filter(item => {
+        return item.value === "USER"
+      })
+    } else {
+      return Object.values(ROLES)
+    }
+  }
+
+  useEffect(() => {
+    if (role.role === 'MANAGER' || role.role === "ACCOUNTANT") {
+      const value = Object.values(ROLES).filter(item => {
+        return item.value === "USER"
+      })
+      setSelectedRole(value[0])
+    }
+  }, [])
+
+  // console.log(listRole());
+
   return (
     <ModalComponent
       title="Tạo Tài Khoản Mới"
@@ -197,14 +222,16 @@ const ModalCreateUser = ({ visible, onCancel, onOk }) => {
 
           <Dropdown.Menu style={{ padding: 0 }} className={styles.dropMenu}>
             {/* map object ROLES */}
-            {Object.values(ROLES).map((item, index) =>
-              item.value !== 'ROOT' ? (
+            {listRole().map((item, index) => {
+              console.log(item);
+              return item.value !== 'ROOT' ? (
                 <Dropdown.Item key={index} className={styles.dropItem} onClick={() => onSelectRole(item)}>
                   {item.label}
                 </Dropdown.Item>
               ) : (
                 ''
               )
+            }
             )}
           </Dropdown.Menu>
         </Dropdown>

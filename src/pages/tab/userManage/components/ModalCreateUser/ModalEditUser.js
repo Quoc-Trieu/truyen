@@ -20,6 +20,8 @@ import ROLES from './../../../../../constants/roles';
 
 const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
   // console.log('itemSelect----------' + JSON.stringify(item));
+  // role
+  const role = useSelector(state => state.auth)
   const {
     register,
     setValue,
@@ -151,6 +153,17 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
     }
   };
 
+  const listRole = () => {
+    // console.log(role.role);
+    if (role.role === 'MANAGER' || role.role === "ACCOUNTANT") {
+      return Object.values(ROLES).filter(item => {
+        return item.value === "USER"
+      })
+    } else {
+      return Object.values(ROLES)
+    }
+  }
+
   return (
     <ModalComponent
       title={title}
@@ -240,7 +253,7 @@ const ModalEditUser = ({ title, visible, onCancel, onOk, item }) => {
 
           <Dropdown.Menu style={{ padding: 0 }} className={styles.dropMenu}>
             {/* map object ROLES */}
-            {Object.values(ROLES).map((item, index) =>
+            {listRole().map((item, index) =>
               item.value !== 'ROOT' ? (
                 <Dropdown.Item key={index} className={styles.dropItem} onClick={() => onSelectRole(item)}>
                   {item.label}

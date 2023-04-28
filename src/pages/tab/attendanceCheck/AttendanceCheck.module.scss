@@ -77,6 +77,14 @@ $column-5-width: 50px;
         min-width: 100%;
         border-spacing: 0 !important;
 
+        tbody>tr>td:nth-child(1),
+        tbody>tr>td:nth-child(2),
+        tbody>tr>td:nth-child(3),
+        tbody>tr>td:nth-child(4) {
+          text-align: center;
+          // z-index: 100;
+        }
+
         th,
         td {
           padding: 10px;

@@ -29,10 +29,11 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
   const searchText = useSelector(searchUserSelector);
   const filterUser = useSelector(filterUserUserSelector);
   const permissionEditUser = useSelector(permissionEdiSelector); // dựa vào quyền đang đăng nhập để xác định có được phép edit user hay không
- 
+
   const phoneLocalStorage = getPhoneLocalStorage();
 
   const [listUser, setListUser] = useState([]);
+  const [listNhancong, setListNhancong] = useState([]);
 
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [showModalEditUser, setShowModalEditUser] = useState(false);
@@ -40,11 +41,14 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
   const [itemSelect, setItemSelect] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
+  // role
+  const role = useSelector(state => state.auth)
+
 
   useEffect(() => {
     const fetchListUser = async () => {
       try {
-        if(roleAuth){
+        if (roleAuth) {
           // tìm userRole của roleAuth de truyen vao api
           const userRole = Object.values(ROLES).find((role) => role.value === roleAuth)?.userRole;
 
@@ -55,9 +59,17 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
             query: searchText,
           });
           console.log(response.data);
-          setListUser(response.data);
+          if (role.role === 'MANAGER' || role.role === "ACCOUNTANT") {
+            const value = response.data.users.filter(item => {
+              // console.log(item.role[0]);
+              return item.role[0] === "USER"
+            })
+            setListUser({ users: value })
+          } else {
+            setListUser(response.data);
+          }
         }
-        
+
       } catch (error) {
         console.log('Failed to fetch list: User ', error);
       }
@@ -123,6 +135,16 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
     dispatch(setPageCurrentUser(page));
   };
 
+  // useEffect(() => {
+  //   if (role.role === 'MANAGER' || role.role === "ACCOUNTANT") {
+  //     const value = listUser.users.filter(item => {
+  //       // console.log(item.role[0]);
+  //       return item.role[0] === "USER"
+  //     })
+  //     setListNhancong(value)
+  //   }
+  // }, [])
+
   return (
     <div className={styles.listUser}>
       {/* Header row */}
@@ -149,7 +171,7 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
                 {Object.values(ROLES).find((role) => role.value === item?.role[0])?.label}
 
                 {/* pointerEvents: không phép edit nếu đang nhập với quyền không cho phép chỉnh sửa, quy định trong ROLES (contants) */}
-                <div className={styles.actionItem} style={{pointerEvents: permissionEditUser ? 'auto' : 'none' }}>
+                <div className={styles.actionItem} style={{ pointerEvents: permissionEditUser ? 'auto' : 'none' }}>
                   <img src={iconEdit} className={styles.edit} onClick={() => onEdit(item)} />
                   <img src={iconRemove} className={styles.remove} onClick={() => onRemove(item)} />
 

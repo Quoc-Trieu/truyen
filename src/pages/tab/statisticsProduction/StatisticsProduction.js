@@ -29,7 +29,7 @@ const StatisticsProduction = () => {
       console.table(res.data.infoScaping);
       console.table(res.data.dataScaping);
       // format lại dữ liệu từ api để hiển thị ra bảng, nếu không có dữ liệu thì thêm 0 vào vào các trường
-      const formatData = getInfoScaping({infoScaping: res.data.infoScaping, dataScaping: res.data.dataScaping});
+      const formatData = getInfoScaping({ infoScaping: res.data.infoScaping, dataScaping: res.data.dataScaping });
       setDataTable(formatData);
       setDataTotal(res.data);
     };
@@ -37,6 +37,7 @@ const StatisticsProduction = () => {
   }, [selectArea, monthQuantity]);
 
   const handleClick = (e) => {
+    e.stopPropagation();
     setIsOpenDatePicker(true);
     // console.log(e);
   };
@@ -69,6 +70,17 @@ const StatisticsProduction = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const handleClick = () => {
+      setIsOpenDatePicker(false);
+    };
+    document.body.addEventListener('click', handleClick);
+
+    return () => {
+      document.body.removeEventListener('click', handleClick);
+    };
+  }, []);
 
   return (
     <div className={styles.statisticsProduction}>

@@ -23,6 +23,7 @@ import "react-datetime/css/react-datetime.css";
 import moment from "moment";
 import "moment/locale/vi";
 import { useSelector } from "react-redux";
+import numeral from 'numeral';
 
 function TinhLuong() {
   const permissionEditUser = useSelector(permissionEdiSelector);
@@ -33,7 +34,7 @@ function TinhLuong() {
   const [dataSalary, setDataSalary] = useState([]);
   const [dongiasanluong, setDongiasanluong] = useState("");
   const [dongiachedo, setDongiachedo] = useState("");
-  const [salaryOther, setSalaryOther] = useState(0);
+  const [salaryOther, setSalaryOther] = useState("");
   const [errOther, setErrOther] = useState(false);
   const [idUser, setIdUser] = useState("");
 
@@ -107,11 +108,11 @@ function TinhLuong() {
   //   hàm này là hàm submit khi lưu cài đặt đơn giản
   const onSubmit = (data) => {
     // kiểm tra nếu 2 giá trị nhập vào nhỏ hơn 0 thì không cho cập nhật 
-    if (parseInt(dongiasanluong.replace(",", "")) > 0 && parseInt(dongiachedo.replace(",", ""))) {
+    if (parseInt(dongiasanluong.replace(/[,.]/g, "")) > 0 && parseInt(dongiachedo.replace(/[,.]/g, ""))) {
       updateSetting({
         date: selectedDate,
-        basicSalary: parseInt(data.chedo.replace(",", "")),
-        moneyQuantity: parseInt(data.sanluong.replace(",", "")),
+        basicSalary: parseInt(data.chedo.replace(/[,.]/g, "")),
+        moneyQuantity: parseInt(data.sanluong.replace(/[,.]/g, "")),
       })
         .then((res) => {
           Notiflix.Notify.success("cập nhật thành công");
@@ -125,18 +126,18 @@ function TinhLuong() {
   };
   // hàm này là hàm submit update lương khác của nhân công
   const handleSalaryOther = () => {
-    if (salaryOther) {
+    if (salaryOther && parseInt(salaryOther.replace(/[,.]/g, "")) !== 0) {
       setErrOther(false);
       updateSalaryOther({
         date: selectedDate,
         idUser: idUser,
-        salary: parseInt(salaryOther.replace(",", "")),
+        salary: parseInt(salaryOther.replace(/[,.]/g, "")),
       })
         .then((res) => {
           Notiflix.Notify.success("cập nhật thành công");
           handleCloseSalary();
           getsalary();
-          setSalaryOther(0)
+          setSalaryOther("")
         })
         .catch((err) => {
           console.log(err);
@@ -198,6 +199,9 @@ function TinhLuong() {
     refInputPicker.current._openCalendar();
   };
 
+  const format = (num) => {
+    return numeral(num).format('0,0'); // định dạng số với dấu phân cách phần ngàn là dấu phẩy và dấu thập phân là dấu chấm
+  }
   return (
     // main
     <div id="tinhluong">
@@ -266,7 +270,7 @@ function TinhLuong() {
               style={{ pointerEvents: permissionEditUser ? 'auto' : 'none' }}
             >
               <img src={iconSetting} alt="" />
-              <span>Cài đặt đơn giản</span>
+              <span>Cài đặt đơn giá</span>
             </div>
           </div>
         </div>
@@ -339,7 +343,7 @@ function TinhLuong() {
                 <label htmlFor="">Đơn giá sản lượng</label>
                 <CurrencyInput
                   type="text"
-                  placeholder="6,3000"
+                  placeholder="vui lòng nhập đơn giá sản lượng"
                   {...register("sanluong", {
                     required: true,
                   })}
@@ -351,14 +355,14 @@ function TinhLuong() {
                   <p className="error">vui lòng không bỏ trống</p>
                 )}
                 {
-                  parseInt(dongiasanluong.replace(",", "")) < 0 ? <p className="error"> trị nhập vào phải lớn hơn 0</p> : ''
+                  parseInt(dongiasanluong.replace(/[,.]/g, "")) < 0 ? <p className="error"> trị nhập vào phải lớn hơn 0</p> : ''
                 }
               </div>
               <div className="boxinput">
                 <label htmlFor="">Đơn giá chế độ</label>
                 <CurrencyInput
                   type="text"
-                  placeholder="6,3000"
+                  placeholder="vui lòng nhập đơn giá chế độ"
                   {...register("chedo", {
                     required: true,
                   })}
@@ -370,7 +374,7 @@ function TinhLuong() {
                   <p className="error">vui lòng không bỏ trống</p>
                 )}
                 {
-                  parseInt(dongiachedo.replace(",", "")) < 0 ? <p className="error"> trị nhập vào phải lớn hơn 0</p> : ''
+                  parseInt(dongiachedo.replace(/[,.]/g, "")) < 0 ? <p className="error"> trị nhập vào phải lớn hơn 0</p> : ''
                 }
               </div>
             </div>
@@ -399,8 +403,12 @@ function TinhLuong() {
                   placeholder="6,3000"
                   defaultValue={salaryOther}
                   onChange={(e) => setSalaryOther(e.target.value)}
+                  format={format}
                 />
                 {errOther && <p className="error">vui lòng không bỏ trống</p>}
+                {
+                  parseInt(salaryOther.replace(/[,.]/g, "")) < 0 ? <p className="error"> trị nhập vào phải lớn hơn 0</p> : ''
+                }
               </div>
             </div>
             <div className="bottom">
