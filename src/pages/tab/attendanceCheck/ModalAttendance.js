@@ -351,7 +351,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
                       min="0.01"
                       step="0.01"
                       type="text"
-                      {...register('temp', { required: true, pattern: /^[1-9]\d*$/ })} // pattern là số nguyên dương
+                      {...register('temp', { required: true })} // pattern là số nguyên dương
                       placeholder="00"
                       className={styles.input}
                     />
