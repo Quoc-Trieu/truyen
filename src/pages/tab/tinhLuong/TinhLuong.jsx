@@ -348,7 +348,8 @@ function TinhLuong() {
                     required: true,
                   })}
                   defaultValue={dongiasanluong}
-                  onChange={(e) => setDongiasanluong(e.target.value)}
+                  value={dongiasanluong.replace(/[,.]/g, "")}
+                  onChange={(e) => setDongiasanluong(e.target.value.replace(/[^0-9]/g, ""))}
                 />
                 {/* hiển thị lỗi validator */}
                 {errors?.sanluong?.type === "required" && (
@@ -367,7 +368,8 @@ function TinhLuong() {
                     required: true,
                   })}
                   defaultValue={dongiachedo}
-                  onChange={(e) => setDongiachedo(e.target.value)}
+                  value={dongiachedo.replace(/[,.]/g, "")}
+                  onChange={(e) => setDongiachedo(e.target.value.replace(/[^0-9]/g, ""))}
                 />
                 {/* hiển thị lỗi validator */}
                 {errors?.chedo?.type === "required" && (

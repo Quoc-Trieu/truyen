@@ -59,15 +59,7 @@ const ListUser = ({ itemsHeaderRow, isReload }) => {
             query: searchText,
           });
           console.log(response.data);
-          if (role.role === 'MANAGER' || role.role === "ACCOUNTANT") {
-            const value = response.data.users.filter(item => {
-              // console.log(item.role[0]);
-              return item.role[0] === "USER"
-            })
-            setListUser({ users: value, totalPages: response.data.totalPages })
-          } else {
-            setListUser(response.data);
-          }
+          setListUser(response.data);
         }
 
       } catch (error) {

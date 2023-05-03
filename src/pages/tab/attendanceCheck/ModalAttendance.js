@@ -44,7 +44,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   const [isConfirm, setIsConfirm] = useState(false); // lưu trạng thái nhấn xác nhận điểm danh, false là chưa nhấn
 
   const dates = new Date(date ?? '22-04-2022');
-  let formattedDate = `${dates.getDate()}-${dates.getMonth()+1}-${dates.getFullYear()}`;
+  let formattedDate = `${dates.getDate()}-${dates.getMonth() + 1}-${dates.getFullYear()}`;
   // console.log(formattedDate);
 
   const isoDate = dates.toISOString();
@@ -73,76 +73,97 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
 
   const onSubmit = async (data) => {
     if (selectAreaScaping == null || selectShaveScaping == null) {
-      return
+      return;
     }
     //  console.log(data); //data lấy từ form
     try {
-      //điểm danh User
-      const res = await postAttendance({
+      const res = await postAttendanceAllInOne({
         idUser: idUser,
         isWork: checkAttendance?.isWord,
         isDelay: false,
         isPermission: checkAttendance?.isPermission,
         note: '',
         date: isoDate,
+        phoneUser: phoneUser,
+        idScaping: selectShaveScaping?._id,
+        latexWater: Number(data?.latexWater),
+        temp: Number(data?.temp),
+        latexCup: Number(data?.latexCup),
+        tempCup: Number(data?.tempCup),
+        latexSolidified: Number(data?.latexSolidified),
+        latexWire: Number(data?.latexWire),
       });
-      // check User đã điểm danh
-      if (res?.data?.messenger === 'USER_IS_ATTENDANCE') {
-        if (checkAttendance.value === 'co_di_lam') {
-          try {
-            //thêm sản lượng User
-            const resQuantity = await postCreateQuantity({
-              phoneUser: phoneUser,
-              idUser: idUser,
-              date: isoDate,
-              idScaping: selectShaveScaping?._id,
-              latexWater: Number(data?.latexWater),
-              temp: Number(data?.temp),
-              latexCup: Number(data?.latexCup),
-              tempCup: Number(data?.tempCup),
-              latexSolidified: Number(data?.latexSolidified),
-              latexWire: Number(data?.latexWire),
-            });
-            onOk();
-            reset();
-            Notiflix.Notify.success('Điểm danh thành công');
-          } catch (err) {
-            console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
-            if (err?.response?.data?.code === 'SCAPING_NOT_FOUND') {
-              Notiflix.Notify.failure('User không thuộc khu cạo');
-            } else {
-              Notiflix.Notify.failure('Thêm sản lượng thất bại');
-            }
-          }
-        }
 
-      } else {
-        try {
-          //thêm sản lượng User
-          const resQuantity = await postCreateQuantity({
-            phoneUser: phoneUser,
-            idUser: idUser,
-            date: isoDate,
-            idScaping: selectShaveScaping?._id,
-            latexWater: Number(data?.latexWater),
-            temp: Number(data?.temp),
-            latexCup: Number(data?.latexCup),
-            tempCup: Number(data?.tempCup),
-            latexSolidified: Number(data?.latexSolidified),
-            latexWire: Number(data?.latexWire),
-          });
-          onOk();
-          reset();
-          Notiflix.Notify.success('Điểm danh thành công');
-        } catch (err) {
-          console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
-          if (err?.response?.data?.code === 'SCAPING_NOT_FOUND') {
-            Notiflix.Notify.failure('User không thuộc khu cạo');
-          } else {
-            Notiflix.Notify.failure('Thêm sản lượng thất bại');
-          }
-        }
-      }
+      onOk();
+      reset();
+      Notiflix.Notify.success('Điểm danh thành công');
+
+      // //điểm danh User
+      // const res = await postAttendance({
+      //   idUser: idUser,
+      //   isWork: checkAttendance?.isWord,
+      //   isDelay: false,
+      //   isPermission: checkAttendance?.isPermission,
+      //   note: '',
+      //   date: isoDate,
+      // });
+      // // check User đã điểm danh
+      // if (res?.data?.messenger === 'USER_IS_ATTENDANCE') {
+      //   if (checkAttendance.value === 'co_di_lam') {
+      //     try {
+      //       //thêm sản lượng User
+      //       const resQuantity = await postCreateQuantity({
+      //         phoneUser: phoneUser,
+      //         idUser: idUser,
+      //         date: isoDate,
+      //         idScaping: selectShaveScaping?._id,
+      //         latexWater: Number(data?.latexWater),
+      //         temp: Number(data?.temp),
+      //         latexCup: Number(data?.latexCup),
+      //         tempCup: Number(data?.tempCup),
+      //         latexSolidified: Number(data?.latexSolidified),
+      //         latexWire: Number(data?.latexWire),
+      //       });
+      //       onOk();
+      //       reset();
+      //       Notiflix.Notify.success('Điểm danh thành công');
+      //     } catch (err) {
+      //       console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
+      //       if (err?.response?.data?.code === 'SCAPING_NOT_FOUND') {
+      //         Notiflix.Notify.failure('User không thuộc khu cạo');
+      //       } else {
+      //         Notiflix.Notify.failure('Thêm sản lượng thất bại');
+      //       }
+      //     }
+      //   }
+
+      // } else {
+      //   try {
+      //     //thêm sản lượng User
+      //     const resQuantity = await postCreateQuantity({
+      //       phoneUser: phoneUser,
+      //       idUser: idUser,
+      //       date: isoDate,
+      //       idScaping: selectShaveScaping?._id,
+      //       latexWater: Number(data?.latexWater),
+      //       temp: Number(data?.temp),
+      //       latexCup: Number(data?.latexCup),
+      //       tempCup: Number(data?.tempCup),
+      //       latexSolidified: Number(data?.latexSolidified),
+      //       latexWire: Number(data?.latexWire),
+      //     });
+      //     onOk();
+      //     reset();
+      //     Notiflix.Notify.success('Điểm danh thành công');
+      //   } catch (err) {
+      //     console.log(err?.response?.data?.code === 'SCAPING_NOT_FOUND');
+      //     if (err?.response?.data?.code === 'SCAPING_NOT_FOUND') {
+      //       Notiflix.Notify.failure('User không thuộc khu cạo');
+      //     } else {
+      //       Notiflix.Notify.failure('Thêm sản lượng thất bại');
+      //     }
+      //   }
+      // }
     } catch (err) {
       console.log(err);
       switch (err?.response?.data?.code) {
@@ -151,6 +172,9 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
           break;
         case 'MANAGER_DON_HAVE_USER':
           Notiflix.Notify.failure('Nhân công không thuộc quản lý này');
+          break;
+        case 'SCAPING_NOT_FOUND':
+          Notiflix.Notify.failure('Công nhân không thuộc vùng cạo đã chọn');
           break;
 
         default:
@@ -186,21 +210,26 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
     // nếu không đi làm thì không cần nhập sản lượng
     if (checkAttendance !== dataCheckAttendance.co_di_lam) {
       try {
-        const res = await postAttendance({
+        const res = await postAttendanceAllInOne({
           idUser: idUser,
           isWork: checkAttendance?.isWord,
           isDelay: false,
           isPermission: checkAttendance?.isPermission,
           note: '',
           date: isoDate,
+          phoneUser: phoneUser,
+          idScaping: selectShaveScaping?._id,
+          latexWater: 0,
+          temp: 1,
+          latexCup: 0,
+          tempCup: 1,
+          latexSolidified: 0,
+          latexWire: 0,
         });
-        if (res?.data?.messenger === 'USER_IS_ATTENDANCE') {
-          Notiflix.Notify.failure('Đã điểm danh rồi');
-        } else {
-          onOk();
-          reset();
-          Notiflix.Notify.success('Điểm danh thành công');
-        }
+
+        onOk();
+        reset();
+        Notiflix.Notify.success('Điểm danh thành công');
       } catch (err) {
         console.log(err);
         switch (err?.response?.data?.code) {
@@ -281,8 +310,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
             </Dropdown>
           </div>
 
-          {
-            checkAttendance.value === 'co_di_lam' &&
+          {checkAttendance.value === 'co_di_lam' && (
             <>
               <div className={styles.lineBreak}></div>
 
@@ -351,7 +379,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
                       min="0.01"
                       step="0.01"
                       type="text"
-                      {...register('temp', { required: true })} // pattern là số nguyên dương
+                      // pattern là số nguyên dương
+                      {...register('temp', { required: true, pattern: /^[1-9]\d*$/ })} // pattern là số nguyên dương
                       placeholder="00"
                       className={styles.input}
                     />
@@ -455,7 +484,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
 
               {Object.keys(errors).length !== 0 && <p className={styles.error}>Chưa chọn phần cạo</p>}
             </>
-          }
+          )}
 
           {/* footer */}
           <div className={styles.footer}>
