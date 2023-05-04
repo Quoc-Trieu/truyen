@@ -281,7 +281,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
               <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
                 <span style={{ color: checkAttendance.color }}> {checkAttendance.text} </span>
                 {checkAttendance.value == 'co_di_lam' ? (
-                  <img src={isDropLeave ? iconDown : iconUp} />
+                  <img src={isDropLeave ? iconUp : iconDown } />
                 ) : (
                   <img
                     src={iconClose}
@@ -322,7 +322,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
                   <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
                     <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
                       <span> {selectAreaScaping ? selectAreaScaping?.name : 'Chọn khu'} </span>
-                      <img src={isDropZone ? iconDown : iconUp} />
+                      <img src={isDropZone ? iconUp : iconDown } />
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={styles.dropMenu}>
                       {/* map infoAreaScaping */}
@@ -351,7 +351,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
                   <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropArea(isOpen)}>
                     <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
                       <span>{selectShaveScaping ? selectShaveScaping?.name : 'Chọn phần cạo'}</span>
-                      <img src={isDropArea ? iconDown : iconUp} />
+                      <img src={isDropArea ? iconUp : iconDown} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={styles.dropMenu}>
                       {selectAreaScaping &&

@@ -103,7 +103,7 @@ function Nav() {
       <div className={styles.footerNav}>
         <div className={styles.openNav}>
           {isOpenNav && <p className={styles.line}></p>}
-          <img onClick={() => setIsOpenNav(!isOpenNav)} src={iconOpenNav} width="35px" height="35px" />
+          <img onClick={() => setIsOpenNav(!isOpenNav)} src={iconOpenNav} width="35px" height="35px" style={{transform: isOpenNav ? '' : 'rotate( -180deg )'}}/>
         </div>
       </div>
     </div>

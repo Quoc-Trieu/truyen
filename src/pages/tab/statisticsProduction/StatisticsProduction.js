@@ -92,7 +92,7 @@ const StatisticsProduction = () => {
           <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
             <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
               <span>{selectArea}</span>
-              <img src={isDropZone ? iconDown : iconUp} />
+              <img src={isDropZone ? iconUp : iconDown } />
             </Dropdown.Toggle>
             <Dropdown.Menu className={styles.dropMenu}>
               <Dropdown.Item
