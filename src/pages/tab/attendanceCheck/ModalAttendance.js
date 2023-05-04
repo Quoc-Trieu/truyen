@@ -355,7 +355,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={styles.dropMenu}>
                       {selectAreaScaping &&
-                        selectAreaScaping.infoScaping.map((item, index) => {
+                        selectAreaScaping.infoScaping.sort((a, b) => a.name.localeCompare(b.name)).map((item, index) => {
                           return (
                             <Dropdown.Item className={styles.dropItem} key={index} onClick={() => setSelectShaveScaping(item)}>
                               {item.name}
