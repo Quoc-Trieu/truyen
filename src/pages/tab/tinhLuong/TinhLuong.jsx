@@ -7,6 +7,7 @@ import icon_calendar from "../../../assets/ico/icon-calendar.png";
 import icon_down from "../../../assets/ico/icon-feather-chevron-down.png";
 import {
   excelExport,
+  getConfigSalary,
   getUserSalary,
   updateSalaryOther,
   updateSetting,
@@ -48,6 +49,20 @@ function TinhLuong() {
   const [totalLuongKhac, setTotalLuongKhac] = useState("");
   const [total, setTotal] = useState("");
   const refInputPicker = useRef(null);
+
+  // lấy giá trị của Cài đặt đơn giá và chế độ
+  useEffect(() => {
+    const getSalary = async () => {
+      try {
+        const res = await getConfigSalary();
+        setDongiasanluong(numeral(res.data.salaryQuantity).format('0,0'));
+        setDongiachedo(numeral(res.data.salaryMonth).format('0,0'));
+      }catch(err) {
+        console.log(err);
+      }
+    };
+    getSalary();
+  }, []);
 
   // handle setting
   const handleOpenSetting = () => setOpenSetting(true);

@@ -24,3 +24,7 @@ export const excelExport = (param) => {
     responseType: "blob"
   });
 };
+
+export const getConfigSalary = () => {
+  return AxiosClient.get("/config-salary/infoSalary");
+};

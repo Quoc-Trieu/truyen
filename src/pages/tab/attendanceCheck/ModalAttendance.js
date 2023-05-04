@@ -168,13 +168,19 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
       console.log(err);
       switch (err?.response?.data?.code) {
         case 'INVALID_ROLE':
-          Notiflix.Notify.failure('Không có quyền điểm danh');
+          Notiflix.Notify.failure('Liên hệ tổ trưởng để điểm danh cho nhân công');
           break;
         case 'MANAGER_DON_HAVE_USER':
           Notiflix.Notify.failure('Nhân công không thuộc quản lý này');
           break;
         case 'SCAPING_NOT_FOUND':
           Notiflix.Notify.failure('Công nhân không thuộc vùng cạo đã chọn');
+          break;
+        case 'SCAPING_IS_UPDATE_QUANTITY_TODAY':
+          Notiflix.Notify.failure('Vùng cạo này đã được cập nhập hôm nay');
+          break;
+        case 'USER_NOT_WORK':
+          Notiflix.Notify.failure('Nhân công đã được cập nhập là không đi làm');
           break;
 
         default:
@@ -234,7 +240,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
         console.log(err);
         switch (err?.response?.data?.code) {
           case 'INVALID_ROLE':
-            Notiflix.Notify.failure('Không có quyền điểm danh');
+            Notiflix.Notify.failure('Liên hệ tổ trưởng để điểm danh cho nhân công');
             break;
           case 'MANAGER_DON_HAVE_USER':
             Notiflix.Notify.failure('Nhân công không thuộc quản lý này');
@@ -281,7 +287,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
               <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
                 <span style={{ color: checkAttendance.color }}> {checkAttendance.text} </span>
                 {checkAttendance.value == 'co_di_lam' ? (
-                  <img src={isDropLeave ? iconUp : iconDown } />
+                  <img src={isDropLeave ? iconUp : iconDown} />
                 ) : (
                   <img
                     src={iconClose}
@@ -322,7 +328,7 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
                   <Dropdown className={styles.dropDown} onToggle={(isOpen) => setIsDropZone(isOpen)}>
                     <Dropdown.Toggle className={styles.containerToggle} style={{ width: '100%' }}>
                       <span> {selectAreaScaping ? selectAreaScaping?.name : 'Chọn khu'} </span>
-                      <img src={isDropZone ? iconUp : iconDown } />
+                      <img src={isDropZone ? iconUp : iconDown} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={styles.dropMenu}>
                       {/* map infoAreaScaping */}
@@ -355,13 +361,15 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={styles.dropMenu}>
                       {selectAreaScaping &&
-                        selectAreaScaping.infoScaping.sort((a, b) => a.name.localeCompare(b.name)).map((item, index) => {
-                          return (
-                            <Dropdown.Item className={styles.dropItem} key={index} onClick={() => setSelectShaveScaping(item)}>
-                              {item.name}
-                            </Dropdown.Item>
-                          );
-                        })}
+                        selectAreaScaping.infoScaping
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((item, index) => {
+                            return (
+                              <Dropdown.Item className={styles.dropItem} key={index} onClick={() => setSelectShaveScaping(item)}>
+                                {item.name}
+                              </Dropdown.Item>
+                            );
+                          })}
                     </Dropdown.Menu>
                   </Dropdown>
                   {!selectShaveScaping && isConfirm == true ? <span className={styles.error}>Vui lòng chọn khu</span> : null}
