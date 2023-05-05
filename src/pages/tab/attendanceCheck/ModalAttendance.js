@@ -61,6 +61,8 @@ const ModalAttendance = ({ visible, onCancel, onOk, date, name, dataAttendance }
   useEffect(() => {
     // user có làm việc hay không, để xử lý không cho nhập sản lượng
     setIsHaveWork(checkAttendance == dataCheckAttendance.co_di_lam);
+    setSelectAreaScaping(null);
+    setSelectShaveScaping(null);
   }, [checkAttendance]);
 
   useEffect(() => {
