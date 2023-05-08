@@ -2,19 +2,20 @@
 
 .statisticsProduction {
   width: $full-screen;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
 
   .body1 {
     width: $full-screen;
     // chiều cao 100% trừ thanh header 70px
-    height: calc(100vh - 60px);
+    height: calc(100% - 60px);
 
     display: flex;
     flex-direction: column;
     padding: 0px 40px;
     overflow: hidden;
+    padding-bottom: 30px;
 
     .toolBar {
       display: flex;
@@ -188,7 +189,7 @@
       width: 100%;
       flex: 1;
       overflow: auto;
-      padding-bottom: 30px;
+      // padding-bottom: 30px;
 
       table {
         border-collapse: collapse;

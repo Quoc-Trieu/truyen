@@ -15,7 +15,7 @@ import Notiflix from 'notiflix';
 import { findIdUserByPhone } from '../../../utils/methods';
 
 const dataCheckAttendance = {
-  co_di_lam: { value: 'co_di_lam', isWord: true, isPermission: null, color: '#272727', text: 'Xin nghỉ phép' },
+  co_di_lam: { value: 'co_di_lam', isWord: true, isPermission: null, color: '#272727', text: 'Đi làm' },
   nghi_co_phep: { value: 'nghi_co_phep', isWord: false, isPermission: true, color: '#F6B400', text: 'Nghỉ có phép' },
   nghi_khong_phep: { value: 'nghi_khong_phep', isWord: false, isPermission: false, color: '#F44336', text: 'Nghỉ không phép' },
 };
