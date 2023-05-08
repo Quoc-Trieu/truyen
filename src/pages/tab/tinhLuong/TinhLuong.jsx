@@ -57,7 +57,7 @@ function TinhLuong() {
         const res = await getConfigSalary();
         setDongiasanluong(numeral(res.data.salaryQuantity).format('0,0'));
         setDongiachedo(numeral(res.data.salaryMonth).format('0,0'));
-      }catch(err) {
+      } catch (err) {
         console.log(err);
       }
     };
@@ -291,61 +291,62 @@ function TinhLuong() {
         </div>
         {/* table danh sách bảng lương của nhân công */}
         {/* <div style={{ flex: 1, overflowY: 'scroll' }}> */}
-          <div className="colum">
-            <table>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Họ và tên</th>
-                  <th>Sản lượng</th>
-                  <th>Ngày công</th>
-                  <th>Đơn giá sản lượng</th>
-                  <th>Đơn giá chế độ</th>
-                  <th>Lương sản lượng</th>
-                  <th>Lương chế độ</th>
-                  <th>Lương khác</th>
-                  <th>Tổng</th>
+        <div className="colum">
+          <table>
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Họ và tên</th>
+                <th>Sản lượng</th>
+                <th>Ngày công</th>
+                <th>Đơn giá sản lượng</th>
+                <th>Đơn giá chế độ</th>
+                <th>Lương sản lượng</th>
+                <th>Lương chế độ</th>
+                <th>Lương khác</th>
+                <th>Tổng</th>
+              </tr>
+              <tr>
+                <td>I</td>
+                <td>Bộ phận nhân công</td>
+                <td>{formatter.format(totalSanluong)}</td>
+                <td>{totalWork}</td>
+                <td></td>
+                <td></td>
+                <td>{formatter.format(totalLuongSanluong)}</td>
+                <td>{formatter.format(totalLuongChedo)}</td>
+                <td>{formatter.format(totalLuongKhac)}</td>
+                <td>{formatter.format(total)}</td>
+              </tr>
+            </thead>
+            <tbody>
+              {dataSalary.map((item, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{item.name}</td>
+                  <td>{item.quantity ? formatter.format(item.quantity) : 0}</td>
+                  <td>{item.dayWork ? item.dayWork : 0}</td>
+                  <td>{item.priceQuantity ? formatter.format(item.priceQuantity) : 0}</td>
+                  <td>{item.priceBase ? formatter.format(item.priceBase) : 0}</td>
+                  <td>{item.salaryQuantity ? formatter.format(item.salaryQuantity) : 0}</td>
+                  <td>{item.salaryWork ? formatter.format(item.salaryWork) : 0}</td>
+                  <td>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setIdUser(item.idUser);
+                        handleOpenSalaryOther();
+                      }}
+                    >
+                      {formatter.format(item.salaryMore)}
+                    </div>
+                  </td>
+                  <td>{formatter.format(item.salaryAll)}</td>
                 </tr>
-                <tr>
-                  <td>I</td>
-                  <td>Bộ phận nhân công</td>
-                  <td>{formatter.format(totalSanluong)}</td>
-                  <td>{totalWork}</td>
-                  <td></td>
-                  <td></td>
-                  <td>{formatter.format(totalLuongSanluong)}</td>
-                  <td>{formatter.format(totalLuongChedo)}</td>
-                  <td>{formatter.format(totalLuongKhac)}</td>
-                  <td>{formatter.format(total)}</td>
-                </tr>
-              </thead>
-              <tbody>
-                {dataSalary.map((item, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.quantity ? formatter.format(item.quantity) : 0}</td>
-                    <td>{item.dayWork ? item.dayWork : 0}</td>
-                    <td>{item.priceQuantity ? formatter.format(item.priceQuantity) : 0}</td>
-                    <td>{item.priceBase ? formatter.format(item.priceBase) : 0}</td>
-                    <td>{item.salaryQuantity ? formatter.format(item.salaryQuantity) : 0}</td>
-                    <td>{item.salaryWork ? formatter.format(item.salaryWork) : 0}</td>
-                    <td>
-                      <div
-                        onClick={() => {
-                          setIdUser(item.idUser);
-                          handleOpenSalaryOther();
-                        }}
-                      >
-                        {formatter.format(item.salaryMore)}
-                      </div>
-                    </td>
-                    <td>{formatter.format(item.salaryAll)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {/* </div> */}
       </div>
       {/* modal setting */}
