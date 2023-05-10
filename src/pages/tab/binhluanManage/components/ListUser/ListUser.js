@@ -15,10 +15,10 @@ import { listUserSelector } from '../../../../../store/user/UserSlice';
 import Notiflix from 'notiflix';
 import ModalEditUser from '../ModalCreateUser/ModalEditUser';
 import Pagination from '../../../../../components/Pagination/Pagination';
-import { pageCurrentUserSelector, setPageCurrentUser } from './../../../../../store/user/UserSlice';
-import { permissionEdiSelector, roleUserSelector } from './../../../../../store/auth/authSlice';
-import { getPhoneLocalStorage } from './../../../../../utils/localStorage';
-import ROLES from './../../../../../constants/roles';
+import { pageCurrentUserSelector, setPageCurrentUser } from '../../../../../store/user/UserSlice';
+import { permissionEdiSelector, roleUserSelector } from '../../../../../store/auth/authSlice';
+import { getPhoneLocalStorage } from '../../../../../utils/localStorage';
+import ROLES from '../../../../../constants/roles';
 
 const ListUser = ({ itemsHeaderRow, isReload }) => {
   const dispatch = useDispatch();

@@ -21,15 +21,16 @@ const assignment = ({ title, name, back }) => {
   }
 
   //logout
-  const handleLogOut =  () => {
-    removeToken();
+  const handleLogOut = () => {
+    // removeToken();
+    localStorage.removeItem('LoginTruyen')
     navigate("/");
     window.location.reload();
   }
   return (
     <div className={styles.headerStyle}>
       <div className={styles.headerLeft}>
-        {back && <img src={iconBack} onClick={() => navigate(-1)}/>}
+        {back && <img src={iconBack} onClick={() => navigate(-1)} />}
         <span>{title}</span>
       </div>
 
@@ -44,7 +45,7 @@ const assignment = ({ title, name, back }) => {
             </div>
           </Dropdown.Toggle>
 
-          <Dropdown.Menu style={{ padding: 0}}>
+          <Dropdown.Menu style={{ padding: 0 }}>
             <Dropdown.Item className={styles.itemDropdown} onClick={handleChangePassword}>
               Đổi mật khẩu
             </Dropdown.Item>
@@ -57,7 +58,7 @@ const assignment = ({ title, name, back }) => {
           </Dropdown.Menu>
         </Dropdown>
       </div>
-      <ModalChangePassword visible={showModalChangePassword} onCancel={() => setShowModalChangePassword(false)} onOk={() => setShowModalChangePassword(false)}/>
+      <ModalChangePassword visible={showModalChangePassword} onCancel={() => setShowModalChangePassword(false)} onOk={() => setShowModalChangePassword(false)} />
     </div>
   );
 };

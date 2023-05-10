@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import styles from "./Login.module.scss";
-import logo from "../../assets/images/image-login.png";
+// import logo from "../../assets/images/image-login.png";
 import iconUser from "../../assets/ico/icon-awesome-user.png";
 import iconKey from "../../assets/ico/icon-feather-key.png";
 import iconEye from "../../assets/ico/icon-awesome-eye.png";
@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Notiflix from 'notiflix';
 import { getInfoUser } from './../../store/auth/authSlice';
 import { Loading } from 'notiflix';
+import logo from '../../assets/logo512x512.jpg';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,34 +28,37 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    try {
-      Loading.pulse()
-      const res = await login(data);
-      if (res?.data?.user?.status=="ACTIVE")
-      {
-        // lưu token và sdt vào localstorage
-        setToken(res?.data?.auth);
-        setPhoneLocalStorage(res?.data?.user?.phone);
-        // lưu sdt vào redux và lấy thông tin user
-        dispatch(getInfoUser(res?.data?.user?.phone))
-        //thông báo và chuyền màn hình đăng nhập thành công
-        navigate("/");
-        Notiflix.Notify.success('Đăng nhập thành công');
-      }else {
-        Notiflix.Notify.failure('Tài khoản bị khóa');
-      }
-      Loading.remove();
-    } catch (error) {
-      Loading.remove();
-      switch (error?.response?.data?.code) {
-        case "USER_NOT_FOUND": Notiflix.Notify.failure('Tài khoản không tồn tại'); break;
-        case "USERNAME_WRONG": Notiflix.Notify.failure('Tài khoản không tồn tại'); break;
-        case "PASSWORD_WRONG": Notiflix.Notify.failure('Mật khẩu không đúng'); break;
-        case "INVALID_STATUS": Notiflix.Notify.failure('Tài khoản bị khóa'); break;
-        default: Notiflix.Notify.failure('Đăng nhập thất bại'); break;
-      }
+    localStorage.setItem('LoginTruyen',"ok")
+    navigate('/')
+    window.location.reload();
+    // try {
+    //   Loading.pulse()
+    //   const res = await login(data);
+    //   if (res?.data?.user?.status=="ACTIVE")
+    //   {
+    //     // lưu token và sdt vào localstorage
+    //     setToken(res?.data?.auth);
+    //     setPhoneLocalStorage(res?.data?.user?.phone);
+    //     // lưu sdt vào redux và lấy thông tin user
+    //     dispatch(getInfoUser(res?.data?.user?.phone))
+    //     //thông báo và chuyền màn hình đăng nhập thành công
+    //     navigate("/");
+    //     Notiflix.Notify.success('Đăng nhập thành công');
+    //   }else {
+    //     Notiflix.Notify.failure('Tài khoản bị khóa');
+    //   }
+    //   Loading.remove();
+    // } catch (error) {
+    //   Loading.remove();
+    //   switch (error?.response?.data?.code) {
+    //     case "USER_NOT_FOUND": Notiflix.Notify.failure('Tài khoản không tồn tại'); break;
+    //     case "USERNAME_WRONG": Notiflix.Notify.failure('Tài khoản không tồn tại'); break;
+    //     case "PASSWORD_WRONG": Notiflix.Notify.failure('Mật khẩu không đúng'); break;
+    //     case "INVALID_STATUS": Notiflix.Notify.failure('Tài khoản bị khóa'); break;
+    //     default: Notiflix.Notify.failure('Đăng nhập thất bại'); break;
+    //   }
 
-    }
+    // }
   };
 
   return (

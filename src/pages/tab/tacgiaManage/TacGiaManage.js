@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import Header from './../../../components/Header/Header';
-import styles from './UserManage.module.scss';
-import SearchInput from './../../../components/SearchInput/SearchInput';
-import Button from './../../../components/Button/Button';
+import Header from '../../../components/Header/Header';
+import styles from './TacGiaManage.module.scss';
+import SearchInput from '../../../components/SearchInput/SearchInput';
+import Button from '../../../components/Button/Button';
 import ListUser from './components/ListUser/ListUser';
 import Pagination from '../../../components/Pagination/Pagination';
 import ModalCreateUser from './components/ModalCreateUser/ModalCreateUser';
 import iconAddUser from '../../../assets/ico/icon-awesome-user-plus.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilterUser, setSearching, setPageCurrentUser } from './../../../store/user/UserSlice';
+import { setFilterUser, setSearching, setPageCurrentUser } from '../../../store/user/UserSlice';
 import iconUp from '../../..//assets/ico/icon-feather-chevron-up.png';
 import iconDown from '../../../assets/ico/icon-feather-chevron-down.png';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ROLES from '../../../constants/roles';
 
-const UserManage = () => {
+const TacGiaManage = () => {
   // dùng value truyền pẩm để lấy User, ADMIN lấy tất cả, MANAGER lấy User, User lấy quản lý
   const [showModal, setShowModal] = useState(false);
   const [isDrop, setIsDrop] = useState(false);
@@ -98,7 +98,7 @@ const UserManage = () => {
           </Dropdown>
         </div>
 
-        <ListUser isReload={isReload} itemsHeaderRow={['Số điện thoại', 'Tên', '']} />
+        <ListUser isReload={isReload} itemsHeaderRow={['Số điện thoại', 'Tên tác giả', '']} />
       </div>
 
       <ModalCreateUser
@@ -113,4 +113,4 @@ const UserManage = () => {
   );
 };
 
-export default UserManage;
+export default TacGiaManage;

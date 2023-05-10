@@ -44,66 +44,24 @@ function Nav() {
   return (
     <div className={styles.navStyle} width={isOpenNav ? '250px' : '100px'}>
       <ul className={styles.ulNav}>
-        <li className={styles.logo} style={{ marginBottom: !isOpenNav ? '50px' : '0px' }}>
-          <img src={logo} />
-        </li>
-
-        {/* màn hình map */}
         <li onClick={() => onChangeNav('')} className={pathname === '/' ? styles.li_Selected : ''}>
-          <img src={iconLocation} />
-          {isOpenNav && <span>Map</span>}
+          <img src={iconUser} />
+          {isOpenNav && <span>Quản lý user</span>}
         </li>
-
-        {permisson !== 'USER' ? (
-          <>
-            <li onClick={() => onChangeNav('attendanceCheck')} className={pathname === '/attendanceCheck' ? styles.li_Selected : ''}>
-              <img src={iconReminder} />
-              {isOpenNav && <span>Điểm danh</span>}
-            </li>
-
-            <li
-              onClick={() => onChangeNav('statisticsProduction')}
-              className={pathname === '/statisticsProduction' ? styles.li_Selected : ''}
-            >
-              <img src={iconPieChart} />
-              {isOpenNav && <span>Sản lượng</span>}
-            </li>
-
-            <li onClick={() => onChangeNav('tinhLuong')} className={pathname === '/tinhLuong' ? styles.li_Selected : ''}>
-              <img src={iconSalary} />
-              {isOpenNav && <span>Tính lương</span>}
-            </li>
-
-            {/* màn hình quản lý user */}
-            <li onClick={() => onChangeNav('userManage')} className={pathname === '/userManage' ? styles.li_Selected : ''}>
-              <img src={iconUser} />
-              {isOpenNav && <span>Quản lý User</span>}
-            </li>
-
-            {/* màn hình quản lý công việc */}
-            <li
-              onClick={() => onChangeNav('divisions')}
-              className={pathname === '/divisions' || pathname === '/assignment' ? styles.li_Selected : ''}
-            >
-              <img src={iconList} />
-              {isOpenNav && <span>Quản lý công việc</span>}
-            </li>
-          </>
-        ) : (
-          ''
-        )}
-
-        {/* màn hình quản lý cây */}
-        <li onClick={() => onChangeNav('treeManage')} className={pathname === '/treeManage' ? styles.li_Selected : ''}>
-          <img src={iconPlantTree} />
-          {isOpenNav && <span>Quản lý cây</span>}
+        <li onClick={() => onChangeNav('tacgiaManage')} className={pathname === '/tacgiaManage' ? styles.li_Selected : ''}>
+          <img src={iconUser} />
+          {isOpenNav && <span>Quản lý tác giả</span>}
+        </li>
+        <li onClick={() => onChangeNav('BinhLuanManage')} className={pathname === '/BinhLuanManage' ? styles.li_Selected : ''}>
+          <img src={iconUser} />
+          {isOpenNav && <span>Kiểm duyệt bình luận</span>}
         </li>
       </ul>
 
       <div className={styles.footerNav}>
         <div className={styles.openNav}>
           {isOpenNav && <p className={styles.line}></p>}
-          <img onClick={() => setIsOpenNav(!isOpenNav)} src={iconOpenNav} width="35px" height="35px" style={{transform: isOpenNav ? '' : 'rotate( -180deg )'}}/>
+          <img onClick={() => setIsOpenNav(!isOpenNav)} src={iconOpenNav} width="35px" height="35px" style={{ transform: isOpenNav ? '' : 'rotate( -180deg )' }} />
         </div>
       </div>
     </div>

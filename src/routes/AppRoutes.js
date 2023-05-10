@@ -11,8 +11,7 @@ function AppRoutes() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const user = getToken();
-  console.log("Token Login: " + user);
+  const user = localStorage.getItem('LoginTruyen');
   //kiểm tra login hay chưa
   const Routes = user && user !== {} ? ProtectedRoutes : PublicRoutes;
 

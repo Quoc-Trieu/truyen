@@ -5,7 +5,7 @@ import { Modal } from 'antd';
 import { useForm } from 'react-hook-form';
 import ModalComponent from '../../../../../components/ModalComponent/ModalComponent';
 import { postCreateUser } from '../../../../../services/userServies';
-import RadioButton from './../../../../../components/RadioButton/RadioButton';
+import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import Notiflix from 'notiflix';
 import { useDispatch } from 'react-redux';
 import { getALLInfoUser, setPageCurrentUser } from '../../../../../store/user/UserSlice';

@@ -8,19 +8,16 @@ import AttendanceCheck from "./../pages/tab/attendanceCheck/AttendanceCheck";
 import Divisions from "./../pages/tab/assignmentManage/Divisions";
 import StatisticsProduction from "./../pages/tab/statisticsProduction/StatisticsProduction";
 import TinhLuong from "./../pages/tab/tinhLuong/TinhLuong";
+import TacGiaManage from './../pages/tab/tacgiaManage/TacGiaManage'
+import BinhLuanManage from './../pages/tab/binhluanManage/BinhLuanManage'
 
 const ProtectedRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />}>
-        <Route path="/" element={<Map />} />
-        <Route path="/userManage" element={<UserManage />} />
-        <Route path="/divisions" element={<Divisions />} />
-        <Route path="/assignment" element={<Assignment />} />
-        <Route path="/treeManage" element={<TreeManage />} />
-        <Route path="/AttendanceCheck" element={<AttendanceCheck />} />
-        <Route path="/statisticsProduction" element={<StatisticsProduction />} />
-        <Route path="/tinhLuong" element={<TinhLuong />} />
+        <Route path="/" element={<UserManage />} />
+        <Route path="/tacgiaManage" element={<TacGiaManage />} />
+        <Route path="/binhluanManage" element={<BinhLuanManage />} />
       </Route>
     </Routes>
   );
